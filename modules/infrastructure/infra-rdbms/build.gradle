@@ -1,0 +1,16 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    // 모듈
+    implementation project(':domain-account')
+    implementation project(':app-community')
+    // DB
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'com.h2database:h2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
