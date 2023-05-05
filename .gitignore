@@ -28,7 +28,8 @@ out/
 ### property ###
 *.yml
 *.properties
-
+### DB ###
+*.sql
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

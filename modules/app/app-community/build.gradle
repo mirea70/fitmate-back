@@ -6,7 +6,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // 모듈
-    implementation project(':domain-account')
+    implementation project(':domain-rdbms')
+    implementation project(':core')
 }
 
 tasks.named('test') {
