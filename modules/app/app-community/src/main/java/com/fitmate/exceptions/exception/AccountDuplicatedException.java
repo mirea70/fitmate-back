@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class AccountException extends RuntimeException{
+public class AccountDuplicatedException extends RuntimeException{
     private final AccountErrorResult errorResult;
 }

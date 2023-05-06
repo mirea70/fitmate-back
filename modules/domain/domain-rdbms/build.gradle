@@ -3,7 +3,7 @@ jar { enabled = true }
 
 dependencies {
     // 모듈
-    implementation project(':infra-rdbms')
+    api project(':infra-rdbms')
     implementation project(':core')
     // util
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'

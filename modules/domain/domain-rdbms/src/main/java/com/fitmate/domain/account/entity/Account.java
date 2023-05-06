@@ -1,55 +1,49 @@
 package com.fitmate.domain.account.entity;
 
-import com.fitmate.enums.AccountRole;
+import com.fitmate.domain.account.enums.Gender;
+import com.fitmate.domain.account.vo.Password;
+import com.fitmate.domain.account.vo.PrivateInfo;
+import com.fitmate.domain.account.vo.ProfileInfo;
+import com.fitmate.domain.account.enums.AccountRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
-@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "id")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_id")
     private Long id;
 
-    @Column(length = 5)
-    @Size(min = 3, max = 5)
-    @NotNull
-    private String name;
-
-    @Column
-    @NotNull
+    @Column(unique = true, nullable = false)
     private String loginName;
 
-    @Column
-    @NotNull
-    @Size(min = 8)
-    private String password;
+    @Embedded
+    private Password password;
 
-    @Column
-    @NotNull
-    @Size(min = 2)
-    private String nickName;
+    @Embedded
+    private PrivateInfo privateInfo;
 
-    @Column(length = 11)
-    @NotNull
-    private String phone;
+    @Embedded
+    private ProfileInfo profileInfo;
 
-    @Column
-    @NotNull
-    @Email
-    private String email;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AccountRole role;
+
+    public String getEmail() {
+        return this.privateInfo.getEmail();
+    }
 }

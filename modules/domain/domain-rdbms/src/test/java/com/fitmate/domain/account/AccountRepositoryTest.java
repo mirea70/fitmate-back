@@ -2,13 +2,18 @@ package com.fitmate.domain.account;
 
 
 import com.fitmate.domain.account.entity.Account;
+import com.fitmate.domain.account.enums.Gender;
 import com.fitmate.domain.account.repository.AccountRepository;
-import com.fitmate.enums.AccountRole;
+import com.fitmate.domain.account.vo.Password;
+import com.fitmate.domain.account.vo.PrivateInfo;
+import com.fitmate.domain.account.vo.ProfileInfo;
+import com.fitmate.domain.account.enums.AccountRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 public class AccountRepositoryTest {
@@ -22,40 +27,47 @@ public class AccountRepositoryTest {
     @Test
     public void 회원등록 () throws Exception {
         // given
-        final Account account = Account.builder()
-                .name("홍길동")
-                .loginName("asd1")
-                .password("12345678")
-                .email("abc@naver.com")
-                .nickName("마이")
-                .phone("01011112222")
-                .role(AccountRole.USER)
-                .build();
+        Account account = getTestAccount();
         // when
         final Account result = accountRepository.save(account);
 
         // then
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getEmail()).isEqualTo(account.getEmail());
+        assertThat(result).isNotNull();
+        assertEquals(result, account);
     }
     @Test
     public void 회원조회 () throws Exception {
         // given
-        final Account account = Account.builder()
+        Account account = getTestAccount();
+        accountRepository.save(account);
+        // when
+        final Account findResult = accountRepository.findByPrivateInfoEmail(account.getEmail());
+        // then
+        System.out.println("findResult.hashCode() = " + findResult.hashCode());
+        System.out.println("account.hashCode() = " + account.hashCode());
+        assertThat(findResult).isNotNull();
+        assertEquals(findResult, account);
+    }
+
+    public Account getTestAccount() {
+
+        final PrivateInfo privateInfo = PrivateInfo.builder()
                 .name("홍길동")
-                .loginName("asd1")
-                .password("12345678")
                 .email("abc@naver.com")
-                .nickName("마이")
                 .phone("01011112222")
+                .build();
+
+        final ProfileInfo profileInfo = ProfileInfo.builder()
+                .nickName("마이")
+                .build();
+
+        return Account.builder()
+                .loginName("asd1")
+                .password(Password.builder().value("12345678").build())
+                .privateInfo(privateInfo)
+                .profileInfo(profileInfo)
+                .gender(Gender.MAIL)
                 .role(AccountRole.USER)
                 .build();
-        // when
-        accountRepository.save(account);
-        final Account findResult = accountRepository.findByEmail(account.getEmail());
-        // then
-        assertThat(findResult).isNotNull();
-        assertThat(findResult.getId()).isNotNull();
-        assertThat(findResult.getPhone()).isEqualTo(account.getPhone());
     }
 }

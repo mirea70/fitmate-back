@@ -1,4 +1,4 @@
-package com.fitmate.enums;
+package com.fitmate.domain.account.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,5 +10,5 @@ public enum AccountRole {
     USER("회원"),
     ;
 
-    private final String role;
+    private final String label;
 }
