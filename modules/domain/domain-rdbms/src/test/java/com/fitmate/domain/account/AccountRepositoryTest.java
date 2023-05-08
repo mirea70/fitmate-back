@@ -11,9 +11,11 @@ import com.fitmate.domain.account.enums.AccountRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 public class AccountRepositoryTest {
@@ -23,6 +25,22 @@ public class AccountRepositoryTest {
     @Test
     public void AccountRepository가Null이아님 () {
         assertThat(accountRepository).isNotNull();
+    }
+    @Test
+    public void 회원등록실패_값중복 () throws Exception {
+        // given
+        saveBefore();
+        Account newAccount = getTestAccount();
+        // when
+        final DataIntegrityViolationException result = assertThrows(DataIntegrityViolationException.class,
+                () -> accountRepository.save(newAccount));
+        // then
+        assertEquals(DataIntegrityViolationException.class, result.getClass());
+    }
+
+    private void saveBefore() {
+        Account account = getTestAccount();
+        accountRepository.save(account);
     }
     @Test
     public void 회원등록 () throws Exception {

@@ -5,8 +5,6 @@ dependencies {
     // 모듈
     api project(':infra-rdbms')
     implementation project(':core')
-    // util
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     // 테스트
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'

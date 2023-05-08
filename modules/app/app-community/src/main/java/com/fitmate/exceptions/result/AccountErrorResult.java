@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum AccountErrorResult {
     DUPLICATED_ACCOUNT_JOIN(HttpStatus.BAD_REQUEST, "Duplicated Account Join Request"),
+    DUPLICATED_ACCOUNT_VALUE(HttpStatus.BAD_REQUEST, "Duplicated Account Value Request")
     ;
 
     private final HttpStatus httpStatus;
