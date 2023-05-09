@@ -24,4 +24,20 @@ public class AccountDto {
 
         private Gender gender;
     }
+    @Getter
+    @Builder
+    public static class JoinResponse {
+
+        private String loginName;
+
+        private String password;
+
+        private ProfileInfo profileInfo;
+
+        private PrivateInfo privateInfo;
+
+        private AccountRole role;
+
+        private Gender gender;
+    }
 }

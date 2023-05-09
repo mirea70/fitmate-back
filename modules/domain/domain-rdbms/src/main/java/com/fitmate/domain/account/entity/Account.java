@@ -5,16 +5,14 @@ import com.fitmate.domain.account.vo.Password;
 import com.fitmate.domain.account.vo.PrivateInfo;
 import com.fitmate.domain.account.vo.ProfileInfo;
 import com.fitmate.domain.account.enums.AccountRole;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(exclude = "id")
+@Getter
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

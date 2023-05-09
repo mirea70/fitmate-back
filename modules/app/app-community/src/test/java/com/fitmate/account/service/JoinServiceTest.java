@@ -3,7 +3,9 @@ package com.fitmate.account.service;
 import com.fitmate.account.dto.AccountDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.enums.AccountRole;
+import com.fitmate.domain.account.enums.Gender;
 import com.fitmate.domain.account.repository.AccountRepository;
+import com.fitmate.domain.account.service.AccountService;
 import com.fitmate.domain.account.vo.Password;
 import com.fitmate.domain.account.vo.PrivateInfo;
 import com.fitmate.domain.account.vo.ProfileInfo;
@@ -19,8 +21,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class JoinServiceTest {
@@ -28,13 +29,14 @@ class JoinServiceTest {
     private JoinService target;
     @Mock
     private AccountRepository accountRepository;
+    @Mock
+    private AccountService accountService;
 
     @Test
     public void 회원가입실패_이미존재함 () throws Exception {
         // given
         AccountDto.JoinRequest joinRequest = getTestAccountJoinRequest();
 
-        doReturn(Account.builder().build()).when(accountRepository).findByPrivateInfoEmail(joinRequest.getPrivateInfo().getEmail());
         // when
         final AccountDuplicatedException result = assertThrows(AccountDuplicatedException.class,
                 () -> target.join(joinRequest));
@@ -60,7 +62,7 @@ class JoinServiceTest {
         PrivateInfo privateInfo = PrivateInfo.builder()
                 .name("미이수")
                 .email("abc@naver.com")
-                .phone("12345678")
+                .phone("01011112222")
                 .build();
         ProfileInfo profileInfo = ProfileInfo.builder()
                 .nickName("닉네임2")
@@ -68,10 +70,11 @@ class JoinServiceTest {
 
         return AccountDto.JoinRequest.builder()
                         .loginName("abc2")
-                        .password("1234")
+                        .password("12345678")
                         .privateInfo(privateInfo)
                         .profileInfo(profileInfo)
                         .role(AccountRole.USER)
+                        .gender(Gender.MAIL)
                         .build();
     }
 
@@ -90,9 +93,16 @@ class JoinServiceTest {
     @Test
     public void 회원가입성공 () throws Exception {
         // given
-
+        AccountDto.JoinRequest joinRequest = getTestAccountJoinRequest();
+        Account account = getAccountByRequestDto(joinRequest);
+        doReturn(account).when(accountRepository).save(any(Account.class));
         // when
-
+        final AccountDto.JoinResponse result = target.join(joinRequest);
         // then
+        assertThat(result).isNotNull();
+        assertEquals(result.getPrivateInfo().getEmail(), joinRequest.getPrivateInfo().getEmail());
+
+        verify(accountService, times(1)).CheckDuplicatedByEmail(joinRequest.getPrivateInfo().getEmail());
+        verify(accountRepository, times(1)).save(any(Account.class));
     }
 }

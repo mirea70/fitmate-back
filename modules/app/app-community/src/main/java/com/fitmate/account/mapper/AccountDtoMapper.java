@@ -19,5 +19,13 @@ public interface AccountDtoMapper {
         return Password.builder()
                 .value(password)
                 .build();
-    };
+    }
+
+    @Mapping(target = "password", source = "password", qualifiedByName = "extractPassword")
+    AccountDto.JoinResponse toResponse(Account account);
+
+    @Named("extractPassword")
+    default String extractPassword(Password password) {
+        return password.getValue();
+    }
 }
