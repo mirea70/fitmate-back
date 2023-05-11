@@ -1,8 +1,9 @@
-package com.fitmate.account.mapper;
+package com.fitmate.app.account.mapper;
 
-import com.fitmate.account.dto.AccountDto;
+import com.fitmate.app.account.dto.AccountDto;
+import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
-import com.fitmate.domain.account.vo.Password;
+import com.fitmate.domain.account.entity.vo.Password;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -28,4 +29,10 @@ public interface AccountDtoMapper {
     default String extractPassword(Password password) {
         return password.getValue();
     }
+
+    @Mapping(target = "name", source = "privateInfo.name")
+    @Mapping(target = "email", source = "privateInfo.email")
+    @Mapping(target = "phone", source = "privateInfo.phone")
+    @Mapping(target = "nickName", source = "profileInfo.nickName")
+    AccountDuplicateCheckDto toDuplicatedCheckDto(AccountDto.JoinRequest joinRequest);
 }

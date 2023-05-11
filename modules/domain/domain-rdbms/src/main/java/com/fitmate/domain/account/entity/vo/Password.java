@@ -1,4 +1,4 @@
-package com.fitmate.domain.account.vo;
+package com.fitmate.domain.account.entity.vo;
 
 import lombok.*;
 

@@ -1,13 +1,14 @@
 package com.fitmate.domain.account.entity;
 
 import com.fitmate.domain.account.enums.Gender;
-import com.fitmate.domain.account.vo.Password;
-import com.fitmate.domain.account.vo.PrivateInfo;
-import com.fitmate.domain.account.vo.ProfileInfo;
+import com.fitmate.domain.account.entity.vo.Password;
+import com.fitmate.domain.account.entity.vo.PrivateInfo;
+import com.fitmate.domain.account.entity.vo.ProfileInfo;
 import com.fitmate.domain.account.enums.AccountRole;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,6 +18,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
+    @Getter
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -26,6 +28,7 @@ public class Account {
     private Password password;
 
     @Embedded
+    @NotNull
     private PrivateInfo privateInfo;
 
     @Embedded

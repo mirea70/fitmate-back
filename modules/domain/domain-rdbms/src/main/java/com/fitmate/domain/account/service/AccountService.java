@@ -1,5 +1,6 @@
 package com.fitmate.domain.account.service;
 
+import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.exceptions.exception.AccountDuplicatedException;
 import com.fitmate.exceptions.result.AccountErrorResult;
@@ -17,5 +18,11 @@ public class AccountService {
     public void CheckDuplicatedByEmail(String email) throws AccountDuplicatedException {
         accountRepository.findByPrivateInfoEmail(email)
                 .ifPresent(m -> {throw new AccountDuplicatedException(AccountErrorResult.DUPLICATED_ACCOUNT_JOIN);});
+    }
+
+    public void CheckDuplicated(AccountDuplicateCheckDto checkDto) throws AccountDuplicatedException {
+        int duplicatedCount = accountRepository.checkDuplicatedCount(checkDto.getName(), checkDto.getEmail(),
+                                                                    checkDto.getPhone(), checkDto.getNickName());
+        if(duplicatedCount > 1) throw new AccountDuplicatedException(AccountErrorResult.DUPLICATED_ACCOUNT_JOIN);
     }
 }

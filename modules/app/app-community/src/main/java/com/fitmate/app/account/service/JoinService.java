@@ -1,7 +1,8 @@
-package com.fitmate.account.service;
+package com.fitmate.app.account.service;
 
-import com.fitmate.account.dto.AccountDto;
-import com.fitmate.account.mapper.AccountDtoMapper;
+import com.fitmate.app.account.dto.AccountDto;
+import com.fitmate.app.account.mapper.AccountDtoMapper;
+import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.domain.account.service.AccountService;
@@ -21,13 +22,12 @@ public class JoinService {
     private final AccountRepository accountRepository;
 
     public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) {
-        accountService.CheckDuplicatedByEmail(joinRequest.getPrivateInfo().getEmail());
+        AccountDuplicateCheckDto checkDto = AccountDtoMapper.INSTANCE.toDuplicatedCheckDto(joinRequest);
+        accountService.CheckDuplicated(checkDto);
         Account newAccount = AccountDtoMapper.INSTANCE.toEntity(joinRequest);
         try {
             Account savedAccount = accountRepository.save(newAccount);
-
             return AccountDtoMapper.INSTANCE.toResponse(savedAccount);
-//            return null;
         } catch (DataIntegrityViolationException e) {
             throw new AccountDuplicatedException(AccountErrorResult.DUPLICATED_ACCOUNT_VALUE);
         }

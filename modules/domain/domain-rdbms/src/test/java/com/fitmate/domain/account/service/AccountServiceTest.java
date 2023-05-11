@@ -1,7 +1,9 @@
-package com.fitmate.domain.account;
+package com.fitmate.domain.account.service;
 
 
+import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
+import com.fitmate.domain.account.helper.AccountDomainTestHelper;
 import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.domain.account.service.AccountService;
 import com.fitmate.exceptions.exception.AccountDuplicatedException;
@@ -26,6 +28,8 @@ public class AccountServiceTest {
     @Mock
     private AccountRepository accountRepository;
 
+    private AccountDomainTestHelper accountDomainTestHelper = new AccountDomainTestHelper();;
+
     @Test
     public void 중복체크_이메일로 () throws Exception {
         // given
@@ -34,6 +38,19 @@ public class AccountServiceTest {
         // when
         final AccountDuplicatedException result = assertThrows(AccountDuplicatedException.class,
                 () -> target.CheckDuplicatedByEmail(email));
+        // then
+        assertThat(result.getErrorResult()).isEqualTo(AccountErrorResult.DUPLICATED_ACCOUNT_JOIN);
+    }
+
+    @Test
+    public void 중복체크_회원정보 () throws Exception {
+        // given
+        AccountDuplicateCheckDto checkDto = accountDomainTestHelper.getTestDuplicateCheckDto();
+        doReturn(2).when(accountRepository).checkDuplicatedCount(anyString(), anyString(),
+                                                                            anyString(), anyString());
+        // when
+        final AccountDuplicatedException result = assertThrows(AccountDuplicatedException.class,
+                () -> target.CheckDuplicated(checkDto));
         // then
         assertThat(result.getErrorResult()).isEqualTo(AccountErrorResult.DUPLICATED_ACCOUNT_JOIN);
     }

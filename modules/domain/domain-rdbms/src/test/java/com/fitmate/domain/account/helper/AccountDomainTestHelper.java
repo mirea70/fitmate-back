@@ -1,15 +1,16 @@
-package com.fitmate.domain.account;
+package com.fitmate.domain.account.helper;
 
+import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.enums.AccountRole;
 import com.fitmate.domain.account.enums.Gender;
-import com.fitmate.domain.account.vo.Password;
-import com.fitmate.domain.account.vo.PrivateInfo;
-import com.fitmate.domain.account.vo.ProfileInfo;
+import com.fitmate.domain.account.entity.vo.Password;
+import com.fitmate.domain.account.entity.vo.PrivateInfo;
+import com.fitmate.domain.account.entity.vo.ProfileInfo;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccountTestHelper {
+public class AccountDomainTestHelper {
     public Account getTestAccount() {
 
         final PrivateInfo privateInfo = PrivateInfo.builder()
@@ -29,6 +30,15 @@ public class AccountTestHelper {
                 .profileInfo(profileInfo)
                 .gender(Gender.MAIL)
                 .role(AccountRole.USER)
+                .build();
+    }
+
+    public AccountDuplicateCheckDto getTestDuplicateCheckDto() {
+        return AccountDuplicateCheckDto.builder()
+                .name("홍길동")
+                .email("abc@naver.com")
+                .phone("01011112222")
+                .nickName("마이")
                 .build();
     }
 }
