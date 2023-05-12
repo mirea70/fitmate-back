@@ -7,7 +7,9 @@ import com.fitmate.domain.account.entity.vo.ProfileInfo;
 import lombok.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class AccountDto {
     @Getter
@@ -20,6 +22,7 @@ public class AccountDto {
         @NotNull(message = "로그인ID 입력은 필수입니다.")
         private String loginName;
         @NotNull(message = "비밀번호 입력은 필수입니다.")
+        @Size(min = 8)
         private String password;
         @Valid
         @NotNull(message = "프로필 정보 입력은 필수입니다.")
