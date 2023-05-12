@@ -24,7 +24,7 @@ public class AccountAppTestHelper {
 
         return AccountDto.JoinRequest.builder()
                 .loginName("abc2")
-                .password("12345678")
+                .password("123456aB#")
                 .privateInfo(privateInfo)
                 .profileInfo(profileInfo)
                 .role(AccountRole.USER)

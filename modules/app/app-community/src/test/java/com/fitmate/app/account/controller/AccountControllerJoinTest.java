@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountControllerTest {
+public class AccountControllerJoinTest {
     @InjectMocks
     private AccountController target;
     private AccountAppTestHelper accountAppTestHelper;
@@ -80,7 +80,41 @@ public class AccountControllerTest {
         // given
         final String url = "/api/account/join";
         AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
-        joinRequest.setPassword("");
+        joinRequest.setPassword("abc1234567");
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+    @Test
+    public void 회원가입실패_password_영문자X () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        joinRequest.setPassword("1234567%");
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 회원가입실패_password_영대문자X () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        joinRequest.setPassword("1234567a%");
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+    @Test
+    public void 회원가입실패_password_영소문자X () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        joinRequest.setPassword("1234567A%b");
         // when
         final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
         // then
@@ -118,12 +152,84 @@ public class AccountControllerTest {
     }
 
     @Test
+    public void 회원가입실패_privateInfo_name이2자리미만 () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        PrivateInfo newPrivateInfo = PrivateInfo.builder()
+                .name("아")
+                .email("test@naver.com")
+                .phone("01032341323")
+                .build();
+
+        joinRequest.setPrivateInfo(newPrivateInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 회원가입실패_privateInfo_name이5자리초과 () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        PrivateInfo newPrivateInfo = PrivateInfo.builder()
+                .name("아미아타불만세")
+                .email("test@naver.com")
+                .phone("01032341323")
+                .build();
+
+        joinRequest.setPrivateInfo(newPrivateInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 회원가입실패_privateInfo_name이한글X () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        PrivateInfo newPrivateInfo = PrivateInfo.builder()
+                .name("ab가")
+                .email("test@naver.com")
+                .phone("01032341323")
+                .build();
+
+        joinRequest.setPrivateInfo(newPrivateInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void 회원가입실패_privateInfo_email이Null () throws Exception {
         // given
         final String url = "/api/account/join";
         AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
         PrivateInfo newPrivateInfo = PrivateInfo.builder()
                 .name("홍길동")
+                .phone("01032341323")
+                .build();
+
+        joinRequest.setPrivateInfo(newPrivateInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 회원가입실패_privateInfo_email형식X () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        PrivateInfo newPrivateInfo = PrivateInfo.builder()
+                .name("홍길동")
+                .email("abcx")
                 .phone("01032341323")
                 .build();
 
@@ -152,6 +258,24 @@ public class AccountControllerTest {
     }
 
     @Test
+    public void 회원가입실패_privateInfo_phone형식검증 () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        PrivateInfo newPrivateInfo = PrivateInfo.builder()
+                .name("홍길동")
+                .phone("010134")
+                .email("test@naver.com")
+                .build();
+
+        joinRequest.setPrivateInfo(newPrivateInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void 회원가입실패_profileInfo가Null () throws Exception {
         // given
         final String url = "/api/account/join";
@@ -168,6 +292,72 @@ public class AccountControllerTest {
         final String url = "/api/account/join";
         AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
         ProfileInfo newProfileInfo = ProfileInfo.builder().build();
+
+        joinRequest.setProfileInfo(newProfileInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 회원가입실패_profileInfo_nickName이2자리미만 () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        ProfileInfo newProfileInfo = ProfileInfo.builder()
+                .nickName("하")
+                .build();
+
+        joinRequest.setProfileInfo(newProfileInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 회원가입실패_profileInfo_nickName이10자리초과 () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        ProfileInfo newProfileInfo = ProfileInfo.builder()
+                .nickName("abc12345678910")
+                .build();
+
+        joinRequest.setProfileInfo(newProfileInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 회원가입실패_profileInfo_nickName이특수문자포함 () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        ProfileInfo newProfileInfo = ProfileInfo.builder()
+                .nickName("abc12%")
+                .build();
+
+        joinRequest.setProfileInfo(newProfileInfo);
+        // when
+        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 회원가입실패_profileInfo_introduction_50자초과 () throws Exception {
+        // given
+        final String url = "/api/account/join";
+        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        ProfileInfo newProfileInfo = ProfileInfo.builder()
+                .nickName("마이")
+                // 51자
+                .introduction("012345678901234567890123456789012345678901234567890")
+                .build();
 
         joinRequest.setProfileInfo(newProfileInfo);
         // when
