@@ -1,6 +1,7 @@
 package com.fitmate.app.account.helper;
 
 import com.fitmate.app.account.dto.AccountDto;
+import com.fitmate.app.exceptions.GlobalExceptionHandler;
 import com.google.gson.Gson;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,6 +24,12 @@ public class JoinMockMvcHelper {
 
     public JoinMockMvcHelper(Object target) {
         this.mockMvc = MockMvcBuilders.standaloneSetup(target).build();
+        this.gson = new Gson();
+    }
+    public JoinMockMvcHelper(Object target, GlobalExceptionHandler globalExceptionHandler) {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(target)
+                .setControllerAdvice(globalExceptionHandler)
+                .build();
         this.gson = new Gson();
     }
 }
