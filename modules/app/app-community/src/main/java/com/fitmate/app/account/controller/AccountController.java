@@ -1,14 +1,14 @@
 package com.fitmate.app.account.controller;
 
 import com.fitmate.app.account.dto.AccountDto;
+import com.fitmate.app.account.mapper.AccountDtoMapper;
 import com.fitmate.app.account.service.JoinService;
+import com.fitmate.domain.account.dto.AccountDataDto;
+import com.fitmate.domain.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -19,10 +19,19 @@ public class AccountController {
 
     private final JoinService joinService;
 
+    private final AccountService accountService;
+
     @PostMapping("/join")
-    public ResponseEntity<AccountDto.JoinResponse> join(@Valid @RequestBody AccountDto.JoinRequest joinRequest) {
+    public ResponseEntity<AccountDto.JoinResponse> join(@Valid @RequestBody AccountDto.JoinRequest joinRequest) throws Exception {
         AccountDto.JoinResponse joinResponse = joinService.join(joinRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(joinResponse);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountDto.Response> find(@PathVariable final Long id) throws Exception {
+        AccountDataDto.Response dataResponse = accountService.validateFindById(id);
+        AccountDto.Response response = AccountDtoMapper.INSTANCE.toRealResponse(dataResponse);
+        return ResponseEntity.ok(response);
     }
 }

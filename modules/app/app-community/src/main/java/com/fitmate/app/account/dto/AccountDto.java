@@ -7,12 +7,29 @@ import com.fitmate.domain.account.entity.vo.ProfileInfo;
 import lombok.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 public class AccountDto {
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Response {
+
+        private String loginName;
+
+        private String password;
+
+        private ProfileInfo profileInfo;
+
+        private PrivateInfo privateInfo;
+
+        private AccountRole role;
+
+        private Gender gender;
+    }
+
     @Getter
     @Setter
     @Builder

@@ -1,6 +1,7 @@
 package com.fitmate.app.account.mapper;
 
 import com.fitmate.app.account.dto.AccountDto;
+import com.fitmate.domain.account.dto.AccountDataDto;
 import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.entity.vo.Password;
@@ -35,4 +36,6 @@ public interface AccountDtoMapper {
     @Mapping(target = "phone", source = "privateInfo.phone")
     @Mapping(target = "nickName", source = "profileInfo.nickName")
     AccountDuplicateCheckDto toDuplicatedCheckDto(AccountDto.JoinRequest joinRequest);
+
+    AccountDto.Response toRealResponse(AccountDataDto.Response dataResponse);
 }

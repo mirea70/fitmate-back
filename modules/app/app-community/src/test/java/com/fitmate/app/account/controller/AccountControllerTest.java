@@ -1,12 +1,12 @@
 package com.fitmate.app.account.controller;
 
-import com.fitmate.app.account.dto.AccountDto;
 import com.fitmate.app.account.helper.AccountAppTestHelper;
 import com.fitmate.app.account.helper.AccountMockMvcHelper;
-import com.fitmate.app.account.service.JoinService;
 import com.fitmate.app.exceptions.GlobalExceptionHandler;
-import com.fitmate.exceptions.exception.AccountDuplicatedException;
-import com.fitmate.exceptions.result.AccountErrorResult;
+import com.fitmate.domain.account.service.AccountService;
+import com.fitmate.exceptions.exception.NotFoundException;
+import com.fitmate.exceptions.result.NotFoundErrorResult;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,35 +15,35 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class JoinExceptionTest {
+public class AccountControllerTest {
     @InjectMocks
     private AccountController target;
     @Mock
-    private JoinService joinService;
+    private AccountService accountService;
     private AccountAppTestHelper accountAppTestHelper;
     private AccountMockMvcHelper accountMockMvcHelper;
+    private Gson gson;
 
     @BeforeEach
     public void init() {
         accountAppTestHelper = new AccountAppTestHelper();
         accountMockMvcHelper = new AccountMockMvcHelper(target, new GlobalExceptionHandler());
+        gson = new Gson();
     }
 
     @Test
-    public void 회원가입실패_JoinService_AccountDuplicatedException_Join () throws Exception {
+    public void 회원조회실패_서비스에서에러호출 () throws Exception {
         // given
-        final String url = "/api/accounts/join";
-        AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
-        doThrow(new AccountDuplicatedException(AccountErrorResult.DUPLICATED_ACCOUNT_JOIN))
-                .when(joinService).join(any(AccountDto.JoinRequest.class));
+        String url = "/api/accounts/1";
+        doThrow(new NotFoundException(NotFoundErrorResult.NOT_FOUNT_ACCOUNT_DATA)).when(accountService).validateFindById(anyLong());
         // when
-        final ResultActions resultActions = accountMockMvcHelper.submitPost(joinRequest, url);
+        ResultActions resultActions = accountMockMvcHelper.submitGet(url);
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isNotFound());
     }
 }

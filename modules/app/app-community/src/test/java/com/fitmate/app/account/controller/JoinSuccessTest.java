@@ -2,7 +2,7 @@ package com.fitmate.app.account.controller;
 
 import com.fitmate.app.account.dto.AccountDto;
 import com.fitmate.app.account.helper.AccountAppTestHelper;
-import com.fitmate.app.account.helper.JoinMockMvcHelper;
+import com.fitmate.app.account.helper.AccountMockMvcHelper;
 import com.fitmate.app.account.service.JoinService;
 import com.fitmate.app.exceptions.GlobalExceptionHandler;
 import com.google.gson.Gson;
@@ -29,13 +29,13 @@ public class JoinSuccessTest {
     @Mock
     private JoinService joinService;
     private AccountAppTestHelper accountAppTestHelper;
-    private JoinMockMvcHelper joinMockMvcHelper;
+    private AccountMockMvcHelper accountMockMvcHelper;
     private Gson gson;
 
     @BeforeEach
     public void init() {
         accountAppTestHelper = new AccountAppTestHelper();
-        joinMockMvcHelper = new JoinMockMvcHelper(target, new GlobalExceptionHandler());
+        accountMockMvcHelper = new AccountMockMvcHelper(target, new GlobalExceptionHandler());
         gson = new Gson();
     }
 
@@ -47,7 +47,7 @@ public class JoinSuccessTest {
         AccountDto.JoinResponse joinResponse = accountAppTestHelper.getTestJoinResponse();
         doReturn(joinResponse).when(joinService).join(any(AccountDto.JoinRequest.class));
         // when
-        final ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        final ResultActions resultActions = accountMockMvcHelper.submitPost(joinRequest, url);
         // then
         final AccountDto.JoinResponse resultResponse = gson.fromJson(resultActions.andReturn()
                 .getResponse()

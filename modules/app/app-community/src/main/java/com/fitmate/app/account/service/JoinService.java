@@ -21,7 +21,7 @@ public class JoinService {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-    public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) {
+    public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) throws Exception {
         AccountDuplicateCheckDto checkDto = AccountDtoMapper.INSTANCE.toDuplicatedCheckDto(joinRequest);
         accountService.CheckDuplicated(checkDto);
         Account newAccount = AccountDtoMapper.INSTANCE.toEntity(joinRequest);

@@ -1,8 +1,10 @@
 package com.fitmate.app.exceptions;
 
 import com.fitmate.exceptions.exception.AccountDuplicatedException;
+import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.AccountErrorResult;
 import com.fitmate.exceptions.result.CommonErrorResult;
+import com.fitmate.exceptions.result.NotFoundErrorResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -62,4 +64,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAccountNotFoundException(final NotFoundException exception) {
+        log.warn("존재하지 않는 데이터: ", exception);
+        return this.makeErrorResponseEntity(NotFoundErrorResult.NOT_FOUNT_ACCOUNT_DATA);
+    }
+
+    private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final NotFoundErrorResult errorResult) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
+    }
 }

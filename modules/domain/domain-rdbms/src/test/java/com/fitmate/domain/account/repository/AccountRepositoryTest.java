@@ -4,6 +4,7 @@ package com.fitmate.domain.account.repository;
 import com.fitmate.domain.account.entity.vo.PrivateInfo;
 import com.fitmate.domain.account.helper.AccountDomainTestHelper;
 import com.fitmate.domain.account.entity.Account;
+import com.fitmate.exceptions.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -38,9 +39,9 @@ public class AccountRepositoryTest {
         assertEquals(DataIntegrityViolationException.class, result.getClass());
     }
 
-    private void saveBefore() {
+    private Account saveBefore() {
         Account account = accountDomainTestHelper.getTestAccount();
-        accountRepository.save(account);
+        return accountRepository.save(account);
     }
     @Test
     public void 회원등록 () throws Exception {
@@ -54,7 +55,7 @@ public class AccountRepositoryTest {
         assertEquals(result, account);
     }
     @Test
-    public void 회원조회 () throws Exception {
+    public void 회원조회_이메일로 () throws Exception {
         // given
         Account account = accountDomainTestHelper.getTestAccount();
         accountRepository.save(account);
@@ -62,10 +63,19 @@ public class AccountRepositoryTest {
         final Account findResult = accountRepository.findByPrivateInfoEmail(account.getEmail())
                 .orElseThrow(Exception::new);
         // then
-        System.out.println("findResult.hashCode() = " + findResult.hashCode());
-        System.out.println("account.hashCode() = " + account.hashCode());
         assertThat(findResult).isNotNull();
         assertEquals(findResult, account);
+    }
+    @Test
+    public void 회원조회_ID로_성공 () throws Exception {
+        // given
+        Account savedAccount = saveBefore();
+        // when
+        final Account findResult = accountRepository.findById(savedAccount.getId())
+                .orElseThrow(Exception::new);
+        // then
+        assertThat(findResult).isNotNull();
+        assertEquals(findResult, savedAccount);
     }
 
     @Test

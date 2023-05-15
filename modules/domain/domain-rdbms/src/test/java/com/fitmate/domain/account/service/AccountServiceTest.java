@@ -1,12 +1,13 @@
 package com.fitmate.domain.account.service;
 
 
+import com.fitmate.domain.account.dto.AccountDataDto;
 import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.helper.AccountDomainTestHelper;
 import com.fitmate.domain.account.repository.AccountRepository;
-import com.fitmate.domain.account.service.AccountService;
 import com.fitmate.exceptions.exception.AccountDuplicatedException;
+import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.AccountErrorResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +30,31 @@ public class AccountServiceTest {
     private AccountRepository accountRepository;
 
     private AccountDomainTestHelper accountDomainTestHelper = new AccountDomainTestHelper();;
+
+    @Test
+    public void 회원조회ID로_실패_존재X () throws Exception {
+        // given
+        Long accountId = 1L;
+        doReturn(Optional.empty()).when(accountRepository).findById(anyLong());
+        // when
+        final NotFoundException result = assertThrows(NotFoundException.class,
+                () -> target.validateFindById(accountId));
+        // then
+        assertThat(result.getErrorResult()).isEqualTo(AccountErrorResult.NOT_FOUNT_ACCOUNT_DATA);
+    }
+
+    @Test
+    public void 회원조회ID로_성공 () throws Exception {
+        // given
+        Account account = accountDomainTestHelper.getTestAccount();
+        Long accountId = 1L;
+        doReturn(Optional.of(account)).when(accountRepository).findById(anyLong());
+        // when
+        final AccountDataDto.Response result = target.validateFindById(accountId);
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getPrivateInfo().getEmail()).isEqualTo(account.getEmail());
+    }
 
     @Test
     public void 중복체크_이메일로 () throws Exception {

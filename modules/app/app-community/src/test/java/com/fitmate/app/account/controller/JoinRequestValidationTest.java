@@ -2,7 +2,7 @@ package com.fitmate.app.account.controller;
 
 import com.fitmate.app.account.dto.AccountDto;
 import com.fitmate.app.account.helper.AccountAppTestHelper;
-import com.fitmate.app.account.helper.JoinMockMvcHelper;
+import com.fitmate.app.account.helper.AccountMockMvcHelper;
 import com.fitmate.domain.account.entity.vo.PrivateInfo;
 import com.fitmate.domain.account.entity.vo.ProfileInfo;
 import com.fitmate.domain.account.enums.AccountRole;
@@ -29,13 +29,13 @@ public class JoinRequestValidationTest {
     @InjectMocks
     private AccountController target;
     private AccountAppTestHelper accountAppTestHelper;
-    private JoinMockMvcHelper joinMockMvcHelper;
+    private AccountMockMvcHelper accountMockMvcHelper;
     private final String url = "/api/accounts/join";
 
     @BeforeEach
     public void init() {
         accountAppTestHelper = new AccountAppTestHelper();
-        joinMockMvcHelper = new JoinMockMvcHelper(target);
+        accountMockMvcHelper = new AccountMockMvcHelper(target);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class JoinRequestValidationTest {
                 .gender(gender)
                 .build();
         // when
-        ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        ResultActions resultActions = accountMockMvcHelper.submitPost(joinRequest, url);
         // then
         resultActions.andExpect(status().isBadRequest());
     }
@@ -115,7 +115,7 @@ public class JoinRequestValidationTest {
         joinRequest.setPrivateInfo(privateInfo);
         joinRequest.setProfileInfo(profileInfo);
         // when
-        ResultActions resultActions = joinMockMvcHelper.submitPost(joinRequest, url);
+        ResultActions resultActions = accountMockMvcHelper.submitPost(joinRequest, url);
         // then
         resultActions.andExpect(status().isBadRequest());
     }

@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-public class JoinMockMvcHelper {
+public class AccountMockMvcHelper {
     private MockMvc mockMvc;
 
     private Gson gson;
@@ -22,11 +22,19 @@ public class JoinMockMvcHelper {
         );
     }
 
-    public JoinMockMvcHelper(Object target) {
+    public ResultActions submitGet(String url) throws Exception {
+        return mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+//                        .queryParam(key, value)
+////                        .param(key, value)
+        );
+    }
+
+    public AccountMockMvcHelper(Object target) {
         this.mockMvc = MockMvcBuilders.standaloneSetup(target).build();
         this.gson = new Gson();
     }
-    public JoinMockMvcHelper(Object target, GlobalExceptionHandler globalExceptionHandler) {
+    public AccountMockMvcHelper(Object target, GlobalExceptionHandler globalExceptionHandler) {
         this.mockMvc = MockMvcBuilders.standaloneSetup(target)
                 .setControllerAdvice(globalExceptionHandler)
                 .build();
