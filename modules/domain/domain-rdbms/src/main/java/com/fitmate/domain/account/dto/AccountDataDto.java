@@ -1,7 +1,7 @@
 package com.fitmate.domain.account.dto;
 
-import com.fitmate.domain.account.entity.vo.PrivateInfo;
-import com.fitmate.domain.account.entity.vo.ProfileInfo;
+import com.fitmate.domain.account.vo.PrivateInfo;
+import com.fitmate.domain.account.vo.ProfileInfo;
 import com.fitmate.domain.account.enums.AccountRole;
 import com.fitmate.domain.account.enums.Gender;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,5 @@
 rootProject.name = 'fitmate'
-include 'app-community'
+include 'app-mate'
 include 'core'
 include 'domain-rdbms'
 include 'infra-rdbms'

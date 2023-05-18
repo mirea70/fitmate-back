@@ -4,9 +4,9 @@ import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.enums.AccountRole;
 import com.fitmate.domain.account.enums.Gender;
-import com.fitmate.domain.account.entity.vo.Password;
-import com.fitmate.domain.account.entity.vo.PrivateInfo;
-import com.fitmate.domain.account.entity.vo.ProfileInfo;
+import com.fitmate.domain.account.vo.Password;
+import com.fitmate.domain.account.vo.PrivateInfo;
+import com.fitmate.domain.account.vo.ProfileInfo;
 import org.springframework.stereotype.Component;
 
 @Component

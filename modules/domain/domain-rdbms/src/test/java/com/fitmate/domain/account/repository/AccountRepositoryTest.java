@@ -1,10 +1,9 @@
 package com.fitmate.domain.account.repository;
 
 
-import com.fitmate.domain.account.entity.vo.PrivateInfo;
+import com.fitmate.domain.account.vo.PrivateInfo;
 import com.fitmate.domain.account.helper.AccountDomainTestHelper;
 import com.fitmate.domain.account.entity.Account;
-import com.fitmate.exceptions.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

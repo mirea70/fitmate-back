@@ -2,7 +2,7 @@ package com.fitmate.domain.account.mapper;
 
 import com.fitmate.domain.account.dto.AccountDataDto;
 import com.fitmate.domain.account.entity.Account;
-import com.fitmate.domain.account.entity.vo.Password;
+import com.fitmate.domain.account.vo.Password;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
