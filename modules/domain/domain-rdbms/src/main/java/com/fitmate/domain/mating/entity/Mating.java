@@ -1,8 +1,10 @@
 package com.fitmate.domain.mating.entity;
 
+import com.fitmate.domain.base.BaseDomain;
 import com.fitmate.domain.mating.enums.FitCategory;
 import com.fitmate.domain.mating.enums.GatherType;
 import com.fitmate.domain.mating.enums.PermitGender;
+import com.fitmate.domain.mating.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.vo.FitPlace;
 import com.fitmate.domain.mating.vo.PermitAges;
 import lombok.AccessLevel;
@@ -15,9 +17,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(exclude = "id")
+@EqualsAndHashCode(exclude = "id", callSuper = false)
 @Getter
-public class Mating {
+public class Mating extends BaseDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mating_id")
@@ -58,5 +60,8 @@ public class Mating {
     @Column(nullable = false)
     private boolean isEntryFee = false;
 
+    @Embedded
+    private EntryFeeInfo entryFeeInfo;
 
+    // 작성자 정보 추가 필요
 }

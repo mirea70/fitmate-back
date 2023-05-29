@@ -14,7 +14,7 @@ public class OperateFeeSetConverter implements AttributeConverter<OperateFeeSet,
     public String convertToDatabaseColumn(OperateFeeSet attribute) {
         if (attribute == null) return null;
         return attribute.getOperateFees().stream()
-                .map(operateFee -> operateFee.getDescription())
+                .map(OperateFee::getDescription)
                 .collect(Collectors.joining(","));
     }
 
@@ -23,8 +23,9 @@ public class OperateFeeSetConverter implements AttributeConverter<OperateFeeSet,
         if (dbData == null) return null;
         String[] operateFees = dbData.split(",");
         EnumSet<OperateFee> operateFeeSet = Arrays.stream(operateFees)
-                .map(value -> )
+                .map(OperateFee::valueOf)
+                .collect(Collectors.toCollection(() -> EnumSet.noneOf(OperateFee.class)));
 
-        return null;
+        return new OperateFeeSet(operateFeeSet);
     }
 }
