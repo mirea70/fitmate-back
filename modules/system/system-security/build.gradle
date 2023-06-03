@@ -1,0 +1,14 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    // 모듈
+    implementation project(':domain-rdbms')
+    // security
+    api 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

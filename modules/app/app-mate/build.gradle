@@ -8,6 +8,7 @@ dependencies {
     // 모듈
     implementation project(':domain-rdbms')
     implementation project(':core')
+    implementation project(':system-security')
     // util
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'

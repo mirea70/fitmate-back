@@ -2,7 +2,8 @@ rootProject.name = 'fitmate'
 include 'app-mate'
 include 'core'
 include 'domain-rdbms'
-include 'infra-rdbms'
+include 'domain-redis'
+include 'system-security'
 
 for(project in rootProject.children) {
     switch (project.name.split("-")[0]) {
@@ -10,9 +11,9 @@ for(project in rootProject.children) {
             break
         case "domain": project.projectDir = file("modules/domain/${project.name}")
             break
-        case "infra": project.projectDir = file("modules/infrastructure/${project.name}")
-            break
         case "core": project.projectDir = file("modules/core/${project.name}")
+            break
+        case "system": project.projectDir = file("modules/system/${project.name}")
             break
     }
 }

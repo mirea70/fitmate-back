@@ -15,10 +15,10 @@ import javax.validation.constraints.Min;
 @Getter
 public class PermitAges {
 
-    @Column(nullable = false)
+    @Column(name = "max_permit_age", nullable = false)
     @Max(value = 50)
     private Integer max;
-    @Column(nullable = false)
+    @Column(name = "min_permit_age", nullable = false)
     @Min(value = 15)
     private Integer min;
 

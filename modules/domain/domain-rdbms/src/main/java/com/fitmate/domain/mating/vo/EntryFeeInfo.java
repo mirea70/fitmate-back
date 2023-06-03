@@ -26,6 +26,6 @@ public class EntryFeeInfo {
     @Convert(converter = GatherSetConverter.class)
     private GatherFeeSet gatherFeeSet;
 
-    @Column
+    @Column(name = "etc_fees")
     private String etc;
 }

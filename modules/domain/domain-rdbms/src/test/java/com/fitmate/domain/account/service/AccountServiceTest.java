@@ -9,6 +9,7 @@ import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.exceptions.exception.AccountDuplicatedException;
 import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.AccountErrorResult;
+import com.fitmate.exceptions.result.NotFoundErrorResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +41,7 @@ public class AccountServiceTest {
         final NotFoundException result = assertThrows(NotFoundException.class,
                 () -> target.validateFindById(accountId));
         // then
-        assertThat(result.getErrorResult()).isEqualTo(AccountErrorResult.NOT_FOUNT_ACCOUNT_DATA);
+        assertThat(result.getErrorResult()).isEqualTo(NotFoundErrorResult.NOT_FOUNT_ACCOUNT_DATA);
     }
 
     @Test
