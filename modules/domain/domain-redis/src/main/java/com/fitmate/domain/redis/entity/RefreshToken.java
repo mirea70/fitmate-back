@@ -11,11 +11,15 @@ public class RefreshToken {
     @Id
     private String email;
 
-    private final String token;
+    private String token;
 
     @Builder
     public RefreshToken(String email, String token) {
         this.token = token;
         this.email = email;
+    }
+
+    public void changeToken(String token) {
+        this.token = token;
     }
 }

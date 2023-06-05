@@ -10,6 +10,7 @@ import com.fitmate.exceptions.exception.AccountDuplicatedException;
 import com.fitmate.exceptions.result.AccountErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +21,13 @@ public class JoinService {
 
     private final AccountService accountService;
     private final AccountRepository accountRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) throws Exception {
         AccountDuplicateCheckDto checkDto = AccountDtoMapper.INSTANCE.toDuplicatedCheckDto(joinRequest);
         accountService.CheckDuplicated(checkDto);
+        joinRequest.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
+
         Account newAccount = AccountDtoMapper.INSTANCE.toEntity(joinRequest);
         try {
             Account savedAccount = accountRepository.save(newAccount);

@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/api/accounts/join").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .and()
                 .logout()

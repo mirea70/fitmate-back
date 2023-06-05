@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByPrivateInfoEmail(String email);
 
+    Optional<Account> findByLoginName(String loginName);
+
     @Query(value = "SELECT COUNT(a) FROM Account a " +
             "WHERE a.privateInfo.email = :email OR a.privateInfo.name = :name OR " +
             "a.privateInfo.phone = :phone OR a.profileInfo.nickName = :nickName")
