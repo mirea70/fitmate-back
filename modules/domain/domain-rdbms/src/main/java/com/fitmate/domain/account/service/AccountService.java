@@ -22,7 +22,7 @@ public class AccountService {
 
     public AccountDataDto.Response validateFindById(Long id) throws Exception {
         Account findAccount = accountRepository.findById(id).orElseThrow(
-                () -> new NotFoundException(NotFoundErrorResult.NOT_FOUNT_ACCOUNT_DATA));
+                () -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
 
         return AccountDataDtoMapper.INSTANCE.toResponse(findAccount);
     }

@@ -2,6 +2,7 @@ package com.fitmate.system.security.config;
 
 import com.fitmate.system.security.error.JwtAccessDeniedHandler;
 import com.fitmate.system.security.error.JwtAuthenticationEntryPoint;
+import com.fitmate.system.security.error.TokenExpiredFilter;
 import com.fitmate.system.security.filter.JwtAuthenticationFilter;
 import com.fitmate.system.security.filter.JwtAuthorizationFilter;
 import com.fitmate.system.security.handler.JwtLogoutHandler;
@@ -21,10 +22,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtLogoutHandler jwtLogoutHandler;
+    private final TokenExpiredFilter tokenExpiredFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -34,6 +37,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .apply(new JwtLogin())
                 .and()
+                .addFilterBefore(tokenExpiredFilter, JwtAuthorizationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)

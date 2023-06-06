@@ -41,7 +41,7 @@ public class AccountServiceTest {
         final NotFoundException result = assertThrows(NotFoundException.class,
                 () -> target.validateFindById(accountId));
         // then
-        assertThat(result.getErrorResult()).isEqualTo(NotFoundErrorResult.NOT_FOUNT_ACCOUNT_DATA);
+        assertThat(result.getErrorResult()).isEqualTo(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA);
     }
 
     @Test

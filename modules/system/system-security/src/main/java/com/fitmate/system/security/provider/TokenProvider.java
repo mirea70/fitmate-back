@@ -40,7 +40,8 @@ public class TokenProvider {
         return JWT.create()
                 .withSubject("feetMate JWT Access Token")
 //                .withExpiresAt(new Date(System.currentTimeMillis() + (60 * 1000 * 60)))
-                .withExpiresAt(new Date(System.currentTimeMillis() + (60 * 1000 * 30)))
+//                .withExpiresAt(new Date(System.currentTimeMillis() + (60 * 1000 * 30)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + (2 * 1000 )))
                 .withClaim("accountId", accountId)
                 .withClaim("email", email)
                 .sign(Algorithm.HMAC512(accessKey));
@@ -51,7 +52,8 @@ public class TokenProvider {
         return JWT.create()
                 .withSubject("feetMate JWT Refresh Token")
 //                    .withExpiresAt(new Date(System.currentTimeMillis() + (60 * 1000 * 60 * 24 * 14)))
-                .withExpiresAt(new Date(System.currentTimeMillis() + (60 * 1000 * 30)))
+//                .withExpiresAt(new Date(System.currentTimeMillis() + (60 * 1000 * 30)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + (2 * 1000 )))
                 .withClaim("accountId", accountId)
                 .withClaim("email", email)
                 .sign(Algorithm.HMAC512(refreshKey));
@@ -64,7 +66,9 @@ public class TokenProvider {
         refreshTokenRepository.findById(email)
                 .ifPresentOrElse(
                         r -> {r.changeToken(newRefreshToken);
-                            log.info("기존 리프레시 토큰 변환");},
+                            log.info("기존 리프레시 토큰 변환");
+                            refreshTokenRepository.save(r);
+                            },
                         () -> {
                             RefreshToken toSaveToken = RefreshToken.builder()
                                     .token(newRefreshToken)
@@ -74,6 +78,7 @@ public class TokenProvider {
                             refreshTokenRepository.save(toSaveToken);
                         }
                 );
+
         return newRefreshToken;
     }
 
@@ -82,7 +87,7 @@ public class TokenProvider {
         // refresh Token을 DB에 저장된 토큰과 비교
         Authentication authentication = getAuthentication(refreshToken);
         AuthDetails authdetails = (AuthDetails) authentication.getPrincipal();
-        RefreshToken findRefreshToken = refreshTokenRepository.findById(authentication.getName())
+        RefreshToken findRefreshToken = refreshTokenRepository.findById(authdetails.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("email : " + authentication.getName() + " was not found"));
 
         // 토큰이 일치한다면

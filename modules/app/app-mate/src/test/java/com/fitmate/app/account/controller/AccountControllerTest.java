@@ -41,7 +41,7 @@ public class AccountControllerTest {
     public void 회원조회실패_서비스에서에러호출 () throws Exception {
         // given
         String url = "/api/accounts/1";
-        doThrow(new NotFoundException(NotFoundErrorResult.NOT_FOUNT_ACCOUNT_DATA)).when(accountService).validateFindById(anyLong());
+        doThrow(new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA)).when(accountService).validateFindById(anyLong());
         // when
         ResultActions resultActions = accountMockMvcHelper.submitGet(url);
         // then

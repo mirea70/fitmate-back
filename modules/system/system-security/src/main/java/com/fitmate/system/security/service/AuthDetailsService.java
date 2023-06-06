@@ -20,7 +20,7 @@ public class AuthDetailsService implements UserDetailsService {
     @Override
     public AuthDetails loadUserByUsername(String loginName) throws UsernameNotFoundException {
         Account accountEntity = accountRepository.findByLoginName(loginName).orElseThrow(
-                () -> new NotFoundException(NotFoundErrorResult.NOT_FOUNT_ACCOUNT_DATA));
+                () -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
         return new AuthDetails(accountEntity);
     }
 }
