@@ -2,16 +2,15 @@ package com.fitmate.domain.file.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(of = {"id","storeFileName", "path"})
+@EqualsAndHashCode(of = {"id","storeFileName"})
 public class AttachFile {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_id")
     private Long id;
 
@@ -19,13 +18,10 @@ public class AttachFile {
 
     private String storeFileName;
 
-    private String path;
-
     @Builder
-    public AttachFile(Long id, String uploadFileName, String storeFileName, String path) {
+    public AttachFile(Long id, String uploadFileName, String storeFileName) {
         this.id = id;
         this.uploadFileName = uploadFileName;
         this.storeFileName = storeFileName;
-        this.path = path;
     }
 }

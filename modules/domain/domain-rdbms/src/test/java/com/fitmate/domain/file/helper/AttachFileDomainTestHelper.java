@@ -10,10 +10,8 @@ public class AttachFileDomainTestHelper {
     public AttachFile getTestFile() {
         String uploadFileName = "업로드파일1";
         return AttachFile.builder()
-                .id(1L)
                 .uploadFileName(uploadFileName)
                 .storeFileName(UUID.randomUUID().toString())
-                .path("path")
                 .build();
     }
 }
