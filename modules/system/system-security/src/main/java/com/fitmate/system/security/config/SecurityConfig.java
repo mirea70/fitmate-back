@@ -31,7 +31,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable();
+        httpSecurity.csrf().disable()
+                .headers().frameOptions().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .httpBasic().disable()
@@ -44,8 +45,10 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/h2/**").permitAll()
                 .antMatchers("/api/accounts/join").permitAll()
                 .antMatchers("/api/**").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .logout()
                 .addLogoutHandler(jwtLogoutHandler)
