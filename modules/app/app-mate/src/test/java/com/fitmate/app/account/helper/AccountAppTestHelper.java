@@ -7,11 +7,15 @@ import com.fitmate.domain.account.enums.Gender;
 import com.fitmate.domain.account.vo.Password;
 import com.fitmate.domain.account.vo.PrivateInfo;
 import com.fitmate.domain.account.vo.ProfileInfo;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountAppTestHelper {
-    public AccountDto.JoinRequest getTestAccountJoinRequest() {
+    private final FileTestHelper fileTestHelper = new FileTestHelper();
+
+
+    public AccountDto.JoinRequest getTestAccountJoinRequest() throws Exception {
         PrivateInfo privateInfo = PrivateInfo.builder()
                 .name("미이수")
                 .email("abc@naver.com")
@@ -21,6 +25,8 @@ public class AccountAppTestHelper {
                 .nickName("닉네임2")
                 .build();
 
+        MockMultipartFile multipartFile = fileTestHelper.getMockMultipartFile("image");
+
         return AccountDto.JoinRequest.builder()
                 .loginName("abc2")
                 .password("123456aB#")
@@ -28,8 +34,10 @@ public class AccountAppTestHelper {
                 .profileInfo(profileInfo)
                 .role(AccountRole.USER)
                 .gender(Gender.MAIL)
+                .profileImage(multipartFile)
                 .build();
     }
+
 
     public Account getTestAccount() {
         PrivateInfo privateInfo = PrivateInfo.builder()
@@ -59,6 +67,7 @@ public class AccountAppTestHelper {
                 .build();
         ProfileInfo profileInfo = ProfileInfo.builder()
                 .nickName("닉네임2")
+                .profileImageId(1L)
                 .build();
         return AccountDto.JoinResponse.builder()
                 .loginName("abc")

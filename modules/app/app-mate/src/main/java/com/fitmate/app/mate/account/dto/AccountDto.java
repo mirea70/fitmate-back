@@ -1,10 +1,13 @@
 package com.fitmate.app.mate.account.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fitmate.domain.account.enums.AccountRole;
 import com.fitmate.domain.account.enums.Gender;
 import com.fitmate.domain.account.vo.PrivateInfo;
 import com.fitmate.domain.account.vo.ProfileInfo;
 import lombok.*;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -37,7 +40,7 @@ public class AccountDto {
     @AllArgsConstructor
     public static class JoinRequest {
 
-        @NotNull(message = "로그인ID 입력은 필수입니다.")
+        @NotNull(message = "로그인 ID 입력은 필수입니다.")
         private String loginName;
         @NotNull(message = "비밀번호 입력은 필수입니다.")
         @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$",
@@ -53,6 +56,8 @@ public class AccountDto {
         private AccountRole role;
         @NotNull(message = "성별 입력은 필수입니다.")
         private Gender gender;
+        @JsonIgnore
+        private MultipartFile profileImage;
 
     }
     @Getter

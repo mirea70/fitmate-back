@@ -2,6 +2,8 @@ package com.fitmate.app.mate.account.service;
 
 import com.fitmate.app.mate.account.dto.AccountDto;
 import com.fitmate.app.mate.account.mapper.AccountDtoMapper;
+import com.fitmate.app.mate.file.dto.AttachFileDto;
+import com.fitmate.app.mate.file.service.FileService;
 import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.repository.AccountRepository;
@@ -22,11 +24,14 @@ public class JoinService {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final FileService fileService;
 
     public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) throws Exception {
         AccountDuplicateCheckDto checkDto = AccountDtoMapper.INSTANCE.toDuplicatedCheckDto(joinRequest);
         accountService.CheckDuplicated(checkDto);
         joinRequest.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
+        AttachFileDto.Response fileResponse = fileService.uploadFile(joinRequest.getProfileImage());
+        joinRequest.getProfileInfo().updateProfileImageId(fileResponse.getId());
 
         Account newAccount = AccountDtoMapper.INSTANCE.toEntity(joinRequest);
         try {

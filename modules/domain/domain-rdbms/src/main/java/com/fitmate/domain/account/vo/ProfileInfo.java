@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"nickName", "introduction", "profileImage"})
+@EqualsAndHashCode(exclude = {"nickName", "introduction"})
 @Getter
 public class ProfileInfo {
     @Column(unique = true, nullable = false)
@@ -26,5 +26,9 @@ public class ProfileInfo {
     private String introduction;
 
     @Column
-    private Long profileImage;
+    private Long profileImageId;
+
+    public void updateProfileImageId(Long profileImageId) {
+        if(profileImageId != null) this.profileImageId = profileImageId;
+    }
 }

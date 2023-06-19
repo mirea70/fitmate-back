@@ -1,5 +1,6 @@
 package com.fitmate.app.file.service;
 
+import com.fitmate.app.account.helper.FileTestHelper;
 import com.fitmate.app.mate.file.service.FileService;
 import com.fitmate.app.mate.file.dto.AttachFileDto;
 import com.fitmate.exceptions.exception.FileRequestException;
@@ -23,6 +24,9 @@ public class FileServiceTest {
     @Autowired
     private FileService target;
 
+    @Autowired
+    private FileTestHelper fileTestHelper;
+
     private final String rootPath = System.getProperty("user.home");
     private final String fileDefaultDir = rootPath + "/files/";
     private final String profileImageDir = "/profile/";
@@ -37,7 +41,7 @@ public class FileServiceTest {
         String uploadFileName = "image" + specialWord;
         String ext = "png";
         String path = fileDefaultDir + profileImageDir + uploadFileName + "." + ext;
-        MockMultipartFile multipartFile = getMockMultipartFile(uploadFileName, ext, path);
+        MockMultipartFile multipartFile = fileTestHelper.getMockMultipartFile(uploadFileName);
         // when
         final FileRequestException result = assertThrows(FileRequestException.class, () -> target.uploadFile(multipartFile));
         // then
@@ -51,7 +55,7 @@ public class FileServiceTest {
         String uploadFileName = "image";
         String ext = requestExt;
         String path = fileDefaultDir + profileImageDir + uploadFileName + "." + ext;
-        MockMultipartFile multipartFile = getMockMultipartFile(uploadFileName, ext, path);
+        MockMultipartFile multipartFile = fileTestHelper.getMockMultipartFile(uploadFileName,ext,path);
         // when
         final FileRequestException result = assertThrows(FileRequestException.class, () -> target.uploadFile(multipartFile));
         // then
@@ -64,16 +68,12 @@ public class FileServiceTest {
         String uploadFileName = "image";
         String ext = "png";
         String path = fileDefaultDir + profileImageDir + uploadFileName + "." + ext;
-        MockMultipartFile multipartFile = getMockMultipartFile(uploadFileName, ext, path);
+        MockMultipartFile multipartFile = fileTestHelper.getMockMultipartFile(uploadFileName);
         // when
         AttachFileDto.Response result = target.uploadFile(multipartFile);
         // then
         assertThat(result).isNotNull();
         assertThat(result.getUploadFileName()).isEqualTo(multipartFile.getOriginalFilename());
-    }
-    private MockMultipartFile getMockMultipartFile(String fileName, String ext, String path) throws Exception {
-        FileInputStream fileInputStream = new FileInputStream(new File(path));
-        return new MockMultipartFile(fileName, fileName + "." + ext, ext, fileInputStream);
     }
 
     @Test
