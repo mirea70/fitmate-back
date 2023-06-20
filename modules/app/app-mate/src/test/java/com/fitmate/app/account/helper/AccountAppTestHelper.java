@@ -47,6 +47,7 @@ public class AccountAppTestHelper {
                 .build();
         ProfileInfo profileInfo = ProfileInfo.builder()
                 .nickName("닉네임2")
+                .profileImageId(1L)
                 .build();
 
         return Account.builder()

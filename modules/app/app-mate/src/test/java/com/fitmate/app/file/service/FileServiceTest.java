@@ -10,10 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.UrlResource;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -79,9 +78,13 @@ public class FileServiceTest {
     @Test
     public void 파일다운로드 () throws Exception {
         // given
-
+        String storeFileName = "image_2368d0ba-1f03-4b55-b51a-aa643cea88b9.png";
+        String uploadFileName = storeFileName.split("_")[0];
+        String path = fileDefaultDir + profileImageDir + storeFileName;
         // when
-
+        AttachFileDto.Download result = target.downloadFile(storeFileName);
         // then
+        assertThat(result.getUrlResource().getURL().toString()).isEqualTo("file:" + path);
+        assertThat(result.getContentDisposition()).isEqualTo("attachment; filename=\"" + uploadFileName + "\"");
     }
 }

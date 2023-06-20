@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.core.io.UrlResource;
 
 public class AttachFileDto {
     @Getter
@@ -21,5 +22,16 @@ public class AttachFileDto {
         private String uploadFileName;
 
         private String storeFileName;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Download {
+
+        private UrlResource urlResource;
+
+        private String contentDisposition;
     }
 }

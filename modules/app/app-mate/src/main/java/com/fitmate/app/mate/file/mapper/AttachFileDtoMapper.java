@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
+import org.springframework.core.io.UrlResource;
 
 @Mapper(componentModel = "spring")
 public interface AttachFileDtoMapper {
@@ -15,4 +16,6 @@ public interface AttachFileDtoMapper {
 
     @Mapping(target = "id", ignore = true)
     AttachFile toEntityByFileInfo(String uploadFileName, String storeFileName);
+
+    AttachFileDto.Download toDownLoadDto(UrlResource urlResource, String contentDisposition);
 }

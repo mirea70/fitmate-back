@@ -8,12 +8,18 @@ import com.fitmate.domain.file.repository.AttachFileRepository;
 import com.fitmate.exceptions.exception.FileRequestException;
 import com.fitmate.exceptions.result.FileErrorResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,7 +54,7 @@ public class FileService {
         String extension = extractExt(uploadFileName);
         validateFileExtension(extension);
 
-        return rawFileName + "-" + UUID.randomUUID() + "." + extension;
+        return rawFileName + "_" + UUID.randomUUID() + "." + extension;
     }
 
     private void validateFileExtension(String requestExtension) {
@@ -76,5 +82,22 @@ public class FileService {
         AttachFile savedFile = attachFileRepository.save(newFile);
 
         return AttachFileDtoMapper.INSTANCE.toResponse(savedFile);
+    }
+
+    public AttachFileDto.Download downloadFile(String storeFileName) throws MalformedURLException {
+        String uploadFileName = getUploadNameByStoreName(storeFileName);
+        UrlResource urlResource = new UrlResource("file:" + getFullPath(storeFileName));
+        String contentDisposition = getContentDisposition(uploadFileName);
+
+        return AttachFileDtoMapper.INSTANCE.toDownLoadDto(urlResource, contentDisposition);
+    }
+
+    private String getUploadNameByStoreName(String storeFileName) {
+        return storeFileName.split("_")[0];
+    }
+
+    private String getContentDisposition(String uploadFileName) {
+        String encodedUploadFileName = URLEncoder.encode(uploadFileName, StandardCharsets.UTF_8);
+        return "attachment; filename=\"" + encodedUploadFileName + "\"";
     }
 }

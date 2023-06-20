@@ -30,7 +30,7 @@ public class AccountServiceTest {
     @Mock
     private AccountRepository accountRepository;
 
-    private AccountDomainTestHelper accountDomainTestHelper = new AccountDomainTestHelper();;
+    private final AccountDomainTestHelper accountDomainTestHelper = new AccountDomainTestHelper();
 
     @Test
     public void 회원조회ID로_실패_존재X () throws Exception {
