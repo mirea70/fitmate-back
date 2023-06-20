@@ -10,9 +10,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 public class AccountMockMvcHelper {
-    private MockMvc mockMvc;
+    private final MockMvc mockMvc;
 
-    private Gson gson;
+    private final Gson gson;
 
     public ResultActions submitPost(AccountDto.JoinRequest joinRequest, String url) throws Exception {
         return mockMvc.perform(

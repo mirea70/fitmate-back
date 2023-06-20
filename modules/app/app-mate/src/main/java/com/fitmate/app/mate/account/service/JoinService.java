@@ -30,8 +30,10 @@ public class JoinService {
         AccountDuplicateCheckDto checkDto = AccountDtoMapper.INSTANCE.toDuplicatedCheckDto(joinRequest);
         accountService.CheckDuplicated(checkDto);
         joinRequest.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
-        AttachFileDto.Response fileResponse = fileService.uploadFile(joinRequest.getProfileImage());
-        joinRequest.getProfileInfo().updateProfileImageId(fileResponse.getId());
+        if(joinRequest.getProfileImage() != null) {
+            AttachFileDto.Response fileResponse = fileService.uploadFile(joinRequest.getProfileImage());
+            joinRequest.getProfileInfo().updateProfileImageId(fileResponse.getId());
+        }
 
         Account newAccount = AccountDtoMapper.INSTANCE.toEntity(joinRequest);
         try {

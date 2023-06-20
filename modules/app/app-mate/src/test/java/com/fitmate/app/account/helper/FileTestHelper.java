@@ -49,6 +49,12 @@ public class FileTestHelper {
         return new MockMultipartFile(fileName, fileName + "." + ext, ext, fileInputStream);
     }
 
+    public AttachFileDto.Download getTestDownloadDto() throws MalformedURLException {
+        String uploadFileName = "image.png";
+        String storeFileName = "image-3b36e346-2e82-4c6c-9ae7-6076d54c43a9.png";
+        return this.getTestDownloadDto(uploadFileName, storeFileName);
+    }
+
     public AttachFileDto.Download getTestDownloadDto(String uploadFileName, String storeFileName) throws MalformedURLException {
         return AttachFileDto.Download.builder()
                 .contentDisposition(getContentDisposition(uploadFileName))

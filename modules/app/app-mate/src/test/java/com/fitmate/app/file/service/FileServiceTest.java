@@ -10,7 +10,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.UrlResource;
 import org.springframework.mock.web.MockMultipartFile;
 
 
@@ -27,7 +26,7 @@ public class FileServiceTest {
     private FileTestHelper fileTestHelper;
 
     private final String rootPath = System.getProperty("user.home");
-    private final String fileDefaultDir = rootPath + "/files/";
+    private final String fileDefaultDir = rootPath + "/files";
     private final String profileImageDir = "/profile/";
 
     @ParameterizedTest
@@ -85,6 +84,7 @@ public class FileServiceTest {
         AttachFileDto.Download result = target.downloadFile(storeFileName);
         // then
         assertThat(result.getUrlResource().getURL().toString()).isEqualTo("file:" + path);
+        System.out.println("result = " + result.getUrlResource());
         assertThat(result.getContentDisposition()).isEqualTo("attachment; filename=\"" + uploadFileName + "\"");
     }
 }

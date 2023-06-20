@@ -14,6 +14,7 @@ import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class FileService {
 
     private final AttachFileRepository attachFileRepository;
     private final String rootPath = System.getProperty("user.home");
-    private final String fileDefaultDir = rootPath + "/files/";
+    private final String fileDefaultDir = rootPath + "/files";
     private final String profileImageDir = "/profile/";
 
 
@@ -97,7 +98,7 @@ public class FileService {
     }
 
     private String getContentDisposition(String uploadFileName) {
-        String encodedUploadFileName = URLEncoder.encode(uploadFileName, StandardCharsets.UTF_8);
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
         return "attachment; filename=\"" + encodedUploadFileName + "\"";
     }
 }
