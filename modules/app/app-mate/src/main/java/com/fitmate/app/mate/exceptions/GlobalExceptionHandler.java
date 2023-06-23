@@ -4,6 +4,7 @@ import com.fitmate.exceptions.exception.AccountDuplicatedException;
 import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.AccountErrorResult;
 import com.fitmate.exceptions.result.CommonErrorResult;
+import com.fitmate.exceptions.result.FileErrorResult;
 import com.fitmate.exceptions.result.NotFoundErrorResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,6 +74,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final NotFoundErrorResult errorResult) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
+    }
+
+    @ExceptionHandler(MalformedURLException.class)
+    public ResponseEntity<ErrorResponse> handleMalformedURLException(final MalformedURLException exception) {
+        log.warn("URL 리소스 존재 X: ", exception);
+        return this.makeErrorResponseEntity(FileErrorResult.INVALID_URL_RESOURCE);
+    }
+
+    private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final FileErrorResult errorResult) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
     }
 }

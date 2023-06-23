@@ -22,6 +22,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -75,5 +76,17 @@ public class AccountControllerTest {
         resultActions.andExpect(status().isOk());
         String source = resultActions.andReturn().getResponse().getHeader("Content-Disposition");
         assertThat(source).isEqualTo(downloadDto.getContentDisposition());
+    }
+
+    @Test
+    public void 프로필이미지_다운로드_실패 () throws Exception {
+        // given
+        AttachFileDto.Download downloadDto = fileTestHelper.getTestDownloadDto();
+        final String url = "/api/accounts/1/image";
+        doThrow(MalformedURLException.class).when(accountProfileService).downloadProfileImage(anyLong());
+        // when
+        ResultActions resultActions = accountMockMvcHelper.submitGet(url);
+        // then
+        resultActions.andExpect(status().isBadRequest());
     }
 }
