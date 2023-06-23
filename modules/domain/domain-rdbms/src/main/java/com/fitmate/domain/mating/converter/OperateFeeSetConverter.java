@@ -23,7 +23,7 @@ public class OperateFeeSetConverter implements AttributeConverter<OperateFeeSet,
         if (dbData == null) return null;
         String[] operateFees = dbData.split(",");
         EnumSet<OperateFee> operateFeeSet = Arrays.stream(operateFees)
-                .map(OperateFee::valueOf)
+                .map(OperateFee::getValueFromDescription)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(OperateFee.class)));
 
         return new OperateFeeSet(operateFeeSet);

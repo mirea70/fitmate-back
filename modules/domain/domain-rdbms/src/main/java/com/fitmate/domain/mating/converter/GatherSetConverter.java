@@ -23,9 +23,9 @@ public class GatherSetConverter implements AttributeConverter<GatherFeeSet, Stri
     @Override
     public GatherFeeSet convertToEntityAttribute(String dbData) {
         if (dbData == null) return null;
-        String[] operateFees = dbData.split(",");
-        EnumSet<GatherFee> gatherFeeSet = Arrays.stream(operateFees)
-                .map(GatherFee::valueOf)
+        String[] gatherFees = dbData.split(",");
+        EnumSet<GatherFee> gatherFeeSet = Arrays.stream(gatherFees)
+                .map(GatherFee::getValueFromDescription)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(GatherFee.class)));
 
         return new GatherFeeSet(gatherFeeSet);

@@ -12,8 +12,8 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode(exclude = {"name", "address"})
 @Getter
 public class FitPlace {
-    @Column(name = "fit_place_name")
+    @Column(name = "fit_place_name", nullable = false)
     private String name;
-    @Column(name = "fit_place_address")
+    @Column(name = "fit_place_address", nullable = false)
     private String address;
 }
