@@ -23,6 +23,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,17 @@ public class FileService {
 
         return saveToRepository(multipartFile.getOriginalFilename(), storeFileName);
     }
+
+    public List<AttachFileDto.Response> uploadFiles(List<MultipartFile> multipartFiles) throws IOException {
+        if(multipartFiles == null || multipartFiles.isEmpty()) return  null;
+
+        List<AttachFileDto.Response> responses = new ArrayList<>();
+        for(MultipartFile file : multipartFiles) {
+            responses.add(this.uploadFile(file));
+        }
+        return responses;
+    }
+
 
     private String getStoreFileName(MultipartFile multipartFile) {
         String rawFileName = multipartFile.getName();

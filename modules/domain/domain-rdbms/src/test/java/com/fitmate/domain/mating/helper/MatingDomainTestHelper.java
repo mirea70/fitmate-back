@@ -24,7 +24,7 @@ public class MatingDomainTestHelper {
                 .build();
 
         return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다",LocalDateTime.now(),
-                        fitPlace,GatherType.FAST,PermitGender.ALL,permitAges,3)
+                        fitPlace,GatherType.FAST,PermitGender.ALL,permitAges,3, 1L)
                 .introImages(Set.of(1L,2L))
                 .build();
 
@@ -54,7 +54,7 @@ public class MatingDomainTestHelper {
                 .build();
 
         return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다",LocalDateTime.now(),
-                        fitPlace,GatherType.FAST,PermitGender.ALL,permitAges,3)
+                        fitPlace,GatherType.FAST,PermitGender.ALL,permitAges,3, 1L)
                 .introImages(Set.of(1L,2L))
                 .hasEntryFee(true)
                 .entryFeeInfo(entryFeeInfo)

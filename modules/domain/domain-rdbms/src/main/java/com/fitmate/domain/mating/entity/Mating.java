@@ -9,6 +9,7 @@ import com.fitmate.domain.mating.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.vo.FitPlace;
 import com.fitmate.domain.mating.vo.PermitAges;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -63,6 +64,9 @@ public class Mating extends BaseDomain {
     private final Integer permitPeopleCnt;
 
     @Column(nullable = false)
+    private final Long writerId;
+
+    @Column(nullable = false)
     @Builder.Default
     private boolean hasEntryFee = false;
 
@@ -70,15 +74,17 @@ public class Mating extends BaseDomain {
     @Builder.Default
     private EntryFeeInfo entryFeeInfo = null;
 
-    // 작성자 정보 추가 필요
-
     public static MatingBuilder builder(FitCategory fitCategory, String title, String introduction,
                   LocalDateTime mateAt, FitPlace fitPlace,
                   GatherType gatherType, PermitGender permitGender, PermitAges permitAges,
-                  Integer permitPeopleCnt) {
+                  Integer permitPeopleCnt, Long writerId) {
 
         return innerBuilder().fitCategory(fitCategory).title(title).introduction(introduction)
                 .mateAt(mateAt).fitPlace(fitPlace).gatherType(gatherType).permitGender(permitGender)
-                .permitAges(permitAges).permitPeopleCnt(permitPeopleCnt);
+                .permitAges(permitAges).permitPeopleCnt(permitPeopleCnt).writerId(writerId);
+    }
+
+    public void updateIntroImages(Set<Long> introImages) {
+        this.introImages = introImages;
     }
 }

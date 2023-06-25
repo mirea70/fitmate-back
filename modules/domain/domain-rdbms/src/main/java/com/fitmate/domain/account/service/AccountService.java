@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountService {
     private final AccountRepository accountRepository;
 
-    public AccountDataDto.Response validateFindById(Long id) throws Exception {
+    public AccountDataDto.Response validateFindById(Long id) {
         Account findAccount = accountRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
 

@@ -1,6 +1,7 @@
 package com.fitmate.app.account.helper;
 
 import com.fitmate.app.mate.account.dto.AccountDto;
+import com.fitmate.domain.account.dto.AccountDataDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.enums.AccountRole;
 import com.fitmate.domain.account.enums.Gender;
@@ -71,6 +72,26 @@ public class AccountAppTestHelper {
                 .profileImageId(1L)
                 .build();
         return AccountDto.JoinResponse.builder()
+                .loginName("abc")
+                .password("123456aB#")
+                .privateInfo(privateInfo)
+                .profileInfo(profileInfo)
+                .role(AccountRole.USER)
+                .gender(Gender.MAIL)
+                .build();
+    }
+
+    public AccountDataDto.Response getTestAccountData() {
+        PrivateInfo privateInfo = PrivateInfo.builder()
+                .name("미이수")
+                .email("abc@naver.com")
+                .phone("01011112222")
+                .build();
+        ProfileInfo profileInfo = ProfileInfo.builder()
+                .nickName("닉네임2")
+                .profileImageId(1L)
+                .build();
+        return AccountDataDto.Response.builder()
                 .loginName("abc")
                 .password("123456aB#")
                 .privateInfo(privateInfo)

@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -47,6 +48,17 @@ public class FileTestHelper {
 
         FileInputStream fileInputStream = new FileInputStream(new File(path));
         return new MockMultipartFile(fileName, fileName + "." + ext, ext, fileInputStream);
+    }
+
+    public List<MockMultipartFile> getMockMultipartFileList(String fileName1, String fileName2) throws Exception {
+        String ext = "png";
+        String path = fileDefaultDir + profileImageDir + fileName1 + "." + ext;
+
+        FileInputStream fileInputStream = new FileInputStream(new File(path));
+        MockMultipartFile multipartFile1 = new MockMultipartFile(fileName1, fileName1 + "." + ext, ext, fileInputStream);
+        MockMultipartFile multipartFile2 = new MockMultipartFile(fileName2, fileName2 + "." + ext, ext, fileInputStream);
+
+        return List.of(multipartFile1, multipartFile2);
     }
 
     public AttachFileDto.Download getTestDownloadDto() throws MalformedURLException {
