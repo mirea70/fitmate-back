@@ -2,18 +2,17 @@ package com.fitmate.app.mate.mating.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fitmate.app.mate.mating.vo.EntryFeeDataInfo;
-import com.fitmate.domain.mating.enums.FitCategory;
-import com.fitmate.domain.mating.enums.GatherType;
-import com.fitmate.domain.mating.enums.PermitGender;
-import com.fitmate.domain.mating.vo.FitPlace;
-import com.fitmate.domain.mating.vo.PermitAges;
+import com.fitmate.domain.mating.domain.enums.FitCategory;
+import com.fitmate.domain.mating.domain.enums.GatherType;
+import com.fitmate.domain.mating.domain.enums.PermitGender;
+import com.fitmate.domain.mating.domain.vo.FitPlace;
+import com.fitmate.domain.mating.domain.vo.PermitAges;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 public class MatingDto {
     @Getter
@@ -33,6 +32,7 @@ public class MatingDto {
 
         private List<Long> introImages;
 
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime mateAt;
 
         private FitPlace fitPlace;

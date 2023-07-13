@@ -1,4 +1,4 @@
-package com.fitmate.domain.mating.vo;
+package com.fitmate.domain.mating.domain.vo;
 
 import com.fitmate.domain.mating.converter.GatherSetConverter;
 import com.fitmate.domain.mating.converter.OperateFeeSetConverter;

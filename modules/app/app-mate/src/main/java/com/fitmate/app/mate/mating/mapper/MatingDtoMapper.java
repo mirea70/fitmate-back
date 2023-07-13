@@ -2,12 +2,12 @@ package com.fitmate.app.mate.mating.mapper;
 
 import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.vo.EntryFeeDataInfo;
-import com.fitmate.domain.mating.entity.Mating;
-import com.fitmate.domain.mating.enums.GatherFee;
-import com.fitmate.domain.mating.enums.OperateFee;
-import com.fitmate.domain.mating.vo.EntryFeeInfo;
-import com.fitmate.domain.mating.vo.GatherFeeSet;
-import com.fitmate.domain.mating.vo.OperateFeeSet;
+import com.fitmate.domain.mating.domain.entity.Mating;
+import com.fitmate.domain.mating.domain.enums.GatherFee;
+import com.fitmate.domain.mating.domain.enums.OperateFee;
+import com.fitmate.domain.mating.domain.vo.EntryFeeInfo;
+import com.fitmate.domain.mating.domain.vo.GatherFeeSet;
+import com.fitmate.domain.mating.domain.vo.OperateFeeSet;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

@@ -1,7 +1,7 @@
 package com.fitmate.domain.mating.converter;
 
-import com.fitmate.domain.mating.enums.OperateFee;
-import com.fitmate.domain.mating.vo.OperateFeeSet;
+import com.fitmate.domain.mating.domain.enums.OperateFee;
+import com.fitmate.domain.mating.domain.vo.OperateFeeSet;
 
 import javax.persistence.AttributeConverter;
 import java.util.Arrays;

@@ -1,25 +1,23 @@
-package com.fitmate.domain.mating.entity;
+package com.fitmate.domain.mating.domain.entity;
 
 import com.fitmate.domain.base.BaseDomain;
 import com.fitmate.domain.mating.converter.SetConverter;
-import com.fitmate.domain.mating.enums.FitCategory;
-import com.fitmate.domain.mating.enums.GatherType;
-import com.fitmate.domain.mating.enums.PermitGender;
-import com.fitmate.domain.mating.vo.EntryFeeInfo;
-import com.fitmate.domain.mating.vo.FitPlace;
-import com.fitmate.domain.mating.vo.PermitAges;
+import com.fitmate.domain.mating.domain.enums.FitCategory;
+import com.fitmate.domain.mating.domain.enums.GatherType;
+import com.fitmate.domain.mating.domain.enums.PermitGender;
+import com.fitmate.domain.mating.domain.vo.EntryFeeInfo;
+import com.fitmate.domain.mating.domain.vo.FitPlace;
+import com.fitmate.domain.mating.domain.vo.PermitAges;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @EqualsAndHashCode(exclude = "id", callSuper = false)
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder(builderMethodName = "innerBuilder")
 public class Mating extends BaseDomain {
@@ -30,13 +28,13 @@ public class Mating extends BaseDomain {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private final FitCategory fitCategory;
+    private FitCategory fitCategory;
 
     @Column(nullable = false)
-    private final String title;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    private final String introduction;
+    private String introduction;
 
     @Column
     @Convert(converter = SetConverter.class)
@@ -44,27 +42,27 @@ public class Mating extends BaseDomain {
     private Set<Long> introImages = null;
 
     @Column(nullable = false)
-    private final LocalDateTime mateAt;
+    private LocalDateTime mateAt;
 
     @Embedded
-    private final FitPlace fitPlace;
+    private FitPlace fitPlace;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private final GatherType gatherType;
+    private GatherType gatherType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private final PermitGender permitGender;
+    private PermitGender permitGender;
 
     @Embedded
-    private final PermitAges permitAges;
+    private PermitAges permitAges;
 
     @Column(nullable = false)
-    private final Integer permitPeopleCnt;
+    private Integer permitPeopleCnt;
 
     @Column(nullable = false)
-    private final Long writerId;
+    private Long writerId;
 
     @Column(nullable = false)
     @Builder.Default

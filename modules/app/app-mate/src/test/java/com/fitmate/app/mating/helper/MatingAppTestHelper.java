@@ -2,9 +2,9 @@ package com.fitmate.app.mating.helper;
 
 import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.vo.EntryFeeDataInfo;
-import com.fitmate.domain.mating.entity.Mating;
-import com.fitmate.domain.mating.enums.*;
-import com.fitmate.domain.mating.vo.*;
+import com.fitmate.domain.mating.domain.entity.Mating;
+import com.fitmate.domain.mating.domain.enums.*;
+import com.fitmate.domain.mating.domain.vo.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

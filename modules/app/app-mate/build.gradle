@@ -2,13 +2,13 @@ bootJar { enabled = true }
 jar { enabled = true }
 
 dependencies {
-    // base
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // 모듈
     implementation project(':domain-rdbms')
     implementation project(':core')
     implementation project(':system-security')
+    // base
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // util
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'

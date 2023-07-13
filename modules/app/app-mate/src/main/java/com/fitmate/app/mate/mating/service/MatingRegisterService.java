@@ -6,8 +6,8 @@ import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
 import com.fitmate.domain.account.dto.AccountDataDto;
 import com.fitmate.domain.account.service.AccountService;
-import com.fitmate.domain.mating.entity.Mating;
-import com.fitmate.domain.mating.repository.MatingRepository;
+import com.fitmate.domain.mating.domain.entity.Mating;
+import com.fitmate.domain.mating.domain.repository.MatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MatingService {
+public class MatingRegisterService {
     private final MatingRepository matingRepository;
     private final AccountService accountService;
     private final FileService fileService;

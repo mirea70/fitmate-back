@@ -1,8 +1,8 @@
 package com.fitmate.domain.mating.helper;
 
-import com.fitmate.domain.mating.entity.Mating;
-import com.fitmate.domain.mating.enums.*;
-import com.fitmate.domain.mating.vo.*;
+import com.fitmate.domain.mating.domain.entity.Mating;
+import com.fitmate.domain.mating.domain.enums.*;
+import com.fitmate.domain.mating.domain.vo.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ public class MatingDomainTestHelper {
                 .build();
 
         return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다",LocalDateTime.now(),
-                        fitPlace,GatherType.FAST,PermitGender.ALL,permitAges,3, 1L)
+                        fitPlace, GatherType.FAST, PermitGender.ALL,permitAges,3, 1L)
                 .introImages(Set.of(1L,2L))
                 .build();
 

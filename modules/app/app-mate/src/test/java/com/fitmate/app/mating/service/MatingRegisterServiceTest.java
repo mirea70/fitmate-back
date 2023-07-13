@@ -4,20 +4,18 @@ import com.fitmate.app.account.helper.AccountAppTestHelper;
 import com.fitmate.app.account.helper.FileTestHelper;
 import com.fitmate.app.mate.file.service.FileService;
 import com.fitmate.app.mate.mating.dto.MatingDto;
-import com.fitmate.app.mate.mating.service.MatingService;
+import com.fitmate.app.mate.mating.service.MatingRegisterService;
 import com.fitmate.app.mating.helper.MatingAppTestHelper;
 import com.fitmate.domain.account.dto.AccountDataDto;
 import com.fitmate.domain.account.service.AccountService;
-import com.fitmate.domain.mating.entity.Mating;
-import com.fitmate.domain.mating.repository.MatingRepository;
+import com.fitmate.domain.mating.domain.entity.Mating;
+import com.fitmate.domain.mating.domain.repository.MatingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,9 +25,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Import({MatingAppTestHelper.class, FileTestHelper.class})
-public class MatingServiceTest {
+public class MatingRegisterServiceTest {
     @InjectMocks
-    private MatingService target;
+    private MatingRegisterService target;
     @Mock
     private MatingRepository matingRepository;
     @Mock

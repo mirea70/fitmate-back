@@ -67,9 +67,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleAccountNotFoundException(final NotFoundException exception) {
+    public ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundException exception) {
         log.warn("존재하지 않는 데이터: ", exception);
-        return this.makeErrorResponseEntity(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA);
+        return this.makeErrorResponseEntity(exception.getErrorResult());
     }
 
     private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final NotFoundErrorResult errorResult) {

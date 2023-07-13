@@ -1,6 +1,6 @@
-package com.fitmate.domain.mating.vo;
+package com.fitmate.domain.mating.domain.vo;
 
-import com.fitmate.domain.mating.enums.OperateFee;
+import com.fitmate.domain.mating.domain.enums.OperateFee;
 import lombok.Getter;
 
 import java.util.EnumSet;

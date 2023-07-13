@@ -6,13 +6,15 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class GsonUtil {
-    private static final String PATTERN_DATE = "yyyy-mm-dd";
-    private static final String PATTERN_TIME = "HH:mm:ss";
-    private static final String PATTERN_DATETIME = String.format("%s %s", PATTERN_DATE, PATTERN_TIME);
+    private static String PATTERN_DATE = "yyyy-mm-dd";
+    private static String PATTERN_TIME = "HH:mm:ss";
+    private static String PATTERN_DATETIME = String.format("%s %s", PATTERN_DATE, PATTERN_TIME);
 
     public static class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
 
@@ -29,17 +31,35 @@ public class GsonUtil {
         public LocalDateTime read(JsonReader in) throws IOException {
             return LocalDateTime.parse(in.nextString(), format);
         }
-
-//        @Override
-//        public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
-//            return new JsonPrimitive(format.format(src));
-//        }
-//
-//        @Override
-//        public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-//            return LocalDateTime.parse(json.getAsString(), format);
-//        }
     }
+
+    public static class LocalDateAdapter extends TypeAdapter<LocalDate> {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(PATTERN_DATE);
+
+        @Override
+        public void write(JsonWriter out, LocalDate value) throws IOException {
+            out.value(value.format(format));
+        }
+
+        @Override
+        public LocalDate read(JsonReader in) throws IOException {
+            return LocalDate.parse(in.nextString(), format);
+        }
+    }
+
+    public static class LocalTimeAdapter extends TypeAdapter<LocalTime> {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(PATTERN_TIME);
+        @Override
+        public void write(JsonWriter out, LocalTime value) throws IOException {
+            out.value(value.format(format));
+        }
+
+        @Override
+        public LocalTime read(JsonReader in) throws IOException {
+            return LocalTime.parse(in.nextString(), format);
+        }
+    }
+
 
     public static Gson buildGson() {
         return  new GsonBuilder()
@@ -47,6 +67,8 @@ public class GsonUtil {
                 .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
                 .setDateFormat(PATTERN_DATETIME)
                 .registerTypeAdapter(LocalDateTime.class, new GsonUtil.LocalDateTimeAdapter().nullSafe())
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter().nullSafe())
+                .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter().nullSafe())
                 .create();
     }
 }

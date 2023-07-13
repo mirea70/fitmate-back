@@ -31,7 +31,7 @@ public class AccountController {
     private final AccountProfileService accountProfileService;
 
     @PostMapping(value = "/join", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<AccountDto.JoinResponse> join(@RequestPart AccountDto.JoinRequest joinRequest,
+    public ResponseEntity<AccountDto.JoinResponse> join(@Valid @RequestPart AccountDto.JoinRequest joinRequest,
                                                         @RequestPart(required = false) MultipartFile profileImage) throws Exception {
         joinRequest.setProfileImage(profileImage);
         AccountDto.JoinResponse joinResponse = joinService.join(joinRequest);
@@ -40,7 +40,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDto.Response> find(@PathVariable final Long id) throws Exception {
+    public ResponseEntity<AccountDto.Response> find(@PathVariable final Long id) {
         AccountDataDto.Response dataResponse = accountService.validateFindById(id);
         AccountDto.Response response = AccountDtoMapper.INSTANCE.toRealResponse(dataResponse);
         return ResponseEntity.ok(response);

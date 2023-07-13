@@ -1,4 +1,4 @@
-package com.fitmate.domain.mating.enums;
+package com.fitmate.domain.mating.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

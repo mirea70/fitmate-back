@@ -1,4 +1,4 @@
-package com.fitmate.domain.mating.vo;
+package com.fitmate.domain.mating.domain.vo;
 
 import lombok.*;
 
