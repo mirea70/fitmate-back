@@ -1,10 +1,12 @@
 package com.fitmate.app.mating.helper;
 
 import com.fitmate.app.mate.mating.dto.MatingDto;
+import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
 import com.fitmate.app.mate.mating.vo.EntryFeeDataInfo;
 import com.fitmate.domain.mating.domain.entity.Mating;
 import com.fitmate.domain.mating.domain.enums.*;
 import com.fitmate.domain.mating.domain.vo.*;
+import com.fitmate.domain.mating.dto.MatingReadResponseDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -85,6 +87,10 @@ public class MatingAppTestHelper {
     }
 
     public Mating getTestMating() {
+        return getTestMating(1L);
+    }
+
+    public Mating getTestMating(Long id) {
         FitPlace fitPlace = FitPlace.builder()
                 .name("엑스콩고휘트니스")
                 .address("서울 동작구 노량진동 333-33번지")
@@ -112,7 +118,19 @@ public class MatingAppTestHelper {
                 .introImages(Set.of(1L,2L))
                 .hasEntryFee(true)
                 .entryFeeInfo(entryFeeInfo)
-                .id(1L)
+                .id(id)
                 .build();
+    }
+
+    public List<MatingReadResponseDto> getTestReadResponseDtoList() {
+        Mating mating1 = getTestMating(2L);
+        Mating mating2 = getTestMating(3L);
+        Mating mating3 = getTestMating(4L);
+
+        MatingReadResponseDto response1 = MatingDtoMapper.INSTANCE.toReadResponse(mating1);
+        MatingReadResponseDto response2 = MatingDtoMapper.INSTANCE.toReadResponse(mating2);
+        MatingReadResponseDto response3 = MatingDtoMapper.INSTANCE.toReadResponse(mating3);
+
+        return List.of(response3, response2, response1);
     }
 }

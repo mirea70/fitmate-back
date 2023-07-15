@@ -8,6 +8,7 @@ import com.fitmate.domain.mating.domain.enums.OperateFee;
 import com.fitmate.domain.mating.domain.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.domain.vo.GatherFeeSet;
 import com.fitmate.domain.mating.domain.vo.OperateFeeSet;
+import com.fitmate.domain.mating.dto.MatingReadResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -18,6 +19,12 @@ import java.util.*;
 @Mapper(componentModel = "spring")
 public interface MatingDtoMapper {
     MatingDtoMapper INSTANCE = Mappers.getMapper(MatingDtoMapper.class);
+
+    @Mapping(target = "fitPlaceName", source = "fitPlace.name")
+    @Mapping(target = "fitPlaceAddress", source = "fitPlace.address")
+    @Mapping(target = "permitMaxAge", source = "permitAges.max")
+    @Mapping(target = "permitMinAge", source = "permitAges.min")
+    MatingReadResponseDto toReadResponse(Mating mating);
 
     @Mapping(target = "introImages", ignore = true)
     @Mapping(target = "entryFeeInfo", source = "entryFeeInfo", qualifiedByName = "convertToEntryFeeInfo")

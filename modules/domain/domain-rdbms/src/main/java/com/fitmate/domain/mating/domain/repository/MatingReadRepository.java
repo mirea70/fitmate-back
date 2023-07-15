@@ -1,7 +1,6 @@
 package com.fitmate.domain.mating.domain.repository;
 
 import com.fitmate.domain.mating.domain.entity.Mating;
-import com.fitmate.domain.mating.domain.entity.QMating;
 import com.fitmate.domain.mating.dto.MatingReadResponseDto;
 import com.fitmate.domain.mating.dto.QMatingReadResponseDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,14 +18,16 @@ import static com.fitmate.domain.mating.domain.entity.QMating.mating;
 public class MatingReadRepository {
     private final JPAQueryFactory queryFactory;
 
-    public List<Mating> readList(Long lastMatingId, int limit) {
+    public List<MatingReadResponseDto> readList(Long lastMatingId, int limit) {
 
-        return queryFactory
-                .select(mating)
+        return  queryFactory
+                .select(new QMatingReadResponseDto(mating.id, mating.fitCategory, mating.title,
+                        mating.mateAt, mating.fitPlace.name, mating.fitPlace.address, mating.gatherType,
+                        mating.permitGender, mating.permitAges.max, mating.permitAges.min, mating.permitPeopleCnt))
                 .from(mating)
-//                .orderBy(mating.createdAt.desc())
-//                .where(afterLastMatingId(lastMatingId))
-//                .limit(limit)
+                .orderBy(mating.createdAt.desc())
+                .where(afterLastMatingId(lastMatingId))
+                .limit(limit)
                 .fetch();
     }
 

@@ -4,6 +4,8 @@ import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
 import com.fitmate.app.mate.mating.service.MatingRegisterService;
 import com.fitmate.domain.mating.domain.entity.Mating;
+import com.fitmate.domain.mating.domain.repository.MatingReadRepository;
+import com.fitmate.domain.mating.dto.MatingReadResponseDto;
 import com.fitmate.domain.mating.service.MatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import java.util.List;
 public class MatingController {
     private final MatingRegisterService matingRegisterService;
     private final MatingService matingService;
+    private final MatingReadRepository matingReadRepository;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MatingDto.Response> register(@RequestPart MatingDto.Create createDto,
@@ -34,5 +37,12 @@ public class MatingController {
         Mating findMating = matingService.validateFindById(matingId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MatingDtoMapper.INSTANCE.toResponse(findMating));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MatingReadResponseDto>> findList(@RequestBody MatingDto.ListRequest listDto) {
+        List<MatingReadResponseDto> responses = matingReadRepository.readList(listDto.getLastMatingId(), listDto.getLimit());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responses);
     }
 }

@@ -10,11 +10,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class GsonUtil {
-    private static String PATTERN_DATE = "yyyy-mm-dd";
+    private static String PATTERN_DATE = "yyyy-MM-dd";
     private static String PATTERN_TIME = "HH:mm:ss";
-    private static String PATTERN_DATETIME = String.format("%s %s", PATTERN_DATE, PATTERN_TIME);
+    private static String PATTERN_DATETIME = String.format("%s'T'%s", PATTERN_DATE, PATTERN_TIME);
 
     public static class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
 
@@ -66,7 +67,7 @@ public class GsonUtil {
                 .disableHtmlEscaping()
                 .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
                 .setDateFormat(PATTERN_DATETIME)
-                .registerTypeAdapter(LocalDateTime.class, new GsonUtil.LocalDateTimeAdapter().nullSafe())
+                .registerTypeAdapter(LocalDateTime.class, new GsonUtil.LocalDateTimeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter().nullSafe())
                 .registerTypeAdapter(LocalTime.class, new LocalTimeAdapter().nullSafe())
                 .create();

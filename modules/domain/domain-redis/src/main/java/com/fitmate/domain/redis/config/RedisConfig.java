@@ -1,5 +1,6 @@
 package com.fitmate.domain.redis.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -11,9 +12,13 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
+
+    @Value("${redis.port}")
+    private int port;
+
     @Bean
     public RedisConnectionFactory connectionFactory() {
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", 21000));
+        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", port));
     }
 
     @Bean

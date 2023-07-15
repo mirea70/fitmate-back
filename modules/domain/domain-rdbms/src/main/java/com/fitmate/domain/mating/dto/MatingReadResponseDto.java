@@ -1,5 +1,8 @@
 package com.fitmate.domain.mating.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fitmate.domain.mating.domain.enums.FitCategory;
 import com.fitmate.domain.mating.domain.enums.GatherType;
 import com.fitmate.domain.mating.domain.enums.PermitGender;
@@ -21,6 +24,8 @@ public class MatingReadResponseDto {
     private String title;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime mateAt;
 
     private String fitPlaceName;
