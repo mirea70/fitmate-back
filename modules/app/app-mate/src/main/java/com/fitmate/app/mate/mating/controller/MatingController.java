@@ -5,6 +5,7 @@ import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
 import com.fitmate.app.mate.mating.service.MatingRegisterService;
 import com.fitmate.domain.mating.domain.entity.Mating;
 import com.fitmate.domain.mating.domain.repository.MatingReadRepository;
+import com.fitmate.domain.mating.dto.MatingQuestionDto;
 import com.fitmate.domain.mating.dto.MatingReadResponseDto;
 import com.fitmate.domain.mating.service.MatingService;
 import lombok.RequiredArgsConstructor;
@@ -45,4 +46,11 @@ public class MatingController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responses);
     }
+
+    @GetMapping("/{matingId}/question")
+    public ResponseEntity<MatingQuestionDto.Response> getComeQuestion(@PathVariable Long matingId) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(matingReadRepository.readQuestion(matingId));
+    }
+
 }

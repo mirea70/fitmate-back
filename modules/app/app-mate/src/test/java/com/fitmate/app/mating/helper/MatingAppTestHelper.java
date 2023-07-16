@@ -6,6 +6,7 @@ import com.fitmate.app.mate.mating.vo.EntryFeeDataInfo;
 import com.fitmate.domain.mating.domain.entity.Mating;
 import com.fitmate.domain.mating.domain.enums.*;
 import com.fitmate.domain.mating.domain.vo.*;
+import com.fitmate.domain.mating.dto.MatingQuestionDto;
 import com.fitmate.domain.mating.dto.MatingReadResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -132,5 +133,13 @@ public class MatingAppTestHelper {
         MatingReadResponseDto response3 = MatingDtoMapper.INSTANCE.toReadResponse(mating3);
 
         return List.of(response3, response2, response1);
+    }
+
+    public MatingQuestionDto.Response getTestQuestionResponseDto() {
+        return MatingQuestionDto.Response.builder()
+                .profileImageId(1L)
+                .writerName("김숙자")
+                .comeQuestion("몇살이세요?")
+                .build();
     }
 }

@@ -11,6 +11,7 @@ import com.fitmate.domain.mating.domain.vo.PermitAges;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -71,6 +72,10 @@ public class Mating extends BaseDomain {
     @Embedded
     @Builder.Default
     private EntryFeeInfo entryFeeInfo = null;
+
+    @Column(nullable = false)
+    @Min(value = 5)
+    private String comeQuestion;
 
     public static MatingBuilder builder(FitCategory fitCategory, String title, String introduction,
                   LocalDateTime mateAt, FitPlace fitPlace,

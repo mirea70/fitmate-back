@@ -8,6 +8,7 @@ import com.fitmate.app.mate.account.dto.AccountDto;
 import com.fitmate.app.mate.account.service.AccountProfileService;
 import com.fitmate.app.mate.exceptions.GlobalExceptionHandler;
 import com.fitmate.app.mate.file.dto.AttachFileDto;
+import com.fitmate.config.GsonUtil;
 import com.fitmate.domain.account.service.AccountService;
 import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.NotFoundErrorResult;
@@ -50,7 +51,7 @@ public class AccountControllerTest {
         accountAppTestHelper = new AccountAppTestHelper();
         accountMockMvcHelper = new AccountMockMvcHelper(target, new GlobalExceptionHandler());
         fileTestHelper = new FileTestHelper();
-        gson = new Gson();
+        gson = GsonUtil.buildGson();
     }
 
     @Test

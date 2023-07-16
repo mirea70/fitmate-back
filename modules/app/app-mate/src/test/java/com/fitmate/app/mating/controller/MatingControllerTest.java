@@ -10,6 +10,7 @@ import com.fitmate.app.mating.helper.MatingMockMvcHelper;
 import com.fitmate.config.GsonUtil;
 import com.fitmate.domain.mating.domain.entity.Mating;
 import com.fitmate.domain.mating.domain.repository.MatingReadRepository;
+import com.fitmate.domain.mating.dto.MatingQuestionDto;
 import com.fitmate.domain.mating.dto.MatingReadResponseDto;
 import com.fitmate.domain.mating.service.MatingService;
 import com.fitmate.exceptions.exception.NotFoundException;
@@ -134,5 +135,20 @@ public class MatingControllerTest {
         resultActions.andExpect(status().isOk());
         assertThat(results.size()).isNotEqualTo(0);
         assertThat(results.get(results.size()-1).getId()).isEqualTo(2);
+    }
+
+    @Test
+    public void 질문화면_조회 () throws Exception {
+        // given
+        String url = "/api/mating/1/question";
+        MatingQuestionDto.Response response = matingAppTestHelper.getTestQuestionResponseDto();
+        doReturn(response).when(matingReadRepository).readQuestion(anyLong());
+        // when
+        ResultActions resultActions = matingMockMvcHelper.submitGet(url);
+        MatingQuestionDto.Response result = gson.fromJson(resultActions.andReturn()
+                .getResponse().getContentAsString(StandardCharsets.UTF_8), MatingQuestionDto.Response.class);
+        // then
+        resultActions.andExpect(status().isOk());
+        assertThat(result.getComeQuestion()).isEqualTo("몇살이세요?");
     }
 }

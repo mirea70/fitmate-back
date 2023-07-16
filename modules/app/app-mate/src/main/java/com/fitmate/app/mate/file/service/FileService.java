@@ -6,7 +6,9 @@ import com.fitmate.domain.file.entity.AttachFile;
 import com.fitmate.domain.file.enums.FileExtension;
 import com.fitmate.domain.file.repository.AttachFileRepository;
 import com.fitmate.exceptions.exception.FileRequestException;
+import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.FileErrorResult;
+import com.fitmate.exceptions.result.NotFoundErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -95,6 +97,12 @@ public class FileService {
         AttachFile savedFile = attachFileRepository.save(newFile);
 
         return AttachFileDtoMapper.INSTANCE.toResponse(savedFile);
+    }
+
+    public AttachFileDto.Download downloadById(Long id) throws MalformedURLException {
+        AttachFile attachFile = attachFileRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
+        return this.downloadFile(attachFile.getStoreFileName());
     }
 
     public AttachFileDto.Download downloadFile(String storeFileName) throws MalformedURLException {

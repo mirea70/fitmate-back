@@ -3,7 +3,9 @@ package com.fitmate.domain.mating.repository;
 import com.fitmate.domain.config.QueryDslConfig;
 import com.fitmate.domain.mating.domain.entity.Mating;
 import com.fitmate.domain.mating.domain.repository.MatingRepository;
+import com.fitmate.domain.mating.dto.MatingQuestionDto;
 import com.fitmate.domain.mating.dto.MatingReadResponseDto;
+import com.fitmate.domain.mating.dto.QMatingQuestionDto_Response;
 import com.fitmate.domain.mating.dto.QMatingReadResponseDto;
 import com.fitmate.domain.mating.helper.MatingDomainTestHelper;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.fitmate.domain.account.entity.QAccount.account;
 import static com.fitmate.domain.mating.domain.entity.QMating.mating;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -78,5 +81,20 @@ public class MatingQueryDslTest {
 
     private BooleanExpression afterLastMatingId(Long lastMatingId) {
         return lastMatingId != null ? mating.id.gt(lastMatingId) : null;
+    }
+
+    @Test
+    public void 메이팅신청_질문화면_조회_테스트 () throws Exception {
+        // given
+        Long matingId = 2L;
+        // when
+        MatingQuestionDto.Response response = jpaQueryFactory
+                .select(new QMatingQuestionDto_Response(account.profileInfo.profileImageId, account.profileInfo.nickName, mating.comeQuestion))
+                .from(mating)
+                .innerJoin(account).on(mating.writerId.eq(account.id))
+                .fetchOne();
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.getComeQuestion()).isEqualTo("테스트질문");
     }
 }

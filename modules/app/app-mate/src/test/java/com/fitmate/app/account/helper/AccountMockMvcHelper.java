@@ -14,6 +14,17 @@ public class AccountMockMvcHelper {
 
     private final Gson gson;
 
+    public AccountMockMvcHelper(Object target) {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(target).build();
+        this.gson = new Gson();
+    }
+    public AccountMockMvcHelper(Object target, GlobalExceptionHandler globalExceptionHandler) {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(target)
+                .setControllerAdvice(globalExceptionHandler)
+                .build();
+        this.gson = new Gson();
+    }
+
     public ResultActions submitPost(AccountDto.JoinRequest joinRequest, String url) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders.post(url)
@@ -28,16 +39,5 @@ public class AccountMockMvcHelper {
 //                        .queryParam(key, value)
 ////                        .param(key, value)
         );
-    }
-
-    public AccountMockMvcHelper(Object target) {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(target).build();
-        this.gson = new Gson();
-    }
-    public AccountMockMvcHelper(Object target, GlobalExceptionHandler globalExceptionHandler) {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(target)
-                .setControllerAdvice(globalExceptionHandler)
-                .build();
-        this.gson = new Gson();
     }
 }
