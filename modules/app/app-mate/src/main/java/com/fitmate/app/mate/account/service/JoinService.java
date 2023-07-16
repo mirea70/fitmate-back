@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -26,21 +28,35 @@ public class JoinService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final FileService fileService;
 
-    public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) throws Exception {
-        AccountDuplicateCheckDto checkDto = AccountDtoMapper.INSTANCE.toDuplicatedCheckDto(joinRequest);
-        accountService.CheckDuplicated(checkDto);
-        joinRequest.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
-        if(joinRequest.getProfileImage() != null) {
-            AttachFileDto.Response fileResponse = fileService.uploadFile(joinRequest.getProfileImage());
-            joinRequest.getProfileInfo().updateProfileImageId(fileResponse.getId());
-        }
+    public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) throws IOException {
 
-        Account newAccount = AccountDtoMapper.INSTANCE.toEntity(joinRequest);
+        Account newAccount = setJoinData(joinRequest);
+
         try {
             Account savedAccount = accountRepository.save(newAccount);
             return AccountDtoMapper.INSTANCE.toResponse(savedAccount);
         } catch (DataIntegrityViolationException e) {
             throw new AccountDuplicatedException(AccountErrorResult.DUPLICATED_ACCOUNT_VALUE);
+        }
+    }
+
+    private Account setJoinData(AccountDto.JoinRequest joinRequest) throws IOException {
+        checkDuplicated(joinRequest);
+        joinRequest.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
+        uploadProfileImage(joinRequest);
+
+        return AccountDtoMapper.INSTANCE.toEntity(joinRequest);
+    }
+
+    private void checkDuplicated(AccountDto.JoinRequest joinRequest) {
+        AccountDuplicateCheckDto checkDto = AccountDtoMapper.INSTANCE.toDuplicatedCheckDto(joinRequest);
+        accountService.CheckDuplicated(checkDto);
+    }
+
+    private void uploadProfileImage(AccountDto.JoinRequest joinRequest) throws IOException {
+        if(joinRequest.getProfileImage() != null) {
+            AttachFileDto.Response fileResponse = fileService.uploadFile(joinRequest.getProfileImage());
+            joinRequest.getProfileInfo().updateProfileImageId(fileResponse.getId());
         }
     }
 

@@ -1,6 +1,5 @@
 package com.fitmate.domain.mating.domain.repository;
 
-import com.fitmate.domain.mating.domain.entity.Mating;
 import com.fitmate.domain.mating.dto.MatingQuestionDto;
 import com.fitmate.domain.mating.dto.MatingReadResponseDto;
 import com.fitmate.domain.mating.dto.QMatingQuestionDto_Response;
