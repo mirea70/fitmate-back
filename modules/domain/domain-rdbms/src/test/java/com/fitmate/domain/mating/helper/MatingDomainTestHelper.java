@@ -23,8 +23,9 @@ public class MatingDomainTestHelper {
                 .min(20)
                 .build();
 
-        return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다",LocalDateTime.now(),
-                        fitPlace, GatherType.FAST, PermitGender.ALL,permitAges,3, 1L)
+        return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다",
+                        LocalDateTime.now(), fitPlace, GatherType.FAST, PermitGender.ALL,
+                        permitAges,3, 1L, "신청질문임요")
                 .introImages(Set.of(1L,2L))
                 .build();
 
@@ -53,8 +54,9 @@ public class MatingDomainTestHelper {
                 .operateFeeSet(operateFeeSet)
                 .build();
 
-        return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다",LocalDateTime.now(),
-                        fitPlace,GatherType.FAST,PermitGender.ALL,permitAges,3, 1L)
+        return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다"
+                        ,LocalDateTime.now(), fitPlace,GatherType.FAST,PermitGender.ALL,
+                        permitAges,3, 1L, "신청질문임요")
                 .introImages(Set.of(1L,2L))
                 .hasEntryFee(true)
                 .entryFeeInfo(entryFeeInfo)

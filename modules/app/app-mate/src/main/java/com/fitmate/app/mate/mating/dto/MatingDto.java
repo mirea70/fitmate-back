@@ -89,6 +89,8 @@ public class MatingDto {
         private Long writerId;
         private boolean hasEntryFee;
         private EntryFeeDataInfo entryFeeInfo;
+        @NotNull(message = "신청질문 입력은 필수입니다.")
+        private String comeQuestion;
 
     }
 

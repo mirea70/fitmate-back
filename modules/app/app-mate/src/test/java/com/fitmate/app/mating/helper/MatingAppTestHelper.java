@@ -49,6 +49,7 @@ public class MatingAppTestHelper {
                 .writerId(1L)
                 .hasEntryFee(true)
                 .entryFeeInfo(entryFeeDataInfo)
+                .comeQuestion("신청질문임")
                 .build();
     }
 
@@ -114,8 +115,10 @@ public class MatingAppTestHelper {
                 .operateFeeSet(operateFeeSet)
                 .build();
 
-        return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다",LocalDateTime.now(),
-                        fitPlace,GatherType.FAST,PermitGender.ALL,permitAges,3, 1L)
+        return Mating.builder(FitCategory.FITNESS, "헬스갈 사람","소개이다"
+                        ,LocalDateTime.now(),
+                        fitPlace,GatherType.FAST,PermitGender.ALL,permitAges,
+                        3, 1L, "신청질문임")
                 .introImages(Set.of(1L,2L))
                 .hasEntryFee(true)
                 .entryFeeInfo(entryFeeInfo)

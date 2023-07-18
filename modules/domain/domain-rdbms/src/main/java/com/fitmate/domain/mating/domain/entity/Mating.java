@@ -12,6 +12,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -74,17 +75,18 @@ public class Mating extends BaseDomain {
     private EntryFeeInfo entryFeeInfo = null;
 
     @Column(nullable = false)
-    @Min(value = 5)
+    @Size(min = 5)
     private String comeQuestion;
 
     public static MatingBuilder builder(FitCategory fitCategory, String title, String introduction,
                   LocalDateTime mateAt, FitPlace fitPlace,
                   GatherType gatherType, PermitGender permitGender, PermitAges permitAges,
-                  Integer permitPeopleCnt, Long writerId) {
+                  Integer permitPeopleCnt, Long writerId, String comeQuestion) {
 
         return innerBuilder().fitCategory(fitCategory).title(title).introduction(introduction)
                 .mateAt(mateAt).fitPlace(fitPlace).gatherType(gatherType).permitGender(permitGender)
-                .permitAges(permitAges).permitPeopleCnt(permitPeopleCnt).writerId(writerId);
+                .permitAges(permitAges).permitPeopleCnt(permitPeopleCnt).writerId(writerId)
+                .comeQuestion(comeQuestion);
     }
 
     public void updateIntroImages(Set<Long> introImages) {
