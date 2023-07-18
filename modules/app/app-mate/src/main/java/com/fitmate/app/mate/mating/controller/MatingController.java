@@ -47,10 +47,6 @@ public class MatingController {
                 .body(responses);
     }
 
-    @GetMapping("/{matingId}/question")
-    public ResponseEntity<MatingQuestionDto.Response> getComeQuestion(@PathVariable Long matingId) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(matingReadRepository.readQuestion(matingId));
-    }
+
 
 }
