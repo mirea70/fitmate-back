@@ -89,10 +89,10 @@ public class MatingAppTestHelper {
     }
 
     public Mating getTestMating() {
-        return getTestMating(1L);
+        return getTestMating(1L, 0, 0);
     }
 
-    public Mating getTestMating(Long id) {
+    public Mating getTestMating(Long id, int waitingAccountCnt, int approvedAccountCnt) {
         FitPlace fitPlace = FitPlace.builder()
                 .name("엑스콩고휘트니스")
                 .address("서울 동작구 노량진동 333-33번지")
@@ -123,13 +123,15 @@ public class MatingAppTestHelper {
                 .hasEntryFee(true)
                 .entryFeeInfo(entryFeeInfo)
                 .id(id)
+                .waitingAccountCnt(waitingAccountCnt)
+                .approvedAccountCnt(approvedAccountCnt)
                 .build();
     }
 
     public List<MatingReadResponseDto> getTestReadResponseDtoList() {
-        Mating mating1 = getTestMating(2L);
-        Mating mating2 = getTestMating(3L);
-        Mating mating3 = getTestMating(4L);
+        Mating mating1 = getTestMating(2L, 3, 5);
+        Mating mating2 = getTestMating(3L,3, 5);
+        Mating mating3 = getTestMating(4L,4,5);
 
         MatingReadResponseDto response1 = MatingDtoMapper.INSTANCE.toReadResponse(mating1);
         MatingReadResponseDto response2 = MatingDtoMapper.INSTANCE.toReadResponse(mating2);

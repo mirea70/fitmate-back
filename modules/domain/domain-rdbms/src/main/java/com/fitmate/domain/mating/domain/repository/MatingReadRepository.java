@@ -25,7 +25,8 @@ public class MatingReadRepository {
         return  queryFactory
                 .select(new QMatingReadResponseDto(mating.id, mating.fitCategory, mating.title,
                         mating.mateAt, mating.fitPlace.name, mating.fitPlace.address, mating.gatherType,
-                        mating.permitGender, mating.permitAges.max, mating.permitAges.min, mating.permitPeopleCnt))
+                        mating.permitGender, mating.permitAges.max, mating.permitAges.min, mating.permitPeopleCnt,
+                        mating.waitingAccountCnt, mating.approvedAccountCnt))
                 .from(mating)
                 .orderBy(mating.createdAt.desc())
                 .where(afterLastMatingId(lastMatingId))

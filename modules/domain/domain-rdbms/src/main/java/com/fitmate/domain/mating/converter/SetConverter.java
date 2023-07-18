@@ -16,6 +16,7 @@ public class SetConverter implements AttributeConverter<Set<Long>, String> {
 
     @Override
     public Set<Long> convertToEntityAttribute(String dbData) {
+        if(dbData == null || dbData.equals("")) return null;
         String[] imageIds = dbData.split(",");
         Set<Long> set = new HashSet<>();
         Arrays.stream(imageIds).forEach((l) -> set.add(Long.valueOf(l)));

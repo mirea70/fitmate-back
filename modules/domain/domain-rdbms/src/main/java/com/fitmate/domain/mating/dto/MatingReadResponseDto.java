@@ -42,12 +42,17 @@ public class MatingReadResponseDto {
 
     private Integer permitPeopleCnt;
 
+    private int waitingAccountCnt;
+
+    private int approvedAccountCnt;
+
     @QueryProjection
     public MatingReadResponseDto(Long id, FitCategory fitCategory, String title,
                                  LocalDateTime mateAt, String fitPlaceName,
                                  String fitPlaceAddress, GatherType gatherType,
                                  PermitGender permitGender, Integer permitMaxAge,
-                                 Integer permitMinAge, Integer permitPeopleCnt) {
+                                 Integer permitMinAge, Integer permitPeopleCnt,
+                                 int waitingAccountCnt, int approvedAccountCnt) {
         this.id = id;
         this.fitCategory = fitCategory;
         this.title = title;
@@ -59,5 +64,7 @@ public class MatingReadResponseDto {
         this.permitMaxAge = permitMaxAge;
         this.permitMinAge = permitMinAge;
         this.permitPeopleCnt = permitPeopleCnt;
+        this.waitingAccountCnt = waitingAccountCnt;
+        this.approvedAccountCnt = approvedAccountCnt;
     }
 }

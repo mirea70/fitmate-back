@@ -9,11 +9,14 @@ import com.fitmate.domain.mating.domain.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.domain.vo.FitPlace;
 import com.fitmate.domain.mating.domain.vo.PermitAges;
 import lombok.*;
+import net.bytebuddy.implementation.bind.annotation.Default;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -61,12 +64,14 @@ public class Mating extends BaseDomain {
     private PermitAges permitAges;
 
     @Column(nullable = false)
-    private Integer permitPeopleCnt;
+    @ColumnDefault("1")
+    private Integer permitPeopleCnt = 1;
 
     @Column(nullable = false)
     private Long writerId;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
     @Builder.Default
     private boolean hasEntryFee = false;
 
@@ -77,6 +82,26 @@ public class Mating extends BaseDomain {
     @Column(nullable = false)
     @Size(min = 5)
     private String comeQuestion;
+
+    @Column
+    @Convert(converter = SetConverter.class)
+    @Builder.Default
+    private Set<Long> waitingAccountIds = new HashSet<>();
+
+    @Column
+    @Convert(converter = SetConverter.class)
+    @Builder.Default
+    private Set<Long> approvedAccountIds = new HashSet<>();
+
+    @Column
+    @ColumnDefault("0")
+    @Builder.Default
+    private int waitingAccountCnt = 0;
+
+    @Column
+    @ColumnDefault("0")
+    @Builder.Default
+    private int approvedAccountCnt = 0;
 
     public static MatingBuilder builder(FitCategory fitCategory, String title, String introduction,
                   LocalDateTime mateAt, FitPlace fitPlace,

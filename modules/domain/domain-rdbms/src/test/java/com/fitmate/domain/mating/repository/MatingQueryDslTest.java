@@ -9,6 +9,7 @@ import com.fitmate.domain.mating.dto.QMatingQuestionDto_Response;
 import com.fitmate.domain.mating.dto.QMatingReadResponseDto;
 import com.fitmate.domain.mating.helper.MatingDomainTestHelper;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,8 @@ public class MatingQueryDslTest {
         List<MatingReadResponseDto> responses = jpaQueryFactory
                 .select(new QMatingReadResponseDto(mating.id, mating.fitCategory, mating.title,
                         mating.mateAt, mating.fitPlace.name, mating.fitPlace.address, mating.gatherType,
-                        mating.permitGender, mating.permitAges.max, mating.permitAges.min, mating.permitPeopleCnt))
+                        mating.permitGender, mating.permitAges.max, mating.permitAges.min, mating.permitPeopleCnt,
+                        mating.waitingAccountCnt, mating.approvedAccountCnt))
                 .from(mating)
                 .orderBy(mating.createdAt.desc())
                 .where(afterLastMatingId(lastMatingId))
@@ -91,10 +93,11 @@ public class MatingQueryDslTest {
         MatingQuestionDto.Response response = jpaQueryFactory
                 .select(new QMatingQuestionDto_Response(account.profileInfo.profileImageId, account.profileInfo.nickName, mating.comeQuestion))
                 .from(mating)
+                .where(mating.id.eq(matingId))
                 .innerJoin(account).on(mating.writerId.eq(account.id))
                 .fetchOne();
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getComeQuestion()).isEqualTo("테스트질문");
+        assertThat(response.getComeQuestion()).isEqualTo("신청질문임요");
     }
 }

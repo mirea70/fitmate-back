@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class MatingDto {
     @Getter
@@ -56,6 +57,10 @@ public class MatingDto {
         private boolean hasEntryFee;
 
         private EntryFeeDataInfo entryFeeInfo;
+
+        private Set<Long> waitingAccountIds;
+
+        private Set<Long> approvedAccountIds;
     }
 
     @Getter
