@@ -115,4 +115,10 @@ public class Mating extends BaseDomain {
     public void updateIntroImages(Set<Long> introImages) {
         this.introImages = introImages;
     }
+
+    public void addWaitingAccountId(Long accountId) {
+        if(accountId == null) return;
+        this.waitingAccountIds.add(accountId);
+        this.waitingAccountCnt = this.waitingAccountIds.size();
+    }
 }

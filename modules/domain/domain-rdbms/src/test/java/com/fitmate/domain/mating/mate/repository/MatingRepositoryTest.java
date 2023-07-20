@@ -66,4 +66,19 @@ public class MatingRepositoryTest {
         Mating mating = matingDomainTestHelper.getTestMating();
         return matingRepository.save(mating);
     }
+
+    @Test
+    public void 메이트신청_대기리스트_추가 () throws Exception {
+        // given
+        Long accountId = 1L;
+        Mating mating = saveBefore();
+        int  beforeWaitingAccountCnt = mating.getWaitingAccountCnt();
+        // when
+        mating.addWaitingAccountId(accountId);
+        Mating afterMating = matingRepository.save(mating);
+        // then
+        assertThat(afterMating).isNotNull();
+        assertThat(afterMating.getWaitingAccountIds().contains(accountId)).isTrue();
+        assertThat(afterMating.getWaitingAccountCnt()).isEqualTo(beforeWaitingAccountCnt + 1);
+    }
 }
