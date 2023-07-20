@@ -8,15 +8,13 @@ import com.fitmate.app.mate.mating.service.MatingRegisterService;
 import com.fitmate.app.mating.helper.MatingAppTestHelper;
 import com.fitmate.app.mating.helper.MatingMockMvcHelper;
 import com.fitmate.config.GsonUtil;
-import com.fitmate.domain.mating.domain.entity.Mating;
-import com.fitmate.domain.mating.domain.repository.MatingReadRepository;
-import com.fitmate.domain.mating.dto.MatingQuestionDto;
-import com.fitmate.domain.mating.dto.MatingReadResponseDto;
-import com.fitmate.domain.mating.service.MatingService;
+import com.fitmate.domain.mating.mate.domain.entity.Mating;
+import com.fitmate.domain.mating.mate.domain.repository.MatingReadRepository;
+import com.fitmate.domain.mating.mate.dto.MatingReadResponseDto;
+import com.fitmate.domain.mating.mate.service.MatingService;
 import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.NotFoundErrorResult;
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +26,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -3,11 +3,11 @@ package com.fitmate.app.mating.helper;
 import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
 import com.fitmate.app.mate.mating.vo.EntryFeeDataInfo;
-import com.fitmate.domain.mating.domain.entity.Mating;
-import com.fitmate.domain.mating.domain.enums.*;
-import com.fitmate.domain.mating.domain.vo.*;
-import com.fitmate.domain.mating.dto.MatingQuestionDto;
-import com.fitmate.domain.mating.dto.MatingReadResponseDto;
+import com.fitmate.domain.mating.mate.domain.entity.Mating;
+import com.fitmate.domain.mating.mate.domain.enums.*;
+import com.fitmate.domain.mating.mate.domain.vo.*;
+import com.fitmate.domain.mating.mate.dto.MatingQuestionDto;
+import com.fitmate.domain.mating.mate.dto.MatingReadResponseDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package com.fitmate.app.mate.mating.controller;
 
-import com.fitmate.domain.mating.domain.repository.MatingReadRepository;
-import com.fitmate.domain.mating.dto.MatingQuestionDto;
+import com.fitmate.domain.mating.mate.domain.repository.MatingReadRepository;
+import com.fitmate.domain.mating.mate.dto.MatingQuestionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

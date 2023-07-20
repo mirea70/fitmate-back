@@ -1,14 +1,13 @@
 package com.fitmate.app.mating.controller;
 
 
-import com.fitmate.app.account.helper.FileTestHelper;
 import com.fitmate.app.mate.exceptions.GlobalExceptionHandler;
 import com.fitmate.app.mate.mating.controller.MatingRequestController;
 import com.fitmate.app.mating.helper.MatingAppTestHelper;
 import com.fitmate.app.mating.helper.MatingMockMvcHelper;
 import com.fitmate.config.GsonUtil;
-import com.fitmate.domain.mating.domain.repository.MatingReadRepository;
-import com.fitmate.domain.mating.dto.MatingQuestionDto;
+import com.fitmate.domain.mating.mate.domain.repository.MatingReadRepository;
+import com.fitmate.domain.mating.mate.dto.MatingQuestionDto;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
