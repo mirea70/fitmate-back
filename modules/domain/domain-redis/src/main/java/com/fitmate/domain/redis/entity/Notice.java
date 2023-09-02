@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
+import java.time.LocalDateTime;
+
 
 @RedisHash(value = "notice")
 @Getter
@@ -20,6 +22,8 @@ public class Notice {
     private Long matingId;
 
     private String content;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @TimeToLive
     private Long expiration = DEFAULT_TTL;
