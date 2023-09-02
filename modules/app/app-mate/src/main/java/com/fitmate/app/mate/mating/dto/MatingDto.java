@@ -110,4 +110,18 @@ public class MatingDto {
         @NotNull(message = "데이터 최대 크기 값은 필수입니다.")
         private int limit;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Apply {
+
+        @NotNull(message = "메이팅 식별 ID 값은 필수입니다.")
+        private Long matingId;
+
+        @NotNull(message = "신청질문 답변 입력은 필수입니다.")
+        private String comeAnswer;
+    }
 }

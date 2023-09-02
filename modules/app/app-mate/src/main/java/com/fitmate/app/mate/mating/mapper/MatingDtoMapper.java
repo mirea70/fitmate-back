@@ -9,6 +9,7 @@ import com.fitmate.domain.mating.mate.domain.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.mate.domain.vo.GatherFeeSet;
 import com.fitmate.domain.mating.mate.domain.vo.OperateFeeSet;
 import com.fitmate.domain.mating.mate.dto.MatingReadResponseDto;
+import com.fitmate.domain.mating.request.domain.entity.MateRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -34,6 +35,9 @@ public interface MatingDtoMapper {
     @Mapping(target = "introImages", source = "introImages", qualifiedByName = "setConvertToList")
     @Mapping(target = "entryFeeInfo", source = "entryFeeInfo", qualifiedByName = "convertToEntryDataInfo")
     MatingDto.Response toResponse(Mating mating);
+
+    @Mapping(target = "approveStatus", constant = "READY")
+    MateRequest applyToEntity(MatingDto.Apply apply);
 
     @Named("convertToEntryFeeInfo")
     default EntryFeeInfo convertToEntryFeeInfo(EntryFeeDataInfo entryFeeDataInfo) {

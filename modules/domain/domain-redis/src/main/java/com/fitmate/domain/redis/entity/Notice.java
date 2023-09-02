@@ -17,9 +17,9 @@ public class Notice {
     public Long DEFAULT_TTL;
 
     @Id
-    private Long accountId;
+    private Long id;
 
-    private Long matingId;
+    private Long accountId;
 
     private String content;
 
@@ -29,9 +29,8 @@ public class Notice {
     private Long expiration = DEFAULT_TTL;
 
     @Builder
-    public Notice(Long accountId, Long matingId, String content) {
+    public Notice(Long accountId, String content) {
         this.accountId = accountId;
-        this.matingId = matingId;
         this.content = content;
     }
 }
