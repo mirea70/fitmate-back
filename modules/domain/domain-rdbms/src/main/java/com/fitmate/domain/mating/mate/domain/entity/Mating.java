@@ -118,6 +118,8 @@ public class Mating extends BaseDomain {
 
     public void addWaitingAccountId(Long accountId) {
         if(accountId == null) return;
+        if(this.waitingAccountIds == null) this.waitingAccountIds = new HashSet<>();
+
         this.waitingAccountIds.add(accountId);
         this.waitingAccountCnt = this.waitingAccountIds.size();
     }
