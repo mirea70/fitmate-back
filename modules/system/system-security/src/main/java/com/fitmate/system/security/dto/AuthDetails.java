@@ -3,6 +3,7 @@ package com.fitmate.system.security.dto;
 import com.fitmate.domain.account.entity.Account;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,8 +14,9 @@ import java.util.Map;
 
 @Data
 @Builder
+@NoArgsConstructor
 public class AuthDetails implements UserDetails {
-    private final Account account;
+    private Account account;
     private Map<String, Object> attributes;
 
     // 일반 로그인

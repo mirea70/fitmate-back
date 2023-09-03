@@ -1,6 +1,7 @@
 package com.fitmate.app.mating.helper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitmate.app.config.annotation.WithMockCustomUser;
 import com.fitmate.app.mate.exceptions.GlobalExceptionHandler;
 import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.config.GsonUtil;
@@ -20,7 +21,7 @@ public class MatingMockMvcHelper {
 
     private final Gson gson = GsonUtil.buildGson();
 
-    public ResultActions submitPost(MatingDto.Create createDto, String url) throws Exception {
+    public ResultActions submitPostForMultiPart(MatingDto.Create createDto, String url) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders.post(url)
                         .content(gson.toJson(createDto))

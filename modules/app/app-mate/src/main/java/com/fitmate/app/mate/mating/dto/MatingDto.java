@@ -118,7 +118,7 @@ public class MatingDto {
     @AllArgsConstructor
     public static class Apply {
 
-        @NotNull(message = "메이팅 식별 ID 값은 필수입니다.")
+        @JsonIgnore
         private Long matingId;
 
         @NotNull(message = "신청질문 답변 입력은 필수입니다.")
