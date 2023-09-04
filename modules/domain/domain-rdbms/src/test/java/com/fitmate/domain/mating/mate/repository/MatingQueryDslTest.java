@@ -7,6 +7,8 @@ import com.fitmate.domain.mating.mate.dto.MatingReadResponseDto;
 import com.fitmate.domain.mating.mate.dto.QMatingQuestionDto_Response;
 import com.fitmate.domain.mating.mate.dto.QMatingReadResponseDto;
 import com.fitmate.domain.mating.mate.helper.MatingDomainTestHelper;
+import com.fitmate.domain.mating.request.domain.entity.MateRequest;
+import com.fitmate.domain.mating.request.domain.repository.MateRequestRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;
@@ -18,10 +20,15 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.fitmate.domain.account.entity.QAccount.account;
 import static com.fitmate.domain.mating.mate.domain.entity.QMating.mating;
+import static com.fitmate.domain.mating.request.domain.entity.QMateRequest.mateRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -35,10 +42,14 @@ public class MatingQueryDslTest {
     @Autowired
     private MatingRepository matingRepository;
     @Autowired
+    private MateRequestRepository mateRequestRepository;
+    @Autowired
     private MatingDomainTestHelper matingDomainTestHelper;
 
     @Autowired
     private Environment env;
+    @Autowired
+    private EntityManager em;
 
     @Test
     public void testGetDataSourceUrl() {
@@ -51,6 +62,8 @@ public class MatingQueryDslTest {
     public void saveBefore() {
         Mating mating = matingDomainTestHelper.getTestMating();
         matingRepository.save(mating);
+        MateRequest mateRequest = matingDomainTestHelper.getTestMateRequest();
+        mateRequestRepository.save(mateRequest);
     }
 
     @Test
@@ -93,5 +106,29 @@ public class MatingQueryDslTest {
         // then
         assertThat(response).isNotNull();
         assertThat(response.getComeQuestion()).isEqualTo("신청질문임요");
+    }
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void 메이트신청_승인_테스트 () throws Exception {
+        // given
+        Long matingId = 3L;
+        Set<Long> accountIds = new HashSet<>();
+        accountIds.add(1L);
+        // when
+        jpaQueryFactory
+                .update(mateRequest)
+                .set(mateRequest.approveStatus, MateRequest.ApproveStatus.APPROVE)
+                .where(mateRequest.matingId.eq(matingId), mateRequest.accountId.in(accountIds))
+                .execute();
+        em.flush();
+        em.clear();
+
+        List<MateRequest> afterMateRequests = mateRequestRepository.findAllByMatingIdAndAccountIdIn(matingId, accountIds);
+        // then
+        afterMateRequests.forEach(afterMateRequest -> {
+            assertThat(afterMateRequest.getApproveStatus()).isEqualTo(MateRequest.ApproveStatus.APPROVE);
+        });
     }
 }

@@ -36,4 +36,13 @@ public class MatingRequestController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping
+    public ResponseEntity<?> approveMate(@PathVariable Long matingId,
+                                         @RequestBody MatingDto.Approve approveDto) {
+        approveDto.setMatingId(matingId);
+        matingRequestService.approveRequest(approveDto);
+
+        return ResponseEntity.ok().build();
+    }
 }

@@ -9,6 +9,7 @@ import com.fitmate.domain.mating.mate.domain.entity.Mating;
 import com.fitmate.domain.mating.mate.domain.enums.GatherType;
 import com.fitmate.domain.mating.mate.domain.repository.MatingRepository;
 import com.fitmate.domain.mating.request.domain.entity.MateRequest;
+import com.fitmate.domain.mating.request.domain.repository.MateRequestQueryRepository;
 import com.fitmate.domain.mating.request.domain.repository.MateRequestRepository;
 import com.fitmate.exceptions.exception.DuplicatedException;
 import com.fitmate.exceptions.exception.NotFoundException;
@@ -19,6 +20,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,7 +32,11 @@ public class MatingRequestService {
 
     private final MatingRepository matingRepository;
 
+    private final MateRequestQueryRepository mateRequestQueryRepository;
+
     private final ApplicationEventPublisher eventPublisher;
+
+    private final EntityManager em;
 
     public Long matingRequest(MatingDto.Apply applyDto) {
 
@@ -55,5 +63,16 @@ public class MatingRequestService {
         MateEventDto.Request event = MateEventDtoMapper.INSTANCE.toEvent(mating.getId(), accountId);
         MateRequestEvent mateRequestEvent = new MateRequestEvent(event);
         eventPublisher.publishEvent(mateRequestEvent);
+    }
+
+    public void approveRequest(MatingDto.Approve approveDto) {
+        Mating mating = matingRepository.findById(approveDto.getMatingId())
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_MATING_DATA));
+        Set<Long> accountIds = approveDto.getAccountIds();
+        mateRequestQueryRepository.approveAccountIds(approveDto.getMatingId(), accountIds);
+
+        mating.forApproveRequest(accountIds);
+        em.flush();
+        em.clear();
     }
 }

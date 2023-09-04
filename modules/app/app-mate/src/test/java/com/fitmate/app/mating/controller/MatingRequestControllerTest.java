@@ -45,6 +45,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -119,6 +121,19 @@ public class MatingRequestControllerTest {
                         .content(gson.toJson(applyDto))
                         .contentType(MediaType.APPLICATION_JSON)
         );
+        // then
+        resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    public void 메이트신청_승인 () throws Exception {
+        // given
+        String url = "/api/mating/3/request";
+        MatingDto.Approve approveDto = MatingDto.Approve.builder()
+                .accountIds(Set.of(1L))
+                .build();
+        // when
+        ResultActions resultActions = matingMockMvcHelper.submitPut(url, approveDto);
         // then
         resultActions.andExpect(status().isOk());
     }

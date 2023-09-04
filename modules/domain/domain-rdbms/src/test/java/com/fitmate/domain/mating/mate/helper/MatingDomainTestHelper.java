@@ -3,6 +3,7 @@ package com.fitmate.domain.mating.mate.helper;
 import com.fitmate.domain.mating.mate.domain.entity.Mating;
 import com.fitmate.domain.mating.mate.domain.enums.*;
 import com.fitmate.domain.mating.mate.domain.vo.*;
+import com.fitmate.domain.mating.request.domain.entity.MateRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -60,6 +61,15 @@ public class MatingDomainTestHelper {
                 .introImages(Set.of(1L,2L))
                 .hasEntryFee(true)
                 .entryFeeInfo(entryFeeInfo)
+                .build();
+    }
+
+    public MateRequest getTestMateRequest() {
+        return MateRequest.builder()
+                .matingId(3L)
+                .accountId(1L)
+                .approveStatus(MateRequest.ApproveStatus.READY)
+                .comeAnswer("테스트답변이요")
                 .build();
     }
 }

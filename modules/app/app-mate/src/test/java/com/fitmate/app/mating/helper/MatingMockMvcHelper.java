@@ -54,6 +54,14 @@ public class MatingMockMvcHelper {
         );
     }
 
+    public ResultActions submitPut(String url, Object dto) throws Exception {
+        return mockMvc.perform(
+                MockMvcRequestBuilders.put(url)
+                        .content(gson.toJson(dto))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+    }
+
     public ResultActions submitGetWithRequestBody(String url, MatingDto.ListRequest requestBody) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders.get(url)

@@ -13,14 +13,22 @@ import com.fitmate.domain.redis.repository.NoticeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.event.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @RecordApplicationEvents
-public class MatingRequestTest {
+public class MatingRequestServiceTest {
 
     @Autowired
     private MatingRequestService target;
@@ -90,5 +98,30 @@ public class MatingRequestTest {
         assertThat(findMateRequest.getApproveStatus()).isEqualTo(
                 findMating.getGatherType() == GatherType.FAST ? MateRequest.ApproveStatus.APPROVE : MateRequest.ApproveStatus.READY
         );
+    }
+
+    @Test
+    @Transactional
+//    @Rollback(value = false)
+    public void 메이트신청_승인_성공 () throws Exception {
+        // given
+        Long matingId = 3L;
+        Set<Long> accountIds = new HashSet<>(Set.of(1L));
+        MatingDto.Approve approveDto = MatingDto.Approve.builder()
+                .matingId(matingId)
+                .accountIds(accountIds)
+                .build();
+        // when
+        target.approveRequest(approveDto);
+        Mating afterMating = matingRepository.findById(matingId).orElse(null);
+        List<MateRequest> afterMateRequests = mateRequestRepository.findAllByMatingIdAndAccountIdIn(matingId, accountIds);
+
+        // then
+        afterMateRequests.forEach(afterMateRequest -> {
+            assertThat(afterMateRequest.getApproveStatus()).isEqualTo(MateRequest.ApproveStatus.APPROVE);
+        });
+        assertTrue(afterMating.getWaitingAccountIds() == null || Collections.disjoint(afterMating.getWaitingAccountIds(), accountIds));
+        assertThat(afterMating.getApprovedAccountIds()).containsAll(accountIds);
+        assertThat(afterMating.getApprovedAccountCnt()).isEqualTo(afterMating.getApprovedAccountIds().size());
     }
 }

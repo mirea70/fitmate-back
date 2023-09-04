@@ -8,6 +8,10 @@ import com.fitmate.domain.mating.mate.domain.enums.PermitGender;
 import com.fitmate.domain.mating.mate.domain.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.mate.domain.vo.FitPlace;
 import com.fitmate.domain.mating.mate.domain.vo.PermitAges;
+import com.fitmate.exceptions.exception.LimitException;
+import com.fitmate.exceptions.exception.NotMatchException;
+import com.fitmate.exceptions.result.LimitErrorResult;
+import com.fitmate.exceptions.result.NotMatchErrorResult;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -122,5 +126,18 @@ public class Mating extends BaseDomain {
 
         this.waitingAccountIds.add(accountId);
         this.waitingAccountCnt = this.waitingAccountIds.size();
+    }
+
+    public void forApproveRequest(Set<Long> accountIds) {
+        if(this.waitingAccountCnt + accountIds.size() > this.permitPeopleCnt)
+            throw new LimitException(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
+
+        if(!this.waitingAccountIds.containsAll(accountIds)) throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WAIT_ACCOUNT_LIST);
+        if(this.approvedAccountIds == null) this.approvedAccountIds = new HashSet<>();
+
+        this.waitingAccountIds.removeAll(accountIds);
+        this.waitingAccountCnt = this.waitingAccountIds.size();
+        this.approvedAccountIds.addAll(accountIds);
+        this.approvedAccountCnt = this.approvedAccountIds.size();
     }
 }

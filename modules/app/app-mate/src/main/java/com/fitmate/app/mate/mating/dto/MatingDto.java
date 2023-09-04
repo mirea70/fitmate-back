@@ -131,4 +131,17 @@ public class MatingDto {
         @JsonIgnore
         private MateRequest.ApproveStatus approveStatus;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Approve {
+
+        @JsonIgnore
+        private Long matingId;
+
+        private Set<Long> accountIds;
+    }
 }

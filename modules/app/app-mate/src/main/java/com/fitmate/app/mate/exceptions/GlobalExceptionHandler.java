@@ -1,7 +1,9 @@
 package com.fitmate.app.mate.exceptions;
 
 import com.fitmate.exceptions.exception.DuplicatedException;
+import com.fitmate.exceptions.exception.LimitException;
 import com.fitmate.exceptions.exception.NotFoundException;
+import com.fitmate.exceptions.exception.NotMatchException;
 import com.fitmate.exceptions.result.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -81,6 +83,29 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final FileErrorResult errorResult) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
+    }
+
+    @ExceptionHandler(NotMatchException.class)
+    public ResponseEntity<ErrorResponse> handleNotMatchException(final NotMatchException exception) {
+        log.warn("값의 매치가 맞지 않습니다: ", exception);
+        return this.makeErrorResponseEntity(NotMatchErrorResult.NOT_MATCH_WAIT_ACCOUNT_LIST);
+    }
+
+    private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final NotMatchErrorResult errorResult) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
+    }
+
+
+    @ExceptionHandler(LimitException.class)
+    public ResponseEntity<ErrorResponse> handleLimitException(final LimitException exception) {
+        log.warn("값의 매치가 맞지 않습니다: ", exception);
+        return this.makeErrorResponseEntity(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
+    }
+
+    private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final LimitErrorResult errorResult) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
     }
