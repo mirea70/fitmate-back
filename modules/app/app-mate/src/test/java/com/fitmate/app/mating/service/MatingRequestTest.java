@@ -4,6 +4,8 @@ import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.event.MateRequestEvent;
 import com.fitmate.app.mate.mating.service.MatingRequestService;
 import com.fitmate.app.mating.helper.MatingAppTestHelper;
+import com.fitmate.domain.mating.mate.domain.entity.Mating;
+import com.fitmate.domain.mating.mate.domain.enums.GatherType;
 import com.fitmate.domain.mating.mate.domain.repository.MatingRepository;
 import com.fitmate.domain.mating.request.domain.entity.MateRequest;
 import com.fitmate.domain.mating.request.domain.repository.MateRequestRepository;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.event.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,21 +69,26 @@ public class MatingRequestTest {
     }
 
     @Test
+    @Transactional
     public void 메이트신청_성공 () throws Exception {
         // given
         MatingDto.Apply applyDto = MatingDto.Apply.builder()
                 .matingId(3L)
+                .accountId(1L)
                 .comeAnswer("5글자이상답변")
                 .build();
-        Long accountId = 1L;
+
         // when
-        Long mateRequestId = target.matingRequest(applyDto, accountId);
+        Long mateRequestId = target.matingRequest(applyDto);
         MateRequest findMateRequest = mateRequestRepository.findById(mateRequestId).orElse(null);
+        Mating findMating = matingRepository.findById(applyDto.getMatingId()).orElse(null);
         // then
         assertThat(findMateRequest).isNotNull();
         assertThat(findMateRequest.getComeAnswer()).isEqualTo(applyDto.getComeAnswer());
         int cnt = (int) events.stream(MateRequestEvent.class).count();
-
         assertThat(cnt).isEqualTo(1);
+        assertThat(findMateRequest.getApproveStatus()).isEqualTo(
+                findMating.getGatherType() == GatherType.FAST ? MateRequest.ApproveStatus.APPROVE : MateRequest.ApproveStatus.READY
+        );
     }
 }

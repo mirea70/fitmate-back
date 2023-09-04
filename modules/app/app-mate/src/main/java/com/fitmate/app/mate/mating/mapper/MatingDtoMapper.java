@@ -36,7 +36,6 @@ public interface MatingDtoMapper {
     @Mapping(target = "entryFeeInfo", source = "entryFeeInfo", qualifiedByName = "convertToEntryDataInfo")
     MatingDto.Response toResponse(Mating mating);
 
-    @Mapping(target = "approveStatus", constant = "READY")
     MateRequest applyToEntity(MatingDto.Apply apply);
 
     @Named("convertToEntryFeeInfo")

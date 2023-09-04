@@ -109,9 +109,8 @@ public class MatingRequestControllerTest {
     public void 메이트신청 () throws Exception {
         // given
         String url = "/api/mating/3/request";
-        doReturn(12L).when(matingRequestService).matingRequest(any(MatingDto.Apply.class), anyLong());
+        doReturn(12L).when(matingRequestService).matingRequest(any(MatingDto.Apply.class));
         MatingDto.Apply applyDto = MatingDto.Apply.builder()
-                .matingId(3L)
                 .comeAnswer("5글자에요")
                 .build();
 

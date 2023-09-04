@@ -27,6 +27,9 @@ public class MateRequest {
     private Long matingId;
 
     @Column(nullable = false)
+    private Long accountId;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ApproveStatus approveStatus;
 
@@ -35,10 +38,11 @@ public class MateRequest {
     private LocalDateTime createAt;
 
     @Builder
-    public MateRequest(String comeAnswer, Long matingId, ApproveStatus approveStatus) {
+    public MateRequest(String comeAnswer, Long matingId, ApproveStatus approveStatus, Long accountId) {
         this.comeAnswer = comeAnswer;
         this.matingId = matingId;
         this.approveStatus = approveStatus;
+        this.accountId = accountId;
     }
 
     @Getter

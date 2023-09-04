@@ -11,8 +11,8 @@ import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.domain.account.service.AccountService;
-import com.fitmate.exceptions.exception.AccountDuplicatedException;
-import com.fitmate.exceptions.result.AccountErrorResult;
+import com.fitmate.exceptions.exception.DuplicatedException;
+import com.fitmate.exceptions.result.DuplicatedErrorResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,14 +46,17 @@ class JoinServiceTest {
     public void 회원가입실패_값중복 () throws Exception {
         // given
         AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
+        MockMultipartFile mockMultipartFile = (MockMultipartFile) joinRequest.getProfileImage();
+        AttachFileDto.Response fileResponse = fileTestHelper.getTestResponseDto(mockMultipartFile.getOriginalFilename());
 
         doThrow(DataIntegrityViolationException.class).when(accountRepository).save(any());
+        doReturn(fileResponse).when(fileService).uploadFile(mockMultipartFile);
         // when
-        final AccountDuplicatedException result = assertThrows(AccountDuplicatedException.class,
+        final DuplicatedException result = assertThrows(DuplicatedException.class,
                 () -> target.join(joinRequest));
         // then
-        assertEquals(AccountDuplicatedException.class, result.getClass());
-        assertThat(result.getErrorResult()).isEqualTo(AccountErrorResult.DUPLICATED_ACCOUNT_VALUE);
+        assertEquals(DuplicatedException.class, result.getClass());
+        assertThat(result.getErrorResult()).isEqualTo(DuplicatedErrorResult.DUPLICATED_ACCOUNT_VALUE);
     }
 
     @Test

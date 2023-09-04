@@ -8,8 +8,8 @@ import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.domain.account.service.AccountService;
-import com.fitmate.exceptions.exception.AccountDuplicatedException;
-import com.fitmate.exceptions.result.AccountErrorResult;
+import com.fitmate.exceptions.exception.DuplicatedException;
+import com.fitmate.exceptions.result.DuplicatedErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,7 +36,7 @@ public class JoinService {
             Account savedAccount = accountRepository.save(newAccount);
             return AccountDtoMapper.INSTANCE.toResponse(savedAccount);
         } catch (DataIntegrityViolationException e) {
-            throw new AccountDuplicatedException(AccountErrorResult.DUPLICATED_ACCOUNT_VALUE);
+            throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_ACCOUNT_VALUE);
         }
     }
 

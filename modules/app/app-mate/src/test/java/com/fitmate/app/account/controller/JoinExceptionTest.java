@@ -6,8 +6,8 @@ import com.fitmate.app.account.helper.AccountAppTestHelper;
 import com.fitmate.app.account.helper.AccountMockMvcHelper;
 import com.fitmate.app.mate.account.service.JoinService;
 import com.fitmate.app.mate.exceptions.GlobalExceptionHandler;
-import com.fitmate.exceptions.exception.AccountDuplicatedException;
-import com.fitmate.exceptions.result.AccountErrorResult;
+import com.fitmate.exceptions.exception.DuplicatedException;
+import com.fitmate.exceptions.result.DuplicatedErrorResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,10 +40,10 @@ public class JoinExceptionTest {
         // given
         final String url = "/api/accounts/join";
         AccountDto.JoinRequest joinRequest = accountAppTestHelper.getTestAccountJoinRequest();
-        doThrow(new AccountDuplicatedException(AccountErrorResult.DUPLICATED_ACCOUNT_JOIN))
+        doThrow(new DuplicatedException(DuplicatedErrorResult.DUPLICATED_ACCOUNT_JOIN))
                 .when(joinService).join(any(AccountDto.JoinRequest.class));
         // when
-        final ResultActions resultActions = accountMockMvcHelper.submitPost(joinRequest, url);
+        final ResultActions resultActions = accountMockMvcHelper.submitMultiPart(joinRequest, url);
         // then
         resultActions.andExpect(status().isBadRequest());
     }

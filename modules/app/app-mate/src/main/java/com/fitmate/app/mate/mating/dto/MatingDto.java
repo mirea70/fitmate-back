@@ -10,6 +10,7 @@ import com.fitmate.domain.mating.mate.domain.enums.GatherType;
 import com.fitmate.domain.mating.mate.domain.enums.PermitGender;
 import com.fitmate.domain.mating.mate.domain.vo.FitPlace;
 import com.fitmate.domain.mating.mate.domain.vo.PermitAges;
+import com.fitmate.domain.mating.request.domain.entity.MateRequest;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -121,7 +122,13 @@ public class MatingDto {
         @JsonIgnore
         private Long matingId;
 
+        @JsonIgnore
+        private Long accountId;
+
         @NotNull(message = "신청질문 답변 입력은 필수입니다.")
         private String comeAnswer;
+
+        @JsonIgnore
+        private MateRequest.ApproveStatus approveStatus;
     }
 }

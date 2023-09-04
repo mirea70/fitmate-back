@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MateRequestRepository extends JpaRepository<MateRequest, Long> {
+    boolean existsByMatingIdAndAccountId(Long matingId, Long accountId);
 }

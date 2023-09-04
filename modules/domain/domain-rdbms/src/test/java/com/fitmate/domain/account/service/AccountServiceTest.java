@@ -6,9 +6,9 @@ import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.helper.AccountDomainTestHelper;
 import com.fitmate.domain.account.repository.AccountRepository;
-import com.fitmate.exceptions.exception.AccountDuplicatedException;
+import com.fitmate.exceptions.exception.DuplicatedException;
 import com.fitmate.exceptions.exception.NotFoundException;
-import com.fitmate.exceptions.result.AccountErrorResult;
+import com.fitmate.exceptions.result.DuplicatedErrorResult;
 import com.fitmate.exceptions.result.NotFoundErrorResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,10 +63,10 @@ public class AccountServiceTest {
         String email = "test@email.com";
         doReturn(Optional.of(Account.builder().build())).when(accountRepository).findByPrivateInfoEmail(anyString());
         // when
-        final AccountDuplicatedException result = assertThrows(AccountDuplicatedException.class,
+        final DuplicatedException result = assertThrows(DuplicatedException.class,
                 () -> target.CheckDuplicatedByEmail(email));
         // then
-        assertThat(result.getErrorResult()).isEqualTo(AccountErrorResult.DUPLICATED_ACCOUNT_JOIN);
+        assertThat(result.getErrorResult()).isEqualTo(DuplicatedErrorResult.DUPLICATED_ACCOUNT_JOIN);
     }
 
     @Test
@@ -76,9 +76,9 @@ public class AccountServiceTest {
         doReturn(2).when(accountRepository).checkDuplicatedCount(anyString(), anyString(),
                                                                             anyString(), anyString());
         // when
-        final AccountDuplicatedException result = assertThrows(AccountDuplicatedException.class,
+        final DuplicatedException result = assertThrows(DuplicatedException.class,
                 () -> target.CheckDuplicated(checkDto));
         // then
-        assertThat(result.getErrorResult()).isEqualTo(AccountErrorResult.DUPLICATED_ACCOUNT_JOIN);
+        assertThat(result.getErrorResult()).isEqualTo(DuplicatedErrorResult.DUPLICATED_ACCOUNT_JOIN);
     }
 }

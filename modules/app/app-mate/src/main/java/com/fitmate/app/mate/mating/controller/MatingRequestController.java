@@ -31,7 +31,8 @@ public class MatingRequestController {
                                        @RequestBody MatingDto.Apply applyDto,
                                        @AuthenticationPrincipal AuthDetails authDetails) {
         applyDto.setMatingId(matingId);
-        matingRequestService.matingRequest(applyDto, authDetails.getAccount().getId());
+        applyDto.setAccountId(authDetails.getAccount().getId());
+        matingRequestService.matingRequest(applyDto);
 
         return ResponseEntity.ok().build();
     }

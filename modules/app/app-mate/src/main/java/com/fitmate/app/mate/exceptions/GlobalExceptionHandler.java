@@ -1,11 +1,8 @@
 package com.fitmate.app.mate.exceptions;
 
-import com.fitmate.exceptions.exception.AccountDuplicatedException;
+import com.fitmate.exceptions.exception.DuplicatedException;
 import com.fitmate.exceptions.exception.NotFoundException;
-import com.fitmate.exceptions.result.AccountErrorResult;
-import com.fitmate.exceptions.result.CommonErrorResult;
-import com.fitmate.exceptions.result.FileErrorResult;
-import com.fitmate.exceptions.result.NotFoundErrorResult;
+import com.fitmate.exceptions.result.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -44,13 +41,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ErrorResponse(HttpStatus.BAD_REQUEST.toString(), errorDescription));
     }
 
-    @ExceptionHandler(AccountDuplicatedException.class)
-    public ResponseEntity<ErrorResponse> handleJoinDuplicatedException(final AccountDuplicatedException exception) {
-        log.warn("AccountDuplicatedException: ", exception);
+    @ExceptionHandler(DuplicatedException.class)
+    public ResponseEntity<ErrorResponse> handleJoinDuplicatedException(final DuplicatedException exception) {
+        log.warn("DuplicatedException: ", exception);
         return this.makeErrorResponseEntity(exception.getErrorResult());
     }
 
-    private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final AccountErrorResult errorResult) {
+    private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final DuplicatedErrorResult errorResult) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
     }

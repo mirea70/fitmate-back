@@ -48,7 +48,7 @@ public class JoinSuccessTest {
         AccountDto.JoinResponse joinResponse = accountAppTestHelper.getTestJoinResponse();
         doReturn(joinResponse).when(joinService).join(any(AccountDto.JoinRequest.class));
         // when
-        final ResultActions resultActions = accountMockMvcHelper.submitPost(joinRequest, url);
+        final ResultActions resultActions = accountMockMvcHelper.submitMultiPart(joinRequest, url);
         // then
         final AccountDto.JoinResponse resultResponse = gson.fromJson(resultActions.andReturn()
                 .getResponse()
