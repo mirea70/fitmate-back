@@ -40,7 +40,7 @@ public class Mating extends BaseDomain {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "CLOB")
     private String introduction;
 
     @Column
@@ -73,7 +73,7 @@ public class Mating extends BaseDomain {
     private Long writerId;
 
     @Column(nullable = false)
-    @ColumnDefault("false")
+    @ColumnDefault("0")
     @Builder.Default
     private boolean hasEntryFee = false;
 
