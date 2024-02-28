@@ -46,7 +46,7 @@ public class NoticeRepositoryTest {
         Notice newNotice = noticeDomainTestHelper.getTestNotice();
         Notice savedNotice = noticeRepository.save(newNotice);
         // when
-        Optional<Notice> findNotice = noticeRepository.findById(savedNotice.getAccountId());
+        Optional<Notice> findNotice = noticeRepository.findById(savedNotice.getId());
         // then
         assertTrue(findNotice.isPresent());
         assertThat(findNotice.get().getAccountId()).isEqualTo(savedNotice.getAccountId());

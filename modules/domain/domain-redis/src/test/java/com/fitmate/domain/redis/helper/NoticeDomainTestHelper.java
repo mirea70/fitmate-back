@@ -9,7 +9,6 @@ public class NoticeDomainTestHelper {
     public Notice getTestNotice() {
         return Notice.builder()
                 .accountId(1L)
-                .matingId(1L)
                 .content("테스트알림")
                 .build();
     }

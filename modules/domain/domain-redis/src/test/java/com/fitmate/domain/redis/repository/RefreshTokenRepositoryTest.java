@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
@@ -17,16 +18,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataRedisTest
 @Import({RedisConfig.class, RefreshTokenTestHelper.class})
+@ActiveProfiles("redis")
 public class RefreshTokenRepositoryTest {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
     @Autowired
     private RefreshTokenTestHelper refreshTokenTestHelper;
 
-    @AfterEach
-    public void 테스트후처리() {
-        refreshTokenRepository.deleteAll();
-    }
+//    @AfterEach
+//    public void 테스트후처리() {
+//        refreshTokenRepository.deleteAll();
+//    }
 
     @Test
     public void 리프레시토큰_저장 () throws Exception {
