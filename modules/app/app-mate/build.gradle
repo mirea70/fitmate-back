@@ -1,5 +1,5 @@
 bootJar { enabled = true }
-jar { enabled = true }
+jar { enabled = false }
 
 dependencies {
     // 모듈
@@ -18,4 +18,14 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+sourceSets {
+    main {
+        def resDir = "${profile}"==('prd') ? "/home/opc/resources" : "src/main/resources"
+        resources {
+            srcDirs resDir.toString()
+        }
+    }
 }

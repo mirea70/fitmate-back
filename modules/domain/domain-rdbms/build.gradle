@@ -41,3 +41,13 @@ tasks.withType(JavaCompile) {
 clean {
     delete file(querydslSrcDir)
 }
+
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+sourceSets {
+    main {
+        def resDir = "${profile}"==('prd') ? "/home/opc/resources" : "src/main/resources"
+        resources {
+            srcDirs resDir.toString()
+        }
+    }
+}
