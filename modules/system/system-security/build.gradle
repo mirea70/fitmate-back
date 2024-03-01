@@ -17,6 +17,12 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+tasks {
+    processResources {
+        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+    }
+}
+
 ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
 sourceSets {
     main {
