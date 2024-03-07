@@ -30,9 +30,9 @@ ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
 println profile
 sourceSets {
     main {
-//        def resDir = "${profile}"==('prd') ? "/home/opc/resources/ymls/" : "src/main/resources"
+        def resDir = "${profile}"==('prd') ? "/home/opc/resources" : "src/main/resources"
         resources {
-            srcDirs "src/main/resources", "/home/opc/resources/ymls"
+            srcDirs resDir.toString()
         }
     }
 }
