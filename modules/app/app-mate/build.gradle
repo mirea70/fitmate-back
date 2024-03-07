@@ -27,6 +27,7 @@ tasks {
 }
 
 ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+println profile
 sourceSets {
     main {
         def resDir = "${profile}"==('prd') ? "/home/opc/resources" : "src/main/resources"

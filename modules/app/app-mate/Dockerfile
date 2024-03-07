@@ -4,4 +4,4 @@ ARG ORACLE_KEY_FILE=/home/opc/wallet/Wallet_fitmateMain
 COPY ${JAR_FILE} mate.jar
 COPY ${ORACLE_KEY_FILE} /home/opc/wallet/Wallet_fitmateMain
 
-ENTRYPOINT ["java", "-jar", "mate.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prd" , "mate.jar"]
