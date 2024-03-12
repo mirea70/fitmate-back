@@ -29,13 +29,12 @@ tasks {
 ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
 println profile
 
-//def resDir = "${profile}"==('prd') ? "/home/opc/resources" : "src/main/resources"
+def resDir = "${profile}"==('prd') ? "/home/ubuntu/resources" : "src/main/resources"
 //processResources.from(resDir)
-//sourceSets {
-//    main {
-//        def resDir = "${profile}"==('prd') ? "/home/opc/resources" : "src/main/resources"
-//        resources {
-//            srcDirs resDir.toString()
-//        }
-//    }
-//}
+sourceSets {
+    main {
+        resources {
+            srcDirs resDir.toString()
+        }
+    }
+}
