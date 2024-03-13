@@ -1,6 +1,9 @@
 FROM openjdk:17-jdk
+
 ARG JAR_FILE=build/libs/*.jar
-#ARG RESOURCE_PATH=/home/ubuntu/resources/ymls/
+ARG RESOURCE_PATH
+ARG ORACLE_KEY_FILE
+
 COPY ${JAR_FILE} mate.jar
 COPY ${RESOURCE_PATH}/application.yml application.yml
 COPY ${RESOURCE_PATH}/application-rdbms.yml application-rdbms.yml
