@@ -11,4 +11,4 @@ COPY ${JAR_FILE} mate.jar
 #COPY ${RESOURCE_PATH}/application-security.yml application-security.yml
 #COPY ${ORACLE_KEY_FILE} /home/ubuntu/wallet/Wallet_fitmateMain/
 
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prd", "-Dspring.config.location=option:./resources/ymls/", "mate.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prd", "-Dspring.config.location=./resources/ymls/", "mate.jar"]
