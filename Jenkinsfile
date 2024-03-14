@@ -26,9 +26,10 @@ pipeline {
 
     stages('Build Image') {
         steps {
-            sh "cd modules/app/app-mate"
             echo 'mate-service docker build...'
-            sh "docker build -t mate-service -f ./Dockerfile ."
+            dir('modules/app/app-mate') {
+                sh "docker build -t mate-service -f ./Dockerfile ."
+            }
         }
     }
 
