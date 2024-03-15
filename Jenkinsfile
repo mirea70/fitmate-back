@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Git Clone') {
             steps {
-                git 'https://github.com/mirea70/fitmate-back'
+                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/mirea70/fitmate-back'
             }
         }
 
