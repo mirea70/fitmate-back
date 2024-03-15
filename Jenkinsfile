@@ -32,7 +32,7 @@ pipeline {
                 script {
                     echo 'mate-service docker build...'
                     dir('modules/app/app-mate') {
-                        sh "docker build -t mate-service -f ./Dockerfile ."
+                        sh "docker build -t $repository:latest -f ./Dockerfile ."
                     }
                 }
             }
