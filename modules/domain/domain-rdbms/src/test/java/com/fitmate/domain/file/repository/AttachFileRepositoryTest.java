@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(AttachFileDomainTestHelper.class)
 /**
-  수정 필요3 (테스트)
+  수정 필요4 (테스트)
 **/
 public class AttachFileRepositoryTest {
     @Autowired
