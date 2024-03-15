@@ -4,78 +4,86 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-token')
     }
 
-    triggers {
-        pollSCM('* * * * *')
-    }
+//     triggers {
+//         pollSCM('* * * * *')
+//     }
 
     agent any
 
-    stages('Git Clone') {
-        steps {
-            git 'https://github.com/mirea70/fitmate-back'
-        }
-    }
-
-    stages('Build Jar') {
-        steps {
-            sh "chmod +x gradlew"
-            echo 'mate-service Build...'
-            sh "./gradlew :app-mate:clean :app-mate:build -Pprofile=prd -x test"
-        }
-    }
-
-    stages('Build Image') {
-        steps {
-            echo 'mate-service docker build...'
-            dir('modules/app/app-mate') {
-                sh "docker build -t mate-service -f ./Dockerfile ."
+    stages {
+        stage('Git Clone') {
+            steps {
+                git 'https://github.com/mirea70/fitmate-back'
             }
         }
-    }
 
-    stages('Image Push') {
-        steps {
-            sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
-            sh "docker push $repository:latest"
+        stage('Build Jar') {
+            steps {
+                script {
+                    sh "chmod +x gradlew"
+                    echo 'mate-service Build...'
+                    sh "./gradlew :app-mate:clean :app-mate:build -Pprofile=prd -x test"
+                }
+            }
         }
-    }
 
-    stages('Image Clean') {
-        steps {
-            sh "docker rmi $repository:latest"
+        stage('Build Image') {
+            steps {
+                script {
+                    echo 'mate-service docker build...'
+                    dir('modules/app/app-mate') {
+                        sh "docker build -t mate-service -f ./Dockerfile ."
+                    }
+                }
+            }
         }
-    }
 
-    stages('Deploy') {
-        steps {
-            ssh_publisher(
-                continueOnError: false,
-                failOnError: true,
-                publishers:[
-                    sshPublisherDesc(
-                        configName: 'instance-fitmate',
-                        verbose: true,
-                        transfers: [
-                            sshTransfer(
-                                    cleanRemote: false,
-                                    excludes: '',
-                                    execCommand:
-                                            '''docker rmi -f mirea720/fitmate \
+        stage('Image Push') {
+            steps {
+                script {
+                    sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    sh "docker push $repository:latest"
+                }
+            }
+        }
+
+        stage('Image Clean') {
+            steps {
+                sh "docker rmi $repository:latest"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                ssh_publisher(
+                        continueOnError: false,
+                        failOnError: true,
+                        publishers:[
+                                sshPublisherDesc(
+                                        configName: 'instance-fitmate',
+                                        verbose: true,
+                                        transfers: [
+                                                sshTransfer(
+                                                        cleanRemote: false,
+                                                        excludes: '',
+                                                        execCommand:
+                                                                '''docker rmi -f mirea720/fitmate \
                                                ~/backend/deploy.sh \
                                                docker rmi -f $(docker images -f "dangling=true" -q)
                                             ''',
-                                    execTimeout: 120000,
-                                    flatten: false,
-                                    makeEmptyDirs: false,
-                                    noDefaultExcludes: false,
-                                    patternSeparator: '[, ]+',
-                                    remoteDirectory: './backend/',
-                                    remoteDirectorySDF: false,
-                            )
+                                                        execTimeout: 120000,
+                                                        flatten: false,
+                                                        makeEmptyDirs: false,
+                                                        noDefaultExcludes: false,
+                                                        patternSeparator: '[, ]+',
+                                                        remoteDirectory: './backend/',
+                                                        remoteDirectorySDF: false,
+                                                )
+                                        ]
+                                )
                         ]
-                    )
-                ]
-            )
+                )
+            }
         }
     }
 }
