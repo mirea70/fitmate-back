@@ -3,6 +3,7 @@ package com.fitmate.app.account.helper;
 import com.fitmate.app.mate.account.dto.AccountDto;
 import com.fitmate.app.mate.file.dto.AttachFileDto;
 import com.fitmate.domain.file.entity.AttachFile;
+import org.mockito.Mockito;
 import org.springframework.core.io.UrlResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+
+import static org.mockito.Mockito.mock;
 
 @Component
 public class FileTestHelper {
@@ -40,14 +43,12 @@ public class FileTestHelper {
         String ext = "png";
         String path = fileDefaultDir + profileImageDir + fileName + "." + ext;
 
-        FileInputStream fileInputStream = new FileInputStream(new File(path));
-        return new MockMultipartFile(fileName, fileName + "." + ext, ext, fileInputStream);
+        return new MockMultipartFile(fileName, fileName + "." + ext, ext, fileName.getBytes());
     }
 
     public MockMultipartFile getMockMultipartFile(String fileName, String ext, String path) throws Exception {
 
-        FileInputStream fileInputStream = new FileInputStream(new File(path));
-        return new MockMultipartFile(fileName, fileName + "." + ext, ext, fileInputStream);
+        return new MockMultipartFile(fileName, fileName + "." + ext, ext, fileName.getBytes());
     }
 
     public List<MockMultipartFile> getMockMultipartFileList(String fileName1, String fileName2) throws Exception {
@@ -68,10 +69,18 @@ public class FileTestHelper {
     }
 
     public AttachFileDto.Download getTestDownloadDto(String uploadFileName, String storeFileName) throws MalformedURLException {
+
+//        String url = "file:" + getFullPath(storeFileName);
+        UrlResource mockUrlResource = Mockito.mock(UrlResource.class);
+        Mockito.when(mockUrlResource.exists()).thenReturn(false);
+        Mockito.when(Mockito.any(UrlResource.class)).thenReturn(mockUrlResource);
+
         return AttachFileDto.Download.builder()
                 .contentDisposition(getContentDisposition(uploadFileName))
-                .urlResource(new UrlResource("file:" + getFullPath(storeFileName)))
+//                .urlResource(new UrlResource("file:" + getFullPath(storeFileName)))
+                .urlResource(mockUrlResource)
                 .build();
+
     }
 
     private String getContentDisposition(String uploadFileName) {

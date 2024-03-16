@@ -1,5 +1,8 @@
 package com.fitmate.domain.mating.mate.repository;
 
+import com.fitmate.domain.account.entity.Account;
+import com.fitmate.domain.account.helper.AccountDomainTestHelper;
+import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.domain.mating.mate.domain.entity.Mating;
 import com.fitmate.domain.mating.mate.domain.repository.MatingRepository;
 import com.fitmate.domain.mating.mate.dto.MatingQuestionDto;
@@ -21,7 +24,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("rdbms")
+@ActiveProfiles({"dev","rdbms"})
 public class MatingQueryDslTest {
 
     @Autowired
@@ -44,7 +46,11 @@ public class MatingQueryDslTest {
     @Autowired
     private MateRequestRepository mateRequestRepository;
     @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
     private MatingDomainTestHelper matingDomainTestHelper;
+    @Autowired
+    private AccountDomainTestHelper accountDomainTestHelper;
 
     @Autowired
     private Environment env;
@@ -53,24 +59,44 @@ public class MatingQueryDslTest {
 
     @Test
     public void testGetDataSourceUrl() {
-        assertThat(env.getProperty("spring.datasource.url")).isEqualTo("jdbc:mysql://localhost:18000/fitmate?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8");
+        assertThat(env.getProperty("spring.datasource.url")).isEqualTo("jdbc:oracle:thin:@fitmatedev_high?TNS_ADMIN=/Users/growme/oci/wallet/Wallet_fitmateDev");
+    }
+
+    @Transactional
+//    @Rollback(value = false)
+    public Mating saveMatingBefore() {
+        Mating mating = matingDomainTestHelper.getTestMating();
+        return matingRepository.save(mating);
+    }
+    @Transactional
+    public Account saveAccountBefore() {
+        Account account = accountDomainTestHelper.getTestAccount();
+        return accountRepository.save(account);
+    }
+
+
+    @Transactional
+    @Rollback(value = false)
+    public MateRequest saveMateRequestBefore() {
+        MateRequest mateRequest = matingDomainTestHelper.getTestMateRequest();
+        return mateRequestRepository.save(mateRequest);
+    }
+
+    @Transactional
+    public void deleteMatingAfter() {
+        matingRepository.deleteAll();
+    }
+
+    @Transactional
+    public void deleteMateRequestAfter() {
+        mateRequestRepository.deleteAll();
     }
 
     @Test
     @Transactional
-    @Rollback(value = false)
-    public void saveBefore() {
-        Mating mating = matingDomainTestHelper.getTestMating();
-        matingRepository.save(mating);
-        MateRequest mateRequest = matingDomainTestHelper.getTestMateRequest();
-        mateRequestRepository.save(mateRequest);
-    }
-
-    @Test
-    @Transactional(readOnly = true)
     public void 메이팅글_목록조회_테스트() throws Exception {
         // given
-        Long lastMatingId = 2L;
+        Long lastMatingId = saveMatingBefore().getId();
         int limit = 10;
         // when
         List<MatingReadResponseDto> responses = jpaQueryFactory
@@ -80,12 +106,12 @@ public class MatingQueryDslTest {
                         mating.waitingAccountCnt, mating.approvedAccountCnt))
                 .from(mating)
                 .orderBy(mating.createdAt.desc())
-                .where(afterLastMatingId(lastMatingId))
+                .where(afterLastMatingId(lastMatingId-1))
                 .limit(limit)
                 .fetch();
         // then
         assertThat(responses.size()).isNotEqualTo(0);
-        assertThat(responses.get(responses.size() - 1).getId()).isEqualTo(3L);
+        assertThat(responses.get(responses.size() - 1).getId()).isEqualTo(lastMatingId);
     }
 
     private BooleanExpression afterLastMatingId(Long lastMatingId) {
@@ -93,9 +119,14 @@ public class MatingQueryDslTest {
     }
 
     @Test
+    @Transactional
+    @Rollback(value = false)
     public void 메이팅신청_질문화면_조회_테스트 () throws Exception {
         // given
-        Long matingId = 2L;
+        // Test 데이터 생성 시, initMating의 writerId == initAccount의 id와 같게 생성함
+        saveAccountBefore();
+        Mating initMating = saveMatingBefore();
+        Long matingId = initMating.getId();
         // when
         MatingQuestionDto.Response response = jpaQueryFactory
                 .select(new QMatingQuestionDto_Response(account.profileInfo.profileImageId, account.profileInfo.nickName, mating.comeQuestion))
@@ -105,7 +136,7 @@ public class MatingQueryDslTest {
                 .fetchOne();
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getComeQuestion()).isEqualTo("신청질문임요");
+        assertThat(response.getComeQuestion()).isEqualTo(initMating.getComeQuestion());
     }
 
     @Test

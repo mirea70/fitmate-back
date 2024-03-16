@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DataJpaTest
 @Import(AccountDomainTestHelper.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("rdbms")
+@ActiveProfiles({"rdbms", "dev"})
 public class AccountRepositoryTest {
     @Autowired
     private AccountRepository accountRepository;

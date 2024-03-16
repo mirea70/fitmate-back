@@ -10,6 +10,7 @@ public class MateRequestDomainTestHelper {
                 .comeAnswer("대답입니다1")
                 .matingId(1L)
                 .approveStatus(MateRequest.ApproveStatus.READY)
+                .accountId(1L)
                 .build();
     }
 }

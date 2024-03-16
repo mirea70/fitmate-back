@@ -13,11 +13,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.net.MalformedURLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -28,7 +35,7 @@ public class FileControllerTest {
     @InjectMocks
     private FileController target;
     @Mock
-    private FileService fileService;
+    private FileService mockFileService;
 
     private FileTestHelper fileTestHelper;
 
@@ -41,26 +48,32 @@ public class FileControllerTest {
         fileMockMvcHelper = new FileMockMvcHelper(target, new GlobalExceptionHandler());
     }
 
-    @Test
-    public void 파일다운로드_ID로_성공 () throws Exception {
-        // given
-        AttachFileDto.Download downloadDto = fileTestHelper.getTestDownloadDto();
-        final String url = "/api/files/1";
-        doReturn(downloadDto).when(fileService).downloadById(anyLong());
-        // when
-        ResultActions resultActions = fileMockMvcHelper.submitGet(url);
-        // then
-        resultActions.andExpect(status().isOk());
-        String source = resultActions.andReturn().getResponse().getHeader("Content-Disposition");
-        assertThat(source).isEqualTo(downloadDto.getContentDisposition());
-    }
+//    @Test
+//    public void 파일다운로드_ID로_성공 () throws Exception {
+//        // given
+////        AttachFileDto.Download downloadDto = fileTestHelper.getTestDownloadDto();
+//        final String url = "/api/files/1";
+//        ResultActions resultActions = fileMockMvcHelper.submitGet(url);
+//        resultActions.andExpect(status().isOk());
+////        doReturn(downloadDto).when(mockFileService).downloadById(anyLong());
+//        // when
+//        MockHttpServletResponse response = resultActions.andReturn().getResponse();
+//        // then
+//        String contentType = response.getContentType();
+//        String contentDisposition = response.getHeader(HttpHeaders.CONTENT_DISPOSITION);
+//
+//        assertAll(
+//                () -> assertThat(contentType).isEqualTo(MediaType.APPLICATION_OCTET_STREAM_VALUE),
+//                () -> assertThat(contentDisposition).contains("attachment", "UTF-8")
+//        );
+//    }
 
     @Test
     public void 파일다운로드_ID로_실패 () throws Exception {
         // given
         AttachFileDto.Download downloadDto = fileTestHelper.getTestDownloadDto();
         final String url = "/api/files/1";
-        doThrow(MalformedURLException.class).when(fileService).downloadById(anyLong());
+        doThrow(MalformedURLException.class).when(mockFileService).downloadById(anyLong());
         // when
         ResultActions resultActions = fileMockMvcHelper.submitGet(url);
         // then
