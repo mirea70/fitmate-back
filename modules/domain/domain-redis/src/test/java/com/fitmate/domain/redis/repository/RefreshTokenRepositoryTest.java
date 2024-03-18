@@ -18,17 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataRedisTest
 @Import({RedisConfig.class, RefreshTokenTestHelper.class})
-@ActiveProfiles("redis")
+@ActiveProfiles({"dev","redis"})
 public class RefreshTokenRepositoryTest {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
     @Autowired
     private RefreshTokenTestHelper refreshTokenTestHelper;
-
-//    @AfterEach
-//    public void 테스트후처리() {
-//        refreshTokenRepository.deleteAll();
-//    }
 
     @Test
     public void 리프레시토큰_저장 () throws Exception {

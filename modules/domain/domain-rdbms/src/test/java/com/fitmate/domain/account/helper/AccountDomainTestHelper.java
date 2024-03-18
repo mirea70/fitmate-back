@@ -24,7 +24,7 @@ public class AccountDomainTestHelper {
                 .build();
 
         return Account.builder()
-//                .id(1L)
+                .id(1L)
                 .loginName("asd1")
                 .password(Password.builder().value("12345678").build())
                 .privateInfo(privateInfo)

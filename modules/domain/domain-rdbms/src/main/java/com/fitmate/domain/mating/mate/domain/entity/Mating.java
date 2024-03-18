@@ -120,6 +120,11 @@ public class Mating extends BaseDomain {
         this.introImages = introImages;
     }
 
+    public void updateWriterId(Long writerId){
+        if (writerId == null) return;
+        this.writerId = writerId;
+    }
+
     public void addWaitingAccountId(Long accountId) {
         if(accountId == null) return;
         if(this.waitingAccountIds == null) this.waitingAccountIds = new HashSet<>();

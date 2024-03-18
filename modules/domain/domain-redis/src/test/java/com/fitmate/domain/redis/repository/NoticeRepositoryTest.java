@@ -18,17 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataRedisTest
 @Import({RedisConfig.class, NoticeDomainTestHelper.class})
-@ActiveProfiles("redis")
+@ActiveProfiles({"dev","redis"})
 public class NoticeRepositoryTest {
     @Autowired
     private NoticeRepository noticeRepository;
     @Autowired
     private NoticeDomainTestHelper noticeDomainTestHelper;
-
-//    @AfterEach
-//    public void 테스트후처리() {
-//        noticeRepository.deleteAll();
-//    }
 
     @Test
     public void 알림_저장 () throws Exception {

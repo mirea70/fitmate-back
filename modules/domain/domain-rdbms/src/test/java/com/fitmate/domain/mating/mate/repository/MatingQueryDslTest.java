@@ -21,6 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -63,7 +65,6 @@ public class MatingQueryDslTest {
     }
 
     @Transactional
-//    @Rollback(value = false)
     public Mating saveMatingBefore() {
         Mating mating = matingDomainTestHelper.getTestMating();
         return matingRepository.save(mating);
@@ -76,7 +77,6 @@ public class MatingQueryDslTest {
 
 
     @Transactional
-    @Rollback(value = false)
     public MateRequest saveMateRequestBefore() {
         MateRequest mateRequest = matingDomainTestHelper.getTestMateRequest();
         return mateRequestRepository.save(mateRequest);
@@ -120,12 +120,12 @@ public class MatingQueryDslTest {
 
     @Test
     @Transactional
-    @Rollback(value = false)
     public void 메이팅신청_질문화면_조회_테스트 () throws Exception {
-        // given
-        // Test 데이터 생성 시, initMating의 writerId == initAccount의 id와 같게 생성함
-        saveAccountBefore();
+        // given : 한 사용자가 메이팅 글 등록
+        Account initAccount = saveAccountBefore();
         Mating initMating = saveMatingBefore();
+        initMating.updateWriterId(initAccount.getId());
+
         Long matingId = initMating.getId();
         // when
         MatingQuestionDto.Response response = jpaQueryFactory
@@ -140,13 +140,14 @@ public class MatingQueryDslTest {
     }
 
     @Test
-    @Transactional
-    @Rollback(value = false)
-    public void 메이트신청_승인_테스트 () throws Exception {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void 메이트신청_승인상태_변경_테스트 () throws Exception {
         // given
-        Long matingId = 3L;
+        MateRequest testMateRequest = saveMateRequestBefore();
+
+        Long matingId = testMateRequest.getMatingId();
         Set<Long> accountIds = new HashSet<>();
-        accountIds.add(1L);
+        accountIds.add(testMateRequest.getAccountId());
         // when
         jpaQueryFactory
                 .update(mateRequest)
