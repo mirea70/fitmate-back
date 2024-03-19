@@ -2,6 +2,7 @@ package com.fitmate.app.mate.mating.service;
 
 import com.fitmate.app.mate.mating.dto.MateEventDto;
 import com.fitmate.app.mate.mating.dto.MatingDto;
+import com.fitmate.app.mate.mating.event.MateApproveEvent;
 import com.fitmate.app.mate.mating.event.MateRequestEvent;
 import com.fitmate.app.mate.mating.mapper.MateEventDtoMapper;
 import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
@@ -60,6 +61,11 @@ public class MatingRequestService {
 
         mating.addWaitingAccountId(accountId);
 
+        /**
+         * [이벤트 처리 목록]
+         * 1. 메이트 신청자 알림 보내기
+         * 2. 메이트 신청자 휴대폰 문자 보내기
+         */
         MateEventDto.Request event = MateEventDtoMapper.INSTANCE.toEvent(mating.getId(), accountId);
         MateRequestEvent mateRequestEvent = new MateRequestEvent(event);
         eventPublisher.publishEvent(mateRequestEvent);
@@ -74,5 +80,20 @@ public class MatingRequestService {
         mating.forApproveRequest(accountIds);
         em.flush();
         em.clear();
+
+        afterApprove(mating, accountIds);
+    }
+
+    private void afterApprove(Mating mating, Set<Long> accountIds) {
+
+        /**
+         * [이벤트 처리 목록]
+         * 1. 메이트 신청자 알림 보내기
+         * 2. 메이트 신청자 휴대폰 문자 보내기 (구현 필요)
+         */
+
+        MateEventDto.Approve event = MateEventDtoMapper.INSTANCE.toEvent(mating.getId(), accountIds);
+        MateApproveEvent mateApproveEvent = new MateApproveEvent(event);
+        eventPublisher.publishEvent(mateApproveEvent);
     }
 }

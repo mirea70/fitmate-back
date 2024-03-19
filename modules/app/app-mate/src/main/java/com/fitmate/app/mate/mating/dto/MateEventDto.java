@@ -2,6 +2,8 @@ package com.fitmate.app.mate.mating.dto;
 
 import lombok.*;
 
+import java.util.Set;
+
 public class MateEventDto {
     @Getter
     @Builder
@@ -9,8 +11,19 @@ public class MateEventDto {
     @AllArgsConstructor
     public static class Request {
 
-        private Long matingId;
+        private String title;
 
         private Long accountId;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Approve {
+
+        private String title;
+
+        private Set<Long> accountIds;
     }
 }
