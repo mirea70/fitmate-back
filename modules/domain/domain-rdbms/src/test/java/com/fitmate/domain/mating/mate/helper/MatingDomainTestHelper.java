@@ -64,6 +64,7 @@ public class MatingDomainTestHelper {
                 .build();
     }
 
+
     public MateRequest getTestMateRequest() {
         return MateRequest.builder()
                 .matingId(3L)

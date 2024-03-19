@@ -3,11 +3,6 @@ pipeline {
         repository = "mirea720/fitmate"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-token')
     }
-
-//     triggers {
-//         pollSCM('* * * * *')
-//     }
-
     agent any
 
     stages {

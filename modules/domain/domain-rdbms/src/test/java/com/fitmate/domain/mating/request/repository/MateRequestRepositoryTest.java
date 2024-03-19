@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(MateRequestDomainTestHelper.class)
-@ActiveProfiles("rdbms")
+@ActiveProfiles({"dev","rdbms"})
 @EnableJpaAuditing
 public class MateRequestRepositoryTest {
     @Autowired

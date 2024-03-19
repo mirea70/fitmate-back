@@ -12,9 +12,12 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @EqualsAndHashCode(exclude = "id")
 @Getter
+@Builder
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
@@ -45,14 +48,14 @@ public class Account {
         return this.privateInfo.getEmail();
     }
 
-    @Builder
-    public Account(String loginName, Password password, PrivateInfo privateInfo,
-                   ProfileInfo profileInfo, Gender gender, AccountRole role) {
-        this.loginName = loginName;
-        this.password = password;
-        this.privateInfo = privateInfo;
-        this.profileInfo = profileInfo;
-        this.gender = gender;
-        this.role = role;
-    }
+//    @Builder
+//    public Account(String loginName, Password password, PrivateInfo privateInfo,
+//                   ProfileInfo profileInfo, Gender gender, AccountRole role) {
+//        this.loginName = loginName;
+//        this.password = password;
+//        this.privateInfo = privateInfo;
+//        this.profileInfo = profileInfo;
+//        this.gender = gender;
+//        this.role = role;
+//    }
 }
