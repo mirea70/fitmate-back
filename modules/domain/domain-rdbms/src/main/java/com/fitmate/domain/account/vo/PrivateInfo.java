@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"name", "phone", "email"})
 @Getter
+@EqualsAndHashCode
 public class PrivateInfo {
 
     @Column(length = 5,unique = true, nullable = false)

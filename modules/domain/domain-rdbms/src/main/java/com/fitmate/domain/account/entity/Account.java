@@ -48,15 +48,15 @@ public class Account {
         return this.privateInfo.getEmail();
     }
 
-    public void modifyProfile(Password password, PrivateInfo privateInfo, ProfileInfo profileInfo, Long newImageFileId) {
+    public void modifyProfile(Password password, PrivateInfo privateInfo, ProfileInfo profileInfo) {
         if(password != null) {
             this.password = password;
         }
         if(privateInfo != null) {
             this.privateInfo.modifyPrivateInfo(privateInfo);
         }
-        if(profileInfo != null || newImageFileId != null) {
-            this.profileInfo.modifyProfileInfo(profileInfo, newImageFileId);
+        if(profileInfo != null) {
+            this.profileInfo.modifyProfileInfo(profileInfo);
         }
     }
 

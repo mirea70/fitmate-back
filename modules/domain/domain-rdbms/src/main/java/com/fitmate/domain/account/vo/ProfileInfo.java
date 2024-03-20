@@ -12,8 +12,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"nickName", "introduction"})
 @Getter
+@EqualsAndHashCode
 public class ProfileInfo {
     @Column(unique = true, nullable = false)
     @Size(min = 2, max = 10)
@@ -32,20 +32,15 @@ public class ProfileInfo {
         if(profileImageId != null) this.profileImageId = profileImageId;
     }
 
-    public void modifyProfileInfo(ProfileInfo requestProfileInfo, Long newProfileImageId) {
-        if(requestProfileInfo != null) {
-            modifyProfileInfo(requestProfileInfo);
-        }
-        if(newProfileImageId != null)
-            this.profileImageId = requestProfileInfo.getProfileImageId();
-    }
-
     public void modifyProfileInfo(ProfileInfo requestProfileInfo) {
         if(requestProfileInfo.getNickName() != null) {
             this.nickName = requestProfileInfo.getNickName();
         }
         if(requestProfileInfo.getIntroduction() != null) {
             this.introduction = requestProfileInfo.getIntroduction();
+        }
+        if(requestProfileInfo.getProfileImageId() != null) {
+            this.profileImageId = requestProfileInfo.getProfileImageId();
         }
     }
 }
