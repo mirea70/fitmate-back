@@ -1,10 +1,12 @@
 package com.fitmate.app.mate.account.service;
 
 import com.fitmate.app.mate.account.dto.AccountDto;
+import com.fitmate.app.mate.account.mapper.AccountDtoMapper;
 import com.fitmate.app.mate.file.dto.AttachFileDto;
 import com.fitmate.app.mate.file.service.FileService;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.repository.AccountRepository;
+import com.fitmate.domain.account.vo.Password;
 import com.fitmate.domain.file.entity.AttachFile;
 import com.fitmate.domain.file.repository.AttachFileRepository;
 import com.fitmate.exceptions.exception.NotFoundException;
@@ -32,16 +34,24 @@ public class AccountProfileService {
         return fileService.downloadFile(attachFile.getStoreFileName());
     }
 
-    public AccountDto.Response modifyProfile(AccountDto.UpdateRequest updateRequest) {
-        // 프로필 이미지가 있으면 실제 파일 수정 처리를 한다. (이 함수에서 에러가 발생할 경우 해당 파일들은 롤백 처리)
-        // account 객체를 수정한다.
-        // Dto를 반환한다.
+    public AccountDto.Response modifyProfile(AccountDto.UpdateRequest updateRequest) throws Exception {
 
-        return null;
+        Account account = accountRepository.findById(updateRequest.getAccountId())
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
+
+        Long newFileId = modifyProfileImage(updateRequest.getProfileImage(), account.getProfileInfo().getProfileImageId());
+
+        Password requestPassword = AccountDtoMapper.INSTANCE.wrapPassword(updateRequest.getPassword());
+        account.modifyProfile(requestPassword, updateRequest.getPrivateInfo(), updateRequest.getProfileInfo(), newFileId);
+
+        return AccountDtoMapper.INSTANCE.toResponse(account);
     }
 
-    private void modifyProfileImage(MultipartFile imageFile) {
+    private Long modifyProfileImage(MultipartFile imageFile, Long orgFileId) throws Exception {
+        if(imageFile == null) return null;
         // 기존 파일 삭제
+        fileService.deleteFile(orgFileId);
         // 실제 파일 업로드
+        return fileService.uploadFile(imageFile).getId();
     }
 }

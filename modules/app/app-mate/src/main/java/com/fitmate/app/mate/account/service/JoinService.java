@@ -34,7 +34,7 @@ public class JoinService {
 
         try {
             Account savedAccount = accountRepository.save(newAccount);
-            return AccountDtoMapper.INSTANCE.toResponse(savedAccount);
+            return AccountDtoMapper.INSTANCE.toJoinResponse(savedAccount);
         } catch (DataIntegrityViolationException e) {
             throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_ACCOUNT_VALUE);
         }

@@ -33,5 +33,16 @@ public class PrivateInfo {
     @NotNull
     private String email;
 
+    public void modifyPrivateInfo(PrivateInfo requestPrivateInfo) {
+        if(requestPrivateInfo.name != null) {
+            this.name = requestPrivateInfo.getName();
+        }
+        if(requestPrivateInfo.phone != null) {
+            this.phone = requestPrivateInfo.getPhone();
+        }
+        if(requestPrivateInfo.email != null) {
+            this.email = requestPrivateInfo.getEmail();
+        }
+    }
 
 }

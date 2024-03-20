@@ -5,9 +5,7 @@ import com.fitmate.domain.account.dto.AccountDataDto;
 import com.fitmate.domain.account.dto.AccountDuplicateCheckDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.vo.Password;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
@@ -24,7 +22,10 @@ public interface AccountDtoMapper {
     }
 
     @Mapping(target = "password", source = "password", qualifiedByName = "extractPassword")
-    AccountDto.JoinResponse toResponse(Account account);
+    AccountDto.Response toResponse(Account account);
+
+    @Mapping(target = "password", source = "password", qualifiedByName = "extractPassword")
+    AccountDto.JoinResponse toJoinResponse(Account account);
 
     @Named("extractPassword")
     default String extractPassword(Password password) {

@@ -56,9 +56,9 @@ public class AccountController {
 
     @PatchMapping(value = "/{accountId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<AccountDto.Response> updateProfile(@PathVariable final Long accountId, @RequestPart AccountDto.UpdateRequest updateRequest,
-                                           @RequestPart(required = false) MultipartFile profileImage) {
+                                           @RequestPart(required = false) MultipartFile profileImage) throws Exception {
         updateRequest.setAccountId(accountId);
         updateRequest.setProfileImage(profileImage);
-        return null;
+        return ResponseEntity.ok(accountProfileService.modifyProfile(updateRequest));
     }
 }

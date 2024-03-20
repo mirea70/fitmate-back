@@ -31,4 +31,21 @@ public class ProfileInfo {
     public void updateProfileImageId(Long profileImageId) {
         if(profileImageId != null) this.profileImageId = profileImageId;
     }
+
+    public void modifyProfileInfo(ProfileInfo requestProfileInfo, Long newProfileImageId) {
+        if(requestProfileInfo != null) {
+            modifyProfileInfo(requestProfileInfo);
+        }
+        if(newProfileImageId != null)
+            this.profileImageId = requestProfileInfo.getProfileImageId();
+    }
+
+    public void modifyProfileInfo(ProfileInfo requestProfileInfo) {
+        if(requestProfileInfo.getNickName() != null) {
+            this.nickName = requestProfileInfo.getNickName();
+        }
+        if(requestProfileInfo.getIntroduction() != null) {
+            this.introduction = requestProfileInfo.getIntroduction();
+        }
+    }
 }

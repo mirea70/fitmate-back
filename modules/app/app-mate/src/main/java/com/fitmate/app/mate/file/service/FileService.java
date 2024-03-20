@@ -121,4 +121,21 @@ public class FileService {
         String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
         return "attachment; filename=\"" + encodedUploadFileName + "\"";
     }
+
+    public void deleteFile(Long fileId) {
+        AttachFile attachFile = attachFileRepository.findById(fileId)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
+
+        File file = new File(attachFile.getStoreFileName());
+        if(file.exists()) {
+            if(file.delete()) {
+               attachFileRepository.delete(attachFile);
+            }
+            else {
+                throw new FileRequestException(FileErrorResult.FAIL_REMOVE_FILE);
+            }
+        } else {
+            throw new NotFoundException(NotFoundErrorResult.NOT_EXIST_FILE_PATH);
+        }
+    }
 }

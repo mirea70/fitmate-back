@@ -48,6 +48,18 @@ public class Account {
         return this.privateInfo.getEmail();
     }
 
+    public void modifyProfile(Password password, PrivateInfo privateInfo, ProfileInfo profileInfo, Long newImageFileId) {
+        if(password != null) {
+            this.password = password;
+        }
+        if(privateInfo != null) {
+            this.privateInfo.modifyPrivateInfo(privateInfo);
+        }
+        if(profileInfo != null || newImageFileId != null) {
+            this.profileInfo.modifyProfileInfo(profileInfo, newImageFileId);
+        }
+    }
+
 //    @Builder
 //    public Account(String loginName, Password password, PrivateInfo privateInfo,
 //                   ProfileInfo profileInfo, Gender gender, AccountRole role) {
