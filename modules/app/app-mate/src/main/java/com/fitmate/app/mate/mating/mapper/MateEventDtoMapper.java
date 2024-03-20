@@ -11,11 +11,11 @@ import java.util.Set;
 public interface MateEventDtoMapper {
     MateEventDtoMapper INSTANCE = Mappers.getMapper(MateEventDtoMapper.class);
 
-    @Mapping(target = "matingId", source = "matingId")
+    @Mapping(target = "title", source = "title")
     @Mapping(target = "accountId", source = "accountId")
-    MateEventDto.Request toEvent(Long matingId, Long accountId);
+    MateEventDto.Request toEvent(String title, Long accountId);
 
-    @Mapping(target = "matingId", source = "matingId")
+    @Mapping(target = "title", source = "title")
     @Mapping(target = "accountIds", source = "accountIds")
-    MateEventDto.Approve toEvent(Long matingId, Set<Long> accountIds);
+    MateEventDto.Approve toEvent(String title, Set<Long> accountIds);
 }

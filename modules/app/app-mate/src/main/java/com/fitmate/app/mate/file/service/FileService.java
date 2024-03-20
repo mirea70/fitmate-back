@@ -126,7 +126,7 @@ public class FileService {
         AttachFile attachFile = attachFileRepository.findById(fileId)
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
 
-        File file = new File(attachFile.getStoreFileName());
+        File file = new File(getFullPath(attachFile.getStoreFileName()));
         if(file.exists()) {
             if(file.delete()) {
                attachFileRepository.delete(attachFile);

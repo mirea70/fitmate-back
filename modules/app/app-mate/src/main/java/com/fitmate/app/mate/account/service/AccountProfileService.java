@@ -39,10 +39,11 @@ public class AccountProfileService {
         Account account = accountRepository.findById(updateRequest.getAccountId())
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
 
-        Long newFileId = modifyProfileImage(updateRequest.getProfileImage(), account.getProfileInfo().getProfileImageId());
+        Long newImageFileId = modifyProfileImage(updateRequest.getProfileImage(), account.getProfileInfo().getProfileImageId());
 
         Password requestPassword = AccountDtoMapper.INSTANCE.wrapPassword(updateRequest.getPassword());
-        account.modifyProfile(requestPassword, updateRequest.getPrivateInfo(), updateRequest.getProfileInfo(), newFileId);
+        updateRequest.getProfileInfo().updateProfileImageId(newImageFileId);
+        account.modifyProfile(requestPassword, updateRequest.getPrivateInfo(), updateRequest.getProfileInfo());
 
         return AccountDtoMapper.INSTANCE.toResponse(account);
     }
