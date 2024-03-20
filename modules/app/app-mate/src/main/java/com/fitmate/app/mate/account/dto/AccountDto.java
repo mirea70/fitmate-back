@@ -78,4 +78,23 @@ public class AccountDto {
 
         private Gender gender;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateRequest {
+
+        @JsonIgnore
+        private Long accountId;
+
+        @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$",
+                message = "비밀번호는 8자리 이상 영문자 소문자, 대문자, 특수문자를 각각 하나 이상 포함해야 합니다.")
+        private String password;
+        private ProfileInfo profileInfo;
+        private PrivateInfo privateInfo;
+        @JsonIgnore
+        private MultipartFile profileImage;
+    }
 }

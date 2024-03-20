@@ -53,4 +53,12 @@ public class AccountController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, downloadDto.getContentDisposition())
                 .body(downloadDto.getUrlResource());
     }
+
+    @PatchMapping(value = "/{accountId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<AccountDto.Response> updateProfile(@PathVariable final Long accountId, @RequestPart AccountDto.UpdateRequest updateRequest,
+                                           @RequestPart(required = false) MultipartFile profileImage) {
+        updateRequest.setAccountId(accountId);
+        updateRequest.setProfileImage(profileImage);
+        return null;
+    }
 }
