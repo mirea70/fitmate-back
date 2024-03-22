@@ -1,9 +1,6 @@
 package com.fitmate.domain.mating.mate.domain.repository;
 
-import com.fitmate.domain.mating.mate.dto.MatingQuestionDto;
-import com.fitmate.domain.mating.mate.dto.MatingReadResponseDto;
-import com.fitmate.domain.mating.mate.dto.QMatingQuestionDto_Response;
-import com.fitmate.domain.mating.mate.dto.QMatingReadResponseDto;
+import com.fitmate.domain.mating.mate.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +10,7 @@ import java.util.List;
 
 import static com.fitmate.domain.account.entity.QAccount.account;
 import static com.fitmate.domain.mating.mate.domain.entity.QMating.mating;
+import static com.fitmate.domain.mating.request.domain.entity.QMateRequest.mateRequest;
 
 
 @Repository
@@ -44,5 +42,14 @@ public class MatingReadRepository {
                 .from(mating)
                 .innerJoin(account).on(mating.writerId.eq(account.id))
                 .fetchOne();
+    }
+    public List<MyMateRequestsDto> getMyMateRequestsQuery(List<Long> matingIds) {
+        return queryFactory
+                .select(new QMyMateRequestsDto(mating.id, mating.introImages, mating.title, mating.mateAt, mating.fitPlace, mating.permitPeopleCnt, mating.approvedAccountCnt, mating.entryFeeInfo, mateRequest.createAt))
+                .from(mating)
+                .innerJoin(mateRequest).on(mating.id.eq(mateRequest.matingId))
+                .where(mating.id.in(matingIds))
+                .orderBy(mateRequest.createAt.desc())
+                .fetch();
     }
 }

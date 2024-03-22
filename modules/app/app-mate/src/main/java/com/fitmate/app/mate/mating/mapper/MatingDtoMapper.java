@@ -33,7 +33,7 @@ public interface MatingDtoMapper {
     MatingReadResponseDto toReadResponse(Mating mating);
 
     @Mapping(target = "thumbnailFileId", source = "introImages", qualifiedByName = "getThumbnailFileId")
-    @Mapping(target = "entryFee", source = "entryFeeInfo", qualifiedByName = "getEntryFee")
+    @Mapping(target = "entryFee", source = "entryFeeInfo.entryFee")
     MatingDto.MyMateResponse toMyMateListResponse(Mating mating);
 
     List<MatingDto.MyMateResponse> toMyMateListResponses(List<Mating> matings);
@@ -45,11 +45,6 @@ public interface MatingDtoMapper {
             max = Math.max(max, introImageId);
         }
         return max;
-    }
-
-    @Named("getEntryFee")
-    default Integer getEntryFee(EntryFeeInfo entryFeeInfo) {
-        return entryFeeInfo.getEntryFee();
     }
 
     @Mapping(target = "introImages", ignore = true)

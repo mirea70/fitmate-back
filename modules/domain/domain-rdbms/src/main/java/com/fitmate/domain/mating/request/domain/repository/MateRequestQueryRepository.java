@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Set;
 
 import static com.fitmate.domain.mating.request.domain.entity.QMateRequest.mateRequest;
@@ -23,5 +24,13 @@ public class MateRequestQueryRepository {
                 .set(mateRequest.approveStatus, MateRequest.ApproveStatus.APPROVE)
                 .where(mateRequest.matingId.eq(matingId), mateRequest.accountId.in(accountIds))
                 .execute();
+    }
+
+    public List<Long> selectMatingIdsForMyMateRequest(Long applierId, MateRequest.ApproveStatus approveStatus) {
+        return queryFactory
+                .select(mateRequest.matingId)
+                .from(mateRequest)
+                .where(mateRequest.accountId.eq(applierId).and(mateRequest.approveStatus.eq(approveStatus)))
+                .fetch();
     }
 }

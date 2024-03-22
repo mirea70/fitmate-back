@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface MatingRepository extends JpaRepository<Mating, Long> {
 
-    public List<Mating> findAllByWriterIdOrderByCreatedAtDesc(Long writerId);
+    List<Mating> findAllByWriterIdOrderByCreatedAtDesc(Long writerId);
 }

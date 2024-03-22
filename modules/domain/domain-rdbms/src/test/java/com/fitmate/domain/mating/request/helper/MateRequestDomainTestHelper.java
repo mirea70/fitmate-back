@@ -9,7 +9,7 @@ public class MateRequestDomainTestHelper {
         return MateRequest.builder()
                 .comeAnswer("대답입니다1")
                 .matingId(1L)
-                .approveStatus(MateRequest.ApproveStatus.READY)
+                .approveStatus(MateRequest.ApproveStatus.WAIT)
                 .accountId(1L)
                 .build();
     }

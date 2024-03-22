@@ -4,12 +4,11 @@ import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
 import com.fitmate.domain.mating.mate.domain.entity.Mating;
 import com.fitmate.domain.mating.mate.domain.repository.MatingRepository;
+import com.fitmate.domain.mating.mate.service.MatingService;
+import com.fitmate.domain.mating.request.domain.entity.MateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountExtraController {
 
+    private final MatingService matingService;
     private final MatingRepository matingRepository;
 
     // 나의 메이트 작성 목록 조회 기능
@@ -29,7 +29,8 @@ public class AccountExtraController {
 
     // 나의 메이트 신청 목록 조회 기능
     @GetMapping("/{accountId}/my/mate/request/list")
-    public ResponseEntity<?> getMyMateRequestList(@PathVariable Long accountId) {
-        return null;
+    public ResponseEntity<?> getMyMateRequestList(@PathVariable Long accountId,
+                                                  @RequestParam MateRequest.ApproveStatus approveStatus) {
+        return ResponseEntity.ok(matingService.findAllMyMateRequest(accountId, approveStatus));
     }
 }
