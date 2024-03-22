@@ -8,6 +8,7 @@ import com.fitmate.app.mate.mating.vo.EntryFeeDataInfo;
 import com.fitmate.domain.mating.mate.domain.enums.FitCategory;
 import com.fitmate.domain.mating.mate.domain.enums.GatherType;
 import com.fitmate.domain.mating.mate.domain.enums.PermitGender;
+import com.fitmate.domain.mating.mate.domain.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.mate.domain.vo.FitPlace;
 import com.fitmate.domain.mating.mate.domain.vo.PermitAges;
 import com.fitmate.domain.mating.request.domain.entity.MateRequest;
@@ -62,6 +63,30 @@ public class MatingDto {
         private Set<Long> waitingAccountIds;
 
         private Set<Long> approvedAccountIds;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyMateResponse {
+
+        private Long id;
+        private Long thumbnailFileId;
+        private String title;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @JsonDeserialize(using = LocalDateDeserializer.class)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        private LocalDateTime mateAt;
+        private FitPlace fitPlace;
+        private Integer permitPeopleCnt;
+        private Integer approvedAccountCnt;
+        private Integer entryFee;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @JsonDeserialize(using = LocalDateDeserializer.class)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        private LocalDateTime createdAt;
     }
 
     @Getter

@@ -13,6 +13,7 @@ import com.fitmate.exceptions.exception.NotMatchException;
 import com.fitmate.exceptions.result.LimitErrorResult;
 import com.fitmate.exceptions.result.NotMatchErrorResult;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -26,7 +27,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder(builderMethodName = "innerBuilder")
+@SuperBuilder(builderMethodName = "innerBuilder")
 public class Mating extends BaseDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

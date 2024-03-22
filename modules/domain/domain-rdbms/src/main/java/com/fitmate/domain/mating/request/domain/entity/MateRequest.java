@@ -48,7 +48,7 @@ public class MateRequest {
     @Getter
     @RequiredArgsConstructor
     public enum ApproveStatus {
-        READY("대기중"),
+        WAIT("대기중"),
         APPROVE("승인");
 
         private final String label;

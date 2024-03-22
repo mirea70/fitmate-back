@@ -21,20 +21,40 @@ import java.util.*;
 public interface MatingDtoMapper {
     MatingDtoMapper INSTANCE = Mappers.getMapper(MatingDtoMapper.class);
 
+    @Mapping(target = "writerNickName", ignore = true)
+    @Mapping(target = "introImages", source = "introImages", qualifiedByName = "setConvertToList")
+    @Mapping(target = "entryFeeInfo", source = "entryFeeInfo", qualifiedByName = "convertToEntryDataInfo")
+    MatingDto.Response toResponse(Mating mating);
+
     @Mapping(target = "fitPlaceName", source = "fitPlace.name")
     @Mapping(target = "fitPlaceAddress", source = "fitPlace.address")
     @Mapping(target = "permitMaxAge", source = "permitAges.max")
     @Mapping(target = "permitMinAge", source = "permitAges.min")
     MatingReadResponseDto toReadResponse(Mating mating);
 
+    @Mapping(target = "thumbnailFileId", source = "introImages", qualifiedByName = "getThumbnailFileId")
+    @Mapping(target = "entryFee", source = "entryFeeInfo", qualifiedByName = "getEntryFee")
+    MatingDto.MyMateResponse toMyMateListResponse(Mating mating);
+
+    List<MatingDto.MyMateResponse> toMyMateListResponses(List<Mating> matings);
+
+    @Named("getThumbnailFileId")
+    default Long getThumbnailFileId(Set<Long> introImageIds) {
+        long max = 0L;
+        for (Long introImageId : introImageIds) {
+            max = Math.max(max, introImageId);
+        }
+        return max;
+    }
+
+    @Named("getEntryFee")
+    default Integer getEntryFee(EntryFeeInfo entryFeeInfo) {
+        return entryFeeInfo.getEntryFee();
+    }
+
     @Mapping(target = "introImages", ignore = true)
     @Mapping(target = "entryFeeInfo", source = "entryFeeInfo", qualifiedByName = "convertToEntryFeeInfo")
     Mating toEntity(MatingDto.Create request);
-
-    @Mapping(target = "writerNickName", ignore = true)
-    @Mapping(target = "introImages", source = "introImages", qualifiedByName = "setConvertToList")
-    @Mapping(target = "entryFeeInfo", source = "entryFeeInfo", qualifiedByName = "convertToEntryDataInfo")
-    MatingDto.Response toResponse(Mating mating);
 
     MateRequest applyToEntity(MatingDto.Apply apply);
 

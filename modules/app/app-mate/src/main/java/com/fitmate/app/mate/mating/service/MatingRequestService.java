@@ -46,7 +46,7 @@ public class MatingRequestService {
 
         Mating mating = matingRepository.findById(applyDto.getMatingId())
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_MATING_DATA));
-        applyDto.setApproveStatus(mating.getGatherType() == GatherType.AGREE ? MateRequest.ApproveStatus.READY
+        applyDto.setApproveStatus(mating.getGatherType() == GatherType.AGREE ? MateRequest.ApproveStatus.WAIT
                 : MateRequest.ApproveStatus.APPROVE);
 
         MateRequest mateRequest = MatingDtoMapper.INSTANCE.applyToEntity(applyDto);
