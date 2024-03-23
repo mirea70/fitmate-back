@@ -22,13 +22,3 @@ tasks {
         duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
     }
 }
-
-//ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
-//sourceSets {
-//    main {
-//        def resDir = "${profile}"==('prd') ? "/home/opc/resources/ymls" : "src/main/resources"
-//        resources {
-//            srcDirs resDir.toString(), "application.yml"
-//        }
-//    }
-//}

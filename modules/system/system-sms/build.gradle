@@ -1,0 +1,23 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    // 모듈
+//    implementation project(':domain-rdbms')
+//    implementation project(':domain-redis')
+    implementation project(':core')
+    // sms
+    implementation 'net.nurigo:sdk:4.3.0'
+    // 테스트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks {
+    processResources {
+        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+    }
+}

@@ -4,6 +4,7 @@ include 'core'
 include 'domain-rdbms'
 include 'domain-redis'
 include 'system-security'
+include 'system-sms'
 
 for(project in rootProject.children) {
     switch (project.name.split("-")[0]) {
@@ -17,4 +18,3 @@ for(project in rootProject.children) {
             break
     }
 }
-
