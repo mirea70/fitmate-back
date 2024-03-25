@@ -23,6 +23,8 @@ public class Notice {
     @Indexed
     private Long accountId;
 
+    private Long matingId;
+
     private String content;
 
     private LocalDateTime createdAt = LocalDateTime.now();
