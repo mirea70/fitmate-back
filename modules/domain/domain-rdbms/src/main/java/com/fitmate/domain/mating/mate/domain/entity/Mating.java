@@ -8,8 +8,10 @@ import com.fitmate.domain.mating.mate.domain.enums.PermitGender;
 import com.fitmate.domain.mating.mate.domain.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.mate.domain.vo.FitPlace;
 import com.fitmate.domain.mating.mate.domain.vo.PermitAges;
+import com.fitmate.exceptions.exception.DuplicatedException;
 import com.fitmate.exceptions.exception.LimitException;
 import com.fitmate.exceptions.exception.NotMatchException;
+import com.fitmate.exceptions.result.DuplicatedErrorResult;
 import com.fitmate.exceptions.result.LimitErrorResult;
 import com.fitmate.exceptions.result.NotMatchErrorResult;
 import lombok.*;
@@ -135,15 +137,37 @@ public class Mating extends BaseDomain {
     }
 
     public void forApproveRequest(Set<Long> accountIds) {
-        if(this.waitingAccountCnt + accountIds.size() > this.permitPeopleCnt)
-            throw new LimitException(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
+        if(accountIds == null || accountIds.isEmpty()) return;
+        checkAccountIds(accountIds);
 
-        if(!this.waitingAccountIds.containsAll(accountIds)) throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WAIT_ACCOUNT_LIST);
         if(this.approvedAccountIds == null) this.approvedAccountIds = new HashSet<>();
-
         this.waitingAccountIds.removeAll(accountIds);
         this.waitingAccountCnt = this.waitingAccountIds.size();
         this.approvedAccountIds.addAll(accountIds);
         this.approvedAccountCnt = this.approvedAccountIds.size();
+    }
+
+    private void checkAccountIds(Set<Long> accountIds) {
+        checkApproveIdsDuplicate(accountIds);
+        checkExistWaitingAccountIds(accountIds);
+        checkLimitPeople(accountIds);
+    }
+
+    private void checkExistWaitingAccountIds(Set<Long> accountIds) {
+        if(!this.waitingAccountIds.containsAll(accountIds))
+            throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WAIT_ACCOUNT_LIST);
+    }
+
+    private void checkLimitPeople(Set<Long> accountIds) {
+        if(this.waitingAccountCnt + accountIds.size() > this.permitPeopleCnt)
+            throw new LimitException(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
+    }
+
+    private void checkApproveIdsDuplicate(Set<Long> accountIds) {
+        if(this.approvedAccountIds != null && !this.approvedAccountIds.isEmpty()) {
+            for(Long accountId : accountIds) {
+                if(this.approvedAccountIds.contains(accountId)) throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_MATE_APPLIER);
+            }
+        }
     }
 }

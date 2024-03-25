@@ -33,8 +33,11 @@ public class MatingRegisterService {
 
     private Mating setRegisterEntity(MatingDto.Create request) throws IOException {
 
-        Set<Long> imageIds = fileService.uploadFiles(request.getIntroImages())
-                .stream().map((AttachFileDto.Response::getId)).collect(Collectors.toSet());
+        Set<Long> imageIds = null;
+        if(request.getIntroImages() != null && !request.getIntroImages().isEmpty()) {
+            imageIds = fileService.uploadFiles(request.getIntroImages())
+                    .stream().map((AttachFileDto.Response::getId)).collect(Collectors.toSet());
+        }
         Mating mating = MatingDtoMapper.INSTANCE.toEntity(request);
         mating.updateIntroImages(imageIds);
 

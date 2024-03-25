@@ -7,6 +7,7 @@ dependencies {
     implementation project(':domain-redis')
     implementation project(':core')
     implementation project(':system-security')
+    implementation project(':system-sms')
     // base
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

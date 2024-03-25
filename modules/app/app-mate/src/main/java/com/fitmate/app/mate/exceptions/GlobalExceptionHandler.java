@@ -1,9 +1,6 @@
 package com.fitmate.app.mate.exceptions;
 
-import com.fitmate.exceptions.exception.DuplicatedException;
-import com.fitmate.exceptions.exception.LimitException;
-import com.fitmate.exceptions.exception.NotFoundException;
-import com.fitmate.exceptions.exception.NotMatchException;
+import com.fitmate.exceptions.exception.*;
 import com.fitmate.exceptions.result.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -125,5 +122,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<ErrorResponse> makeErrorResponseEntityForFileSize(final FileErrorResult errorResult) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(errorResult.name(), errorResult.getMessage() + maxFileSize));
+    }
+
+    @ExceptionHandler(FileRequestException.class)
+    public ResponseEntity<ErrorResponse> handleFileRequestException(final FileRequestException exception) {
+        log.warn("지원하지 않는 파일 형식입니다.", exception);
+        return this.makeErrorResponseEntityForFileSupport(FileErrorResult.NOT_SUPPORT_EXT);
+    }
+
+    private ResponseEntity<ErrorResponse> makeErrorResponseEntityForFileSupport(final FileErrorResult errorResult) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(errorResult.name(), errorResult.getMessage()));
     }
 }

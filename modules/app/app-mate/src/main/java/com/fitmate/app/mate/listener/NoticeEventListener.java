@@ -1,4 +1,4 @@
-package com.fitmate.app.mate.notice.listener;
+package com.fitmate.app.mate.listener;
 
 import com.fitmate.app.mate.mating.dto.MateEventDto;
 import com.fitmate.app.mate.mating.event.MateApproveEvent;
@@ -15,9 +15,11 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
-
-//@EnableAsync
 @RequiredArgsConstructor
 @Configuration
 @Component
@@ -27,8 +29,9 @@ public class NoticeEventListener {
     private static final String MATE_REQUEST_MSG = " 모집 글에 메이트 신청이 완료되었습니다.";
     private static final String MATE_APPROVE_MSG = " 모집 글의 메이트 신청에 대한 승인이 완료되었습니다.";
 
-//    @Async
-    @EventListener
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(MateRequestEvent event) {
         MateEventDto.Request eventDto = event.getEventDto();
 
@@ -40,7 +43,9 @@ public class NoticeEventListener {
         noticeRepository.save(notice);
     }
 
-    @EventListener
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(MateApproveEvent event) {
         MateEventDto.Approve eventDto = event.getEventDto();
         String content = eventDto.getTitle() + MATE_APPROVE_MSG;

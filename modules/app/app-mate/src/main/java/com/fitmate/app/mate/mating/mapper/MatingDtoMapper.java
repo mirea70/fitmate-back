@@ -104,6 +104,7 @@ public interface MatingDtoMapper {
 
     @Named("setConvertToList")
     default List<Long> setConvertToList(Set<Long> longSet) {
+        if(longSet == null || longSet.isEmpty()) return null;
         return longSet.stream().toList();
     }
 }
