@@ -14,6 +14,7 @@ public class NoticeDto {
     public static class Response {
         private Long id;
         private Long accountId;
+        private Long matingId;
         private String content;
     }
 }
