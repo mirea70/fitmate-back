@@ -38,6 +38,7 @@ public class NoticeEventListener {
         String content = eventDto.getTitle() + MATE_REQUEST_MSG;
         Notice notice = Notice.builder()
                 .accountId(eventDto.getAccountId())
+                .matingId(eventDto.getMatingId())
                 .content(content)
                 .build();
         noticeRepository.save(notice);
@@ -53,6 +54,7 @@ public class NoticeEventListener {
         eventDto.getAccountIds().forEach(accountId -> {
             Notice notice = Notice.builder()
                     .accountId(accountId)
+                    .matingId(eventDto.getMatingId())
                     .content(content)
                     .build();
             noticeRepository.save(notice);

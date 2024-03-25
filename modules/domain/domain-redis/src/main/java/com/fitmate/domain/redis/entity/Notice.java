@@ -33,8 +33,9 @@ public class Notice {
     private Long expiration = DEFAULT_TTL;
 
     @Builder
-    public Notice(Long accountId, String content) {
+    public Notice(Long accountId, String content, Long matingId) {
         this.accountId = accountId;
         this.content = content;
+        this.matingId = matingId;
     }
 }

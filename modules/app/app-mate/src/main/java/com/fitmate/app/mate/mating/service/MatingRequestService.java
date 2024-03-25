@@ -70,7 +70,7 @@ public class MatingRequestService {
          * 1. 메이트 신청자 알림 보내기
          * 2. 메이트 신청자 휴대폰 문자 보내기
          */
-        MateEventDto.Request event = MateEventDtoMapper.INSTANCE.toEvent(mating.getTitle(), accountId);
+        MateEventDto.Request event = MateEventDtoMapper.INSTANCE.toEvent(mating.getTitle(), accountId, mating.getId());
         MateRequestEvent mateRequestEvent = new MateRequestEvent(event);
         eventPublisher.publishEvent(mateRequestEvent);
     }
@@ -96,7 +96,7 @@ public class MatingRequestService {
          * 2. 메이트 신청자 휴대폰 문자 보내기
          */
 
-        MateEventDto.Approve event = MateEventDtoMapper.INSTANCE.toEvent(mating.getTitle(), accountIds);
+        MateEventDto.Approve event = MateEventDtoMapper.INSTANCE.toEvent(mating.getTitle(), accountIds, mating.getId());
         MateApproveEvent mateApproveEvent = new MateApproveEvent(event);
         eventPublisher.publishEvent(mateApproveEvent);
     }

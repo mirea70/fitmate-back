@@ -13,9 +13,11 @@ public interface MateEventDtoMapper {
 
     @Mapping(target = "title", source = "title")
     @Mapping(target = "accountId", source = "accountId")
-    MateEventDto.Request toEvent(String title, Long accountId);
+    @Mapping(target = "matingId", source = "matingId")
+    MateEventDto.Request toEvent(String title, Long accountId, Long matingId);
 
     @Mapping(target = "title", source = "title")
     @Mapping(target = "accountIds", source = "accountIds")
-    MateEventDto.Approve toEvent(String title, Set<Long> accountIds);
+    @Mapping(target = "matingId", source = "matingId")
+    MateEventDto.Approve toEvent(String title, Set<Long> accountIds, Long matingId);
 }

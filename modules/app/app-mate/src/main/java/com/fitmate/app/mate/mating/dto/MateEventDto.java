@@ -13,6 +13,8 @@ public class MateEventDto {
 
         private String title;
 
+        private Long matingId;
+
         private Long accountId;
     }
 
@@ -23,6 +25,8 @@ public class MateEventDto {
     public static class Approve {
 
         private String title;
+
+        private Long matingId;
 
         private Set<Long> accountIds;
     }
