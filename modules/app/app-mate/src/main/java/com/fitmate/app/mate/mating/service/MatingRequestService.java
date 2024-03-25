@@ -52,14 +52,18 @@ public class MatingRequestService {
         MateRequest mateRequest = MatingDtoMapper.INSTANCE.applyToEntity(applyDto);
         MateRequest savedMateRequest = mateRequestRepository.save(mateRequest);
 
-        afterInsert(mating, applyDto.getAccountId());
+        afterRequest(mating, applyDto.getAccountId(), savedMateRequest.getApproveStatus());
 
         return savedMateRequest.getId();
     }
 
-    private void afterInsert(Mating mating, Long accountId) {
+    private void afterRequest(Mating mating, Long accountId, MateRequest.ApproveStatus approveStatus) {
 
-        mating.addWaitingAccountId(accountId);
+        if(approveStatus == MateRequest.ApproveStatus.APPROVE) {
+            mating.addApprovedAccountIds(accountId);
+        } else {
+            mating.addWaitingAccountId(accountId);
+        }
 
         /**
          * [이벤트 처리 목록]
@@ -89,7 +93,7 @@ public class MatingRequestService {
         /**
          * [이벤트 처리 목록]
          * 1. 메이트 신청자 알림 보내기
-         * 2. 메이트 신청자 휴대폰 문자 보내기 (구현 필요)
+         * 2. 메이트 신청자 휴대폰 문자 보내기
          */
 
         MateEventDto.Approve event = MateEventDtoMapper.INSTANCE.toEvent(mating.getTitle(), accountIds);
