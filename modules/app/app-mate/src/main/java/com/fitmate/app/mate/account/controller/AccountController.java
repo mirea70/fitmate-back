@@ -39,16 +39,16 @@ public class AccountController {
                 .body(joinResponse);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AccountDto.Response> find(@PathVariable final Long id) {
-        AccountDataDto.Response dataResponse = accountService.validateFindById(id);
+    @GetMapping("/{accountId}")
+    public ResponseEntity<AccountDto.Response> find(@PathVariable final Long accountId) {
+        AccountDataDto.Response dataResponse = accountService.validateFindById(accountId);
         AccountDto.Response response = AccountDtoMapper.INSTANCE.toRealResponse(dataResponse);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}/image")
-    public ResponseEntity<UrlResource> downloadProfileImage(@PathVariable final Long id) throws MalformedURLException {
-        AttachFileDto.Download downloadDto = accountProfileService.downloadProfileImage(id);
+    @GetMapping("/{accountId}/image")
+    public ResponseEntity<UrlResource> downloadProfileImage(@PathVariable final Long accountId) throws MalformedURLException {
+        AttachFileDto.Download downloadDto = accountProfileService.downloadProfileImage(accountId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, downloadDto.getContentDisposition())
                 .body(downloadDto.getUrlResource());
@@ -61,5 +61,11 @@ public class AccountController {
         updateRequest.setAccountId(accountId);
         updateRequest.setProfileImage(profileImage);
         return ResponseEntity.ok(accountProfileService.modifyProfile(updateRequest));
+    }
+
+    @DeleteMapping("/{accountId}")
+    public ResponseEntity<?> delete(@PathVariable final Long accountId) {
+        accountProfileService.remove(accountId);
+        return ResponseEntity.ok().build();
     }
 }

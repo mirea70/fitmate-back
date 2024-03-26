@@ -1,6 +1,8 @@
 package com.fitmate.domain.mating.request.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE MateRequest SET DELETED_AT = CURRENT_TIMESTAMP WHERE MATE_REQUEST_ID = ? ")
+@Where(clause = "DELETED_AT IS NULL")
 public class MateRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +40,9 @@ public class MateRequest {
     @Column
     @CreatedDate
     private LocalDateTime createAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     @Builder
     public MateRequest(String comeAnswer, Long matingId, ApproveStatus approveStatus, Long accountId) {

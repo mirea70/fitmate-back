@@ -10,6 +10,6 @@ import java.util.Set;
 @Repository
 public interface MateRequestRepository extends JpaRepository<MateRequest, Long> {
     boolean existsByMatingIdAndAccountId(Long matingId, Long accountId);
-
     List<MateRequest> findAllByMatingIdAndAccountIdIn(Long matingId, Set<Long> accountIds);
+    void deleteAllByAccountId(Long accountId);
 }

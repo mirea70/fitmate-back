@@ -1,6 +1,8 @@
 package com.fitmate.app.mate.account.service;
 
 import com.fitmate.app.mate.account.dto.AccountDto;
+import com.fitmate.app.mate.account.dto.AccountEventDto;
+import com.fitmate.app.mate.account.event.AccountDeleteEvent;
 import com.fitmate.app.mate.account.mapper.AccountDtoMapper;
 import com.fitmate.app.mate.file.dto.AttachFileDto;
 import com.fitmate.app.mate.file.service.FileService;
@@ -12,6 +14,7 @@ import com.fitmate.domain.file.repository.AttachFileRepository;
 import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.NotFoundErrorResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +28,7 @@ public class AccountProfileService {
     private final FileService fileService;
     private final AccountRepository accountRepository;
     private final AttachFileRepository attachFileRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public AttachFileDto.Download downloadProfileImage(Long accountId) throws MalformedURLException {
         Account account = accountRepository.findById(accountId).orElseThrow(
@@ -54,5 +58,24 @@ public class AccountProfileService {
         fileService.deleteFile(orgFileId);
         // 실제 파일 업로드
         return fileService.uploadFile(imageFile).getId();
+    }
+
+    /**
+     * 처리 이벤트 (아래 이벤트 중 에러 발생 시, 모두 RollBack 된다.)
+     * 1. notice 삭제
+     * 2. mate_request 삭제
+     * 3. mating 삭제
+     */
+    public void remove(Long accountId) {
+        Account account = accountRepository.findById(accountId).orElseThrow(
+                () -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
+
+        AccountEventDto.Delete eventDto = AccountEventDto.Delete.builder()
+                                                                .accountId(accountId)
+                                                                .build();
+        AccountDeleteEvent event = new AccountDeleteEvent(eventDto);
+        eventPublisher.publishEvent(event);
+
+        accountRepository.delete(account);
     }
 }

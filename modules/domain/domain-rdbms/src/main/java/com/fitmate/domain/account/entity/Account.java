@@ -6,9 +6,12 @@ import com.fitmate.domain.account.vo.PrivateInfo;
 import com.fitmate.domain.account.vo.ProfileInfo;
 import com.fitmate.domain.account.enums.AccountRole;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,6 +19,8 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(exclude = "id")
 @Getter
 @Builder
+@SQLDelete(sql = "UPDATE ACCOUNT SET DELETED_AT = CURRENT_TIMESTAMP WHERE ACCOUNT_ID = ? ")
+@Where(clause = "DELETED_AT IS NULL")
 public class Account {
 
     @Id
@@ -44,6 +49,9 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountRole role;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public String getEmail() {
         return this.privateInfo.getEmail();
     }
@@ -59,15 +67,4 @@ public class Account {
             this.profileInfo.modifyProfileInfo(profileInfo);
         }
     }
-
-//    @Builder
-//    public Account(String loginName, Password password, PrivateInfo privateInfo,
-//                   ProfileInfo profileInfo, Gender gender, AccountRole role) {
-//        this.loginName = loginName;
-//        this.password = password;
-//        this.privateInfo = privateInfo;
-//        this.profileInfo = profileInfo;
-//        this.gender = gender;
-//        this.role = role;
-//    }
 }

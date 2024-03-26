@@ -17,6 +17,8 @@ import com.fitmate.exceptions.result.NotMatchErrorResult;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -30,6 +32,8 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(builderMethodName = "innerBuilder")
+@SQLDelete(sql = "UPDATE MATING SET DELETED_AT = CURRENT_TIMESTAMP WHERE MATING_ID = ? ")
+@Where(clause = "DELETED_AT IS NULL")
 public class Mating extends BaseDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -108,6 +112,9 @@ public class Mating extends BaseDomain {
     @Builder.Default
     private int approvedAccountCnt = 0;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public static MatingBuilder builder(FitCategory fitCategory, String title, String introduction,
                   LocalDateTime mateAt, FitPlace fitPlace,
                   GatherType gatherType, PermitGender permitGender, PermitAges permitAges,
@@ -144,6 +151,14 @@ public class Mating extends BaseDomain {
         this.approvedAccountCnt = this.approvedAccountIds.size();
     }
 
+//    public void removeApplier(Long accountId) {
+//        if(accountId == null) return;
+//        this.waitingAccountIds.remove(accountId);
+//        this.waitingAccountCnt = this.waitingAccountIds.size();
+//        this.approvedAccountIds.remove(accountId);
+//        this.approvedAccountCnt = this.approvedAccountIds.size();
+//    }
+
     public void forApproveRequest(Set<Long> accountIds) {
         if(accountIds == null || accountIds.isEmpty()) return;
         checkAccountIds(accountIds);
@@ -162,6 +177,7 @@ public class Mating extends BaseDomain {
     }
 
     private void checkExistWaitingAccountIds(Set<Long> accountIds) {
+        if(this.waitingAccountIds == null || this.waitingAccountIds.isEmpty()) return;
         if(!this.waitingAccountIds.containsAll(accountIds))
             throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WAIT_ACCOUNT_LIST);
     }

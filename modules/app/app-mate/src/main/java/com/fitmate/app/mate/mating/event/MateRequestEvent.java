@@ -12,8 +12,4 @@ public class MateRequestEvent  {
 
     private final MateEventDto.Request eventDto;
 
-//    public MateRequestEvent(Object source, MateEventDto.Request eventDto) {
-//        super(source);
-//        this.eventDto = eventDto;
-//    }
 }

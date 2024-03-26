@@ -10,4 +10,6 @@ import java.util.List;
 public interface MatingRepository extends JpaRepository<Mating, Long> {
 
     List<Mating> findAllByWriterIdOrderByCreatedAtDesc(Long writerId);
+
+    void deleteAllByWriterId(Long writerId);
 }

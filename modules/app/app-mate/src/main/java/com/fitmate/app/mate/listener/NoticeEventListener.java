@@ -1,5 +1,6 @@
 package com.fitmate.app.mate.listener;
 
+import com.fitmate.app.mate.account.event.AccountDeleteEvent;
 import com.fitmate.app.mate.mating.dto.MateEventDto;
 import com.fitmate.app.mate.mating.event.MateApproveEvent;
 import com.fitmate.app.mate.mating.event.MateRequestEvent;
