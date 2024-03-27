@@ -1,7 +1,7 @@
 package com.fitmate.domain.mating.mate.domain.entity;
 
 import com.fitmate.domain.base.BaseDomain;
-import com.fitmate.domain.mating.mate.converter.SetConverter;
+import com.fitmate.domain.converter.SetConverter;
 import com.fitmate.domain.mating.mate.domain.enums.FitCategory;
 import com.fitmate.domain.mating.mate.domain.enums.GatherType;
 import com.fitmate.domain.mating.mate.domain.enums.PermitGender;

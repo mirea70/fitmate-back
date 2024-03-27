@@ -78,4 +78,26 @@ public class AccountProfileService {
 
         accountRepository.delete(account);
     }
+
+    public void followOrCancel(Long accountId, Long targetId) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
+        Account target = accountRepository.findById(targetId)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
+
+        if(!account.isFollowing(targetId))
+            follow(account, target);
+        else
+            cancelFollow(account, target);
+    }
+
+    private void follow(Account account, Account target) {
+        account.addFollowing(target.getId());
+        target.addFollower(account.getId());
+    }
+
+    private void cancelFollow(Account account, Account target) {
+        account.removeFollowing(target.getId());
+        target.removeFollower(account.getId());
+    }
 }

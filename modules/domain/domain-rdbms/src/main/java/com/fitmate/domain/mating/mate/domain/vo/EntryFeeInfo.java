@@ -1,7 +1,7 @@
 package com.fitmate.domain.mating.mate.domain.vo;
 
-import com.fitmate.domain.mating.mate.converter.GatherSetConverter;
-import com.fitmate.domain.mating.mate.converter.OperateFeeSetConverter;
+import com.fitmate.domain.converter.mate.GatherSetConverter;
+import com.fitmate.domain.converter.mate.OperateFeeSetConverter;
 import lombok.*;
 
 import javax.persistence.Column;

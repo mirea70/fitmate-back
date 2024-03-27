@@ -1,4 +1,4 @@
-package com.fitmate.domain.mating.mate.converter;
+package com.fitmate.domain.converter.mate;
 
 import com.fitmate.domain.mating.mate.domain.enums.GatherFee;
 import com.fitmate.domain.mating.mate.domain.vo.GatherFeeSet;

@@ -1,4 +1,4 @@
-package com.fitmate.domain.mating.mate.converter;
+package com.fitmate.domain.converter;
 
 import javax.persistence.AttributeConverter;
 import java.util.Arrays;

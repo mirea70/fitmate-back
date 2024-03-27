@@ -1,5 +1,6 @@
 package com.fitmate.app.mate.account.controller;
 
+import com.fitmate.app.mate.account.service.AccountProfileService;
 import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
 import com.fitmate.app.mate.notice.dto.NoticeDto;
@@ -27,6 +28,7 @@ public class AccountExtraController {
     private final MatingService matingService;
     private final MatingRepository matingRepository;
     private final NoticeRepository noticeRepository;
+    private final AccountProfileService accountProfileService;
 
     @GetMapping("/{accountId}/my/mate/register/list")
     public ResponseEntity<List<MatingDto.MyMateResponse>> getMyMateRegisterList(@PathVariable Long accountId) {
@@ -44,5 +46,12 @@ public class AccountExtraController {
     public ResponseEntity<List<NoticeDto.Response>> getMyNoticeList(@AuthenticationPrincipal AuthDetails authDetails) {
         List<Notice> notices = noticeRepository.findAllByAccountIdOrderByCreatedAtDesc(authDetails.getAccount().getId());
         return ResponseEntity.ok(NoticeDtoMapper.INSTANCE.toResponses(notices));
+    }
+
+    @PutMapping("/{accountId}/follow")
+    public ResponseEntity<?> followOrCancel(@PathVariable Long accountId,
+                                            @RequestParam Long targetAccountId) {
+        accountProfileService.followOrCancel(accountId, targetAccountId);
+        return ResponseEntity.ok().build();
     }
 }

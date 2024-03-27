@@ -18,7 +18,6 @@ public class QueryDslConfig {
         return new JPAQueryFactory((entityManager));
     }
 
-    //초성 검색시 SQL 수기 작성시 필요한 Entity Manager 를 반환한다.
     public EntityManager getEntityManager(){
         return entityManager;
     }
