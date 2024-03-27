@@ -19,4 +19,8 @@ public class Password {
     public boolean match(String password) {
         return this.value.equals(password);
     }
+
+    public void update(String newPassword) {
+        this.value = newPassword;
+    }
 }

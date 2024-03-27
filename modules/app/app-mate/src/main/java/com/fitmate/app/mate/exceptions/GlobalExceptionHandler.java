@@ -93,7 +93,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NotMatchException.class)
     public ResponseEntity<ErrorResponse> handleNotMatchException(final NotMatchException exception) {
         log.warn("값의 매치가 맞지 않습니다: ", exception);
-        return this.makeErrorResponseEntity(NotMatchErrorResult.NOT_MATCH_WAIT_ACCOUNT_LIST);
+        return this.makeErrorResponseEntity(exception.getErrorResult());
     }
 
     private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final NotMatchErrorResult errorResult) {
