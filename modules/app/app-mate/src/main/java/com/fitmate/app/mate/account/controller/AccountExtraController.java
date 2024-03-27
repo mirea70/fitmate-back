@@ -5,6 +5,7 @@ import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.mapper.MatingDtoMapper;
 import com.fitmate.app.mate.notice.dto.NoticeDto;
 import com.fitmate.app.mate.notice.mapper.NoticeDtoMapper;
+import com.fitmate.domain.account.dto.FollowDetailDto;
 import com.fitmate.domain.mating.mate.domain.entity.Mating;
 import com.fitmate.domain.mating.mate.domain.repository.MatingRepository;
 import com.fitmate.domain.mating.mate.dto.MyMateRequestsDto;
@@ -53,5 +54,17 @@ public class AccountExtraController {
                                             @RequestParam Long targetAccountId) {
         accountProfileService.followOrCancel(accountId, targetAccountId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{accountId}/following")
+    public ResponseEntity<List<FollowDetailDto>> getFollowingList(@PathVariable Long accountId) {
+        List<FollowDetailDto> responses = accountProfileService.getFollowingList(accountId);
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/{accountId}/follower")
+    public ResponseEntity<List<FollowDetailDto>> getFollowerList(@PathVariable Long accountId) {
+        List<FollowDetailDto> responses = accountProfileService.getFollowerList(accountId);
+        return ResponseEntity.ok(responses);
     }
 }

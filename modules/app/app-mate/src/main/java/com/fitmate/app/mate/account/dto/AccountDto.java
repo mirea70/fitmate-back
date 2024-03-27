@@ -99,4 +99,16 @@ public class AccountDto {
         @JsonIgnore
         private MultipartFile profileImage;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FollowResponse {
+
+        private Long accountId;
+        private Long profileImageId;
+        private String nickName;
+    }
 }
