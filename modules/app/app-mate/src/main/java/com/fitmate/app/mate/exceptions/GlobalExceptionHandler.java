@@ -104,8 +104,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(LimitException.class)
     public ResponseEntity<ErrorResponse> handleLimitException(final LimitException exception) {
-        log.warn("값의 매치가 맞지 않습니다: ", exception);
-        return this.makeErrorResponseEntity(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
+        log.warn("초과하는 요청 값이 존재합니다: ", exception);
+        return this.makeErrorResponseEntity(exception.getErrorResult());
     }
 
     private ResponseEntity<ErrorResponse> makeErrorResponseEntity(final LimitErrorResult errorResult) {
@@ -126,8 +126,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(FileRequestException.class)
     public ResponseEntity<ErrorResponse> handleFileRequestException(final FileRequestException exception) {
-        log.warn("지원하지 않는 파일 형식입니다.", exception);
-        return this.makeErrorResponseEntityForFileSupport(FileErrorResult.NOT_SUPPORT_EXT);
+        log.warn("정상적인 파일 요청이 아닙니다.", exception);
+        return this.makeErrorResponseEntityForFileSupport(exception.getErrorResult());
     }
 
     private ResponseEntity<ErrorResponse> makeErrorResponseEntityForFileSupport(final FileErrorResult errorResult) {
