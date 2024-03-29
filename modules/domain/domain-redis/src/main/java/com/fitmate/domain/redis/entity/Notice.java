@@ -3,6 +3,7 @@ package com.fitmate.domain.redis.entity;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.data.redis.core.index.Indexed;
@@ -14,28 +15,29 @@ import java.time.LocalDateTime;
 @Getter
 public class Notice {
 
-    @Value("${redis.notice.expiration}")
-    public Long DEFAULT_TTL;
+    @Transient
+    private final Long DEFAULT_TTL = 86400 * 30L;
 
     @Id
     private Long id;
 
     @Indexed
-    private Long accountId;
+    private final Long accountId;
 
-    private Long matingId;
+    private final Long matingId;
 
-    private String content;
+    private final String content;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     @TimeToLive
-    private Long expiration = DEFAULT_TTL;
+    private final Long expiration;
 
     @Builder
     public Notice(Long accountId, String content, Long matingId) {
         this.accountId = accountId;
         this.content = content;
         this.matingId = matingId;
+        this.expiration = DEFAULT_TTL;
     }
 }
