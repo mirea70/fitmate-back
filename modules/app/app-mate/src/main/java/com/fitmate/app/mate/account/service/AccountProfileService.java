@@ -50,9 +50,8 @@ public class AccountProfileService {
 
         Long newImageFileId = modifyProfileImage(updateRequest.getProfileImage(), account.getProfileInfo().getProfileImageId());
 
-        Password requestPassword = AccountDtoMapper.INSTANCE.wrapPassword(updateRequest.getPassword());
         updateRequest.getProfileInfo().updateProfileImageId(newImageFileId);
-        account.modifyProfile(requestPassword, updateRequest.getPrivateInfo(), updateRequest.getProfileInfo());
+        account.modifyProfile(updateRequest.getPrivateInfo(), updateRequest.getProfileInfo());
 
         return AccountDtoMapper.INSTANCE.toResponse(account);
     }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fitmate.domain.mating.mate.domain.vo.EntryFeeInfo;
 import com.fitmate.domain.mating.mate.domain.vo.FitPlace;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

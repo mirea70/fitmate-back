@@ -24,18 +24,16 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         logger.info("로그인 시도");
 
         try {
-//            ObjectMapper om = new ObjectMapper();
-//            JsonNode jsonNode = om.readTree(request.getInputStream());
-//            String loginName = jsonNode.get("loginName").asText();
-//            String password = jsonNode.get("password").asText();
-            String loginName = request.getParameter("loginName");
-            String password = request.getParameter("password");
+            JsonNode jsonNode = objectMapper.readTree(request.getInputStream());
+            String loginName = jsonNode.get("username").asText();
+            String password = jsonNode.get("password").asText();
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginName, password);
             return authenticationManager.authenticate(authenticationToken);

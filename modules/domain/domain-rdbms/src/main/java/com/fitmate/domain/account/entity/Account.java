@@ -69,10 +69,7 @@ public class Account {
         return this.privateInfo.getEmail();
     }
 
-    public void modifyProfile(Password password, PrivateInfo privateInfo, ProfileInfo profileInfo) {
-        if(password != null) {
-            this.password = password;
-        }
+    public void modifyProfile(PrivateInfo privateInfo, ProfileInfo profileInfo) {
         if(privateInfo != null) {
             this.privateInfo.modifyPrivateInfo(privateInfo);
         }

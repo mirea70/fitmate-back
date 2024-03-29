@@ -45,11 +45,13 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/h2/**").permitAll()
+                .antMatchers(swaggerAuthMatchers()).permitAll()
                 .antMatchers("/api/accounts/join").permitAll()
-//                .antMatchers("/api/**").authenticated()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/**").authenticated()
+//                .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll()
+                .and()
+                .formLogin()
                 .and()
                 .logout()
                 .addLogoutHandler(jwtLogoutHandler)
@@ -70,5 +72,16 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private String[] swaggerAuthMatchers(){
+        return new String[]{
+                "/api-docs",
+                "/swagger",
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/api-docs/**",
+                "/swagger-ui/index.html"
+        };
     }
 }

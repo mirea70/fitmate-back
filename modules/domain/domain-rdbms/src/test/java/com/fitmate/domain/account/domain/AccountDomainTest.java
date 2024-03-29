@@ -20,7 +20,6 @@ public class AccountDomainTest {
     public void 회원프로필_수정_테스트() {
         // given
         Account orgAccount = accountDomainTestHelper.getTestAccount();
-        final Password newPassword = Password.builder().value("33333332").build();
 
         final PrivateInfo newPrivateInfo = PrivateInfo.builder()
                 .name("[수정]홍길동")
@@ -34,10 +33,8 @@ public class AccountDomainTest {
                 .profileImageId(33L)
                 .build();
         // when
-        orgAccount.modifyProfile(newPassword, newPrivateInfo, newProfileInfo);
+        orgAccount.modifyProfile( newPrivateInfo, newProfileInfo);
         // then
-        assertTrue(orgAccount.getPassword().match(newPassword.getValue()));
-
         assertThat(orgAccount.getPrivateInfo()).isEqualTo(newPrivateInfo);
         assertThat(orgAccount.getProfileInfo()).isEqualTo(newProfileInfo);
     }
