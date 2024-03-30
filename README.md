@@ -14,7 +14,7 @@
   - Jdk 17+
   - database install && connect (RDBMS : Oracle recommend, Redis)
   - coolsms join
-  - make yml files on each modules (total : 4)
+  - make yml files on each modules (total : 5)
 ```
 git clone https://github.com/mirea70/fitmate-back.git
 
