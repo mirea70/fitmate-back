@@ -124,4 +124,4 @@ java -jar app-mate-0.0.1-SNAPSHOT.jar
 # CI/CD 구성
 ![image](https://github.com/mirea70/fitmate-back/assets/101246806/d7d15f27-89a0-4d11-95b6-363ecb6b7c47)
 - 현재 Oracle Cloud 측 이슈로 Production Server가 정상동작되지 않고 있습니다.
-- 이에 따라 현재 Jenkins Server까지만 구축되어있습니다.
+- 이에 따라 현재 Jenkins Server까지만 구축되어있습니다. (Jenkins Server에서 Docker push하지않고 바로 Run)
