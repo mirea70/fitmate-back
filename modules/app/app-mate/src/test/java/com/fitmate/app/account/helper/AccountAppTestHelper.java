@@ -34,7 +34,7 @@ public class AccountAppTestHelper {
                 .privateInfo(privateInfo)
                 .profileInfo(profileInfo)
                 .role(AccountRole.USER)
-                .gender(Gender.MAIL)
+                .gender(Gender.MALE)
                 .profileImage(multipartFile)
                 .build();
     }
@@ -57,7 +57,7 @@ public class AccountAppTestHelper {
                 .privateInfo(privateInfo)
                 .profileInfo(profileInfo)
                 .role(AccountRole.USER)
-                .gender(Gender.MAIL)
+                .gender(Gender.MALE)
                 .build();
     }
 
@@ -77,7 +77,7 @@ public class AccountAppTestHelper {
                 .privateInfo(privateInfo)
                 .profileInfo(profileInfo)
                 .role(AccountRole.USER)
-                .gender(Gender.MAIL)
+                .gender(Gender.MALE)
                 .build();
     }
 
@@ -97,7 +97,7 @@ public class AccountAppTestHelper {
                 .privateInfo(privateInfo)
                 .profileInfo(profileInfo)
                 .role(AccountRole.USER)
-                .gender(Gender.MAIL)
+                .gender(Gender.MALE)
                 .build();
     }
 }

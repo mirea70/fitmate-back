@@ -79,19 +79,19 @@ public class JoinRequestValidationTest {
 
         return Stream.of(
                 // loginName
-                Arguments.of(null, "123456aB#", profileInfo, privateInfo, AccountRole.USER, Gender.MAIL),
+                Arguments.of(null, "123456aB#", profileInfo, privateInfo, AccountRole.USER, Gender.MALE),
                 // password
-                Arguments.of("abc", "aB34%", profileInfo, privateInfo, AccountRole.USER, Gender.MAIL),
-                Arguments.of("abc", "aBc1234567", profileInfo, privateInfo, AccountRole.USER, Gender.MAIL),
-                Arguments.of("abc", "1234567%", profileInfo, privateInfo, AccountRole.USER, Gender.MAIL),
-                Arguments.of("abc", "1234567a%", profileInfo, privateInfo, AccountRole.USER, Gender.MAIL),
-                Arguments.of("abc", "1234567A%", profileInfo, privateInfo, AccountRole.USER, Gender.MAIL),
+                Arguments.of("abc", "aB34%", profileInfo, privateInfo, AccountRole.USER, Gender.MALE),
+                Arguments.of("abc", "aBc1234567", profileInfo, privateInfo, AccountRole.USER, Gender.MALE),
+                Arguments.of("abc", "1234567%", profileInfo, privateInfo, AccountRole.USER, Gender.MALE),
+                Arguments.of("abc", "1234567a%", profileInfo, privateInfo, AccountRole.USER, Gender.MALE),
+                Arguments.of("abc", "1234567A%", profileInfo, privateInfo, AccountRole.USER, Gender.MALE),
                 // profileInfo
-                Arguments.of("abc", "123456aB#", null, privateInfo, AccountRole.USER, Gender.MAIL),
+                Arguments.of("abc", "123456aB#", null, privateInfo, AccountRole.USER, Gender.MALE),
                 // privateInfo
-                Arguments.of("abc", "123456aB#", profileInfo, null, AccountRole.USER, Gender.MAIL),
+                Arguments.of("abc", "123456aB#", profileInfo, null, AccountRole.USER, Gender.MALE),
                 // role
-                Arguments.of("abc", "123456aB#", profileInfo, privateInfo, null, Gender.MAIL),
+                Arguments.of("abc", "123456aB#", profileInfo, privateInfo, null, Gender.MALE),
                 // gender
                 Arguments.of("abc", "123456aB#", profileInfo, privateInfo, AccountRole.USER, null)
         );

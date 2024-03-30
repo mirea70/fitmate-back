@@ -28,7 +28,7 @@ public class JoinService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final FileService fileService;
 
-    public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) throws IOException {
+    public AccountDto.JoinResponse join(AccountDto.JoinRequest joinRequest) throws IOException, DuplicatedException {
 
         Account newAccount = setJoinData(joinRequest);
 
@@ -43,6 +43,9 @@ public class JoinService {
     private Account setJoinData(AccountDto.JoinRequest joinRequest) throws IOException {
         checkDuplicated(joinRequest);
         joinRequest.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
+
+        if(joinRequest.getProfileImage() == null)
+            joinRequest.getProfileInfo().updateProfileImageId(null);
         uploadProfileImage(joinRequest);
 
         return AccountDtoMapper.INSTANCE.toEntity(joinRequest);

@@ -29,7 +29,7 @@ public class AccountDomainTestHelper {
                 .password(Password.builder().value("12345678").build())
                 .privateInfo(privateInfo)
                 .profileInfo(profileInfo)
-                .gender(Gender.MAIL)
+                .gender(Gender.MALE)
                 .role(AccountRole.USER)
                 .build();
     }

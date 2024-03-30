@@ -9,8 +9,6 @@ import com.fitmate.domain.account.dto.AccountDataDto;
 import com.fitmate.domain.account.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
@@ -36,11 +34,10 @@ public class AccountController {
     private final AccountProfileService accountProfileService;
 
     @Operation(summary = "회원가입", description = "회원가입 API : Request body의 설명은 application/json 타입으로 봐주시고 테스트는 multipart/form-data로 실행해주세요.")
-    @PostMapping(value = "/join", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/join", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<AccountDto.JoinResponse> join(@Valid @RequestPart AccountDto.JoinRequest joinRequest,
                                                         @RequestPart(required = false)
-//                                                        @Schema(description = "회원 프로필 이미지 파일(1개)")
-                                                        @Parameter(description = "회원 프로필 이미지 파일(1개)", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+                                                        @Parameter(description = "회원 프로필 이미지 파일(1개)")
                                                         MultipartFile profileImage) throws Exception {
         joinRequest.setProfileImage(profileImage);
         AccountDto.JoinResponse joinResponse = joinService.join(joinRequest);

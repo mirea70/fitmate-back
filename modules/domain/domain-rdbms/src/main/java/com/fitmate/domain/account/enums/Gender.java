@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Gender {
-    MAIL("남성"),
+    MALE("남성"),
     FEMALE("여성"),
     ;
 

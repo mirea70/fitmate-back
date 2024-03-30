@@ -114,7 +114,11 @@ public class FileService {
     }
 
     private String getUploadNameByStoreName(String storeFileName) {
-        return storeFileName.split("_")[0];
+        String[] arr1 = storeFileName.split("_");
+        String[] arr2 = arr1[1].split("\\.");
+        String name = arr1[0];
+        String ext = arr2[1];
+        return name + "." + ext;
     }
 
     private String getContentDisposition(String uploadFileName) {
