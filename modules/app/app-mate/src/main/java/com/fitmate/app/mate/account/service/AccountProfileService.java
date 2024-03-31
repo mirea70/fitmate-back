@@ -10,7 +10,6 @@ import com.fitmate.domain.account.dto.FollowDetailDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.repository.AccountReadRepository;
 import com.fitmate.domain.account.repository.AccountRepository;
-import com.fitmate.domain.account.vo.Password;
 import com.fitmate.domain.file.entity.AttachFile;
 import com.fitmate.domain.file.repository.AttachFileRepository;
 import com.fitmate.exceptions.exception.NotFoundException;
