@@ -1,20 +1,13 @@
 package com.fitmate.app.mate.listener;
 
-import com.fitmate.app.mate.account.event.AccountDeleteEvent;
 import com.fitmate.app.mate.mating.dto.MateEventDto;
 import com.fitmate.app.mate.mating.event.MateApproveEvent;
 import com.fitmate.app.mate.mating.event.MateRequestEvent;
-import com.fitmate.domain.mating.mate.domain.entity.Mating;
-import com.fitmate.domain.mating.mate.domain.repository.MatingRepository;
 import com.fitmate.domain.redis.entity.Notice;
 import com.fitmate.domain.redis.repository.NoticeRepository;
-import com.fitmate.exceptions.exception.NotFoundException;
-import com.fitmate.exceptions.result.NotFoundErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
