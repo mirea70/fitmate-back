@@ -42,7 +42,10 @@ public class FileService {
         if(multipartFile == null) return null;
 
         String storeFileName = getStoreFileName(multipartFile);
-        multipartFile.transferTo(new File(getFullPath(storeFileName)));
+        File file = new File(getFullPath(storeFileName));
+        if(!file.getParentFile().exists())
+            file.getParentFile().mkdirs();
+        multipartFile.transferTo(file);
 
         return saveToRepository(multipartFile.getOriginalFilename(), storeFileName);
     }
