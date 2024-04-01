@@ -1,19 +1,40 @@
-plugins {
-    id 'java'
-}
-
-group = 'com.fitmate.system-sms'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
+bootJar { enabled = true }
+jar { enabled = false }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    // 모듈
+    implementation project(':domain-rdbms')
+    implementation project(':domain-mongo')
+    implementation project(':core')
+    // base
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // util
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 }
 
-test {
+tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks {
+    processResources {
+        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+    }
+}
+
+ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
+println profile
+
+def resDir = "${profile}"==('prd') ? "/home/ubuntu/resources" : "src/main/resources"
+//processResources.from(resDir)
+sourceSets {
+    main {
+        resources {
+            srcDirs resDir.toString()
+        }
+    }
 }
