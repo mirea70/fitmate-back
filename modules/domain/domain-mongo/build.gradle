@@ -1,0 +1,19 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    // 모듈
+    implementation project(':core')
+    // util
+
+    // DB
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    // 테스트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks {
+    processResources {
+        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+    }
+}

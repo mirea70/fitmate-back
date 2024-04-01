@@ -1,8 +1,10 @@
 rootProject.name = 'fitmate'
 include 'app-mate'
+include 'app-chat'
 include 'core'
 include 'domain-rdbms'
 include 'domain-redis'
+include 'domain-mongo'
 include 'system-security'
 include 'system-sms'
 
@@ -18,3 +20,4 @@ for(project in rootProject.children) {
             break
     }
 }
+

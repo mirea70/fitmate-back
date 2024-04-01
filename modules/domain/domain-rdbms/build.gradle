@@ -9,7 +9,6 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4.1'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.8.0'
     // DB
     implementation 'com.oracle.database.jdbc:ojdbc10:19.18.0.0'
     implementation 'com.oracle.database.security:osdt_cert'
