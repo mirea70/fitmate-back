@@ -7,6 +7,7 @@ import com.fitmate.domain.mating.mate.domain.entity.Mating;
 import com.fitmate.domain.mating.mate.domain.repository.MatingReadRepository;
 import com.fitmate.domain.mating.mate.dto.MatingReadResponseDto;
 import com.fitmate.domain.mating.mate.service.MatingService;
+import com.fitmate.system.security.dto.AuthDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,8 +35,10 @@ public class MatingController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MatingDto.Response> register(@Valid @RequestPart MatingDto.Create createDto,
                                                        @Parameter(description = "소개 이미지 (여러개)")
-                                                       @RequestPart(required = false) List<MultipartFile> multipartFiles) throws Exception {
+                                                       @RequestPart(required = false) List<MultipartFile> multipartFiles,
+                                                       @AuthenticationPrincipal AuthDetails authDetails) throws Exception {
         createDto.setIntroImages(multipartFiles);
+        createDto.setWriterId(authDetails.getAccount().getId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(matingRegisterService.register(createDto));
     }

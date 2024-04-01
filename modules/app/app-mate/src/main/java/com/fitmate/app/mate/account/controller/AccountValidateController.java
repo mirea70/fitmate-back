@@ -27,7 +27,7 @@ public class AccountValidateController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "문자 인증 요청", description = "문자 인증 요청 API (유효기간 60초)")
+    @Operation(summary = "문자 인증 요청", description = "문자 인증 요청 API (유효기간 60초) \n\n **-> 현재 실제 문자 요청은 요금 부담으로 인해 차단해놓았습니다.**")
     @PostMapping("/request/code")
     public ResponseEntity<?> requestValidateCode(@AuthenticationPrincipal AuthDetails authDetails) {
         accountValidateService.requestValidateCode(authDetails.getAccount().getId());

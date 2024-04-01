@@ -28,7 +28,7 @@ public class MatingRegisterService {
         Mating readyMating = setRegisterEntity(request);
         Mating savedMating = matingRepository.save(readyMating);
 
-        return setResponse(savedMating, request.getWriterId());
+        return getResponse(savedMating, request.getWriterId());
     }
 
     private Mating setRegisterEntity(MatingDto.Create request) throws IOException {
@@ -44,7 +44,7 @@ public class MatingRegisterService {
         return mating;
     }
 
-    private MatingDto.Response setResponse(Mating savedMating, Long writerId) {
+    private MatingDto.Response getResponse(Mating savedMating, Long writerId) {
         MatingDto.Response response = MatingDtoMapper.INSTANCE.toResponse(savedMating);
         AccountDataDto.Response accountData = accountService.validateFindById(writerId);
         response.setWriterNickName(accountData.getProfileInfo().getNickName());

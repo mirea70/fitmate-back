@@ -45,9 +45,10 @@ public class MatingRequestController {
     @Operation(summary = "메이트 신청 승인", description = "메이트 신청 승인 API")
     @PutMapping
     public ResponseEntity<?> approveMate(@PathVariable Long matingId,
-                                         @RequestBody MatingDto.Approve approveDto) {
+                                         @RequestBody MatingDto.Approve approveDto,
+                                         @AuthenticationPrincipal AuthDetails authDetails) {
         approveDto.setMatingId(matingId);
-        matingRequestService.approveRequest(approveDto);
+        matingRequestService.approveRequest(approveDto, authDetails.getAccount().getId());
 
         return ResponseEntity.ok().build();
     }

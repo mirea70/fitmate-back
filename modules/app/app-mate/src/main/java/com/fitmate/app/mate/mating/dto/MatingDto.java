@@ -163,8 +163,7 @@ public class MatingDto {
         @NotNull(message = "허용 인원 입력은 필수입니다.")
         private Integer permitPeopleCnt;
 
-        @Schema(description = "작성자 회원 식별 ID", example = "2")
-        @NotNull(message = "작성자 ID 입력은 필수입니다.")
+        @JsonIgnore
         private Long writerId;
 
         @Schema(description = "참여비 유무 여부", example = "false")

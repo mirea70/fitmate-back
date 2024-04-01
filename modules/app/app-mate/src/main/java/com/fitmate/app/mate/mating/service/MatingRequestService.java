@@ -14,14 +14,17 @@ import com.fitmate.domain.mating.request.domain.repository.MateRequestQueryRepos
 import com.fitmate.domain.mating.request.domain.repository.MateRequestRepository;
 import com.fitmate.exceptions.exception.DuplicatedException;
 import com.fitmate.exceptions.exception.NotFoundException;
+import com.fitmate.exceptions.exception.NotMatchException;
 import com.fitmate.exceptions.result.DuplicatedErrorResult;
 import com.fitmate.exceptions.result.NotFoundErrorResult;
+import com.fitmate.exceptions.result.NotMatchErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -75,9 +78,13 @@ public class MatingRequestService {
         eventPublisher.publishEvent(mateRequestEvent);
     }
 
-    public void approveRequest(MatingDto.Approve approveDto) {
+    public void approveRequest(MatingDto.Approve approveDto, Long accountId) {
         Mating mating = matingRepository.findById(approveDto.getMatingId())
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_MATING_DATA));
+
+        if(!accountId.equals(mating.getWriterId()))
+            throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);
+
         Set<Long> accountIds = approveDto.getAccountIds();
         mateRequestQueryRepository.approveAccountIds(approveDto.getMatingId(), accountIds);
 
