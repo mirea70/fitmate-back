@@ -23,7 +23,7 @@ public class FileController {
 
     private final FileService fileService;
 
-    @Operation(summary = "파일 다운로드", description = "파일 다운로드 API")
+    @Operation(summary = "파일 다운로드", description = "파일 다운로드 API", hidden = true)
     @GetMapping("/{fileId}")
     public ResponseEntity<UrlResource> download(@PathVariable Long fileId) throws MalformedURLException {
         AttachFileDto.Download downloadDto = fileService.downloadById(fileId);

@@ -54,7 +54,7 @@ public class AccountController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "회원 프로필 이미지 다운로드", description = "회원 프로필 이미지 다운로드 API")
+    @Operation(summary = "회원 프로필 이미지 다운로드", description = "회원 프로필 이미지 다운로드 API", hidden = true)
     @GetMapping("/{accountId}/image")
     public ResponseEntity<UrlResource> downloadProfileImage(@Parameter(description = "요청 회원 ID")
                                                                 @PathVariable final Long accountId) throws MalformedURLException {
