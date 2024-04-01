@@ -7,6 +7,8 @@
 - Language : Java 17
 - Database : Oracle, Redis
 - Deployment : Jenkins/Docker/Oracle Cloud Infrastructure
+- [API 문서](http://144.24.78.25:8090/swagger)
+
 </br>
 
 # 실행 방법
