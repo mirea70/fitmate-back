@@ -26,6 +26,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final TokenProvider tokenProvider;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         logger.info("로그인 시도");
@@ -38,10 +39,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginName, password);
             return authenticationManager.authenticate(authenticationToken);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new IllegalArgumentException("요청 파라미터에 문제가 있습니다.");
         }
-        return null;
     }
         @Override
         protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, Authentication authResult) throws IOException, ServletException {
