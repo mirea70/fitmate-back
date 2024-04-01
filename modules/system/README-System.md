@@ -4,6 +4,7 @@
 
 ## 2. 모듈 구성
 - Security
+- Sms
 - etc..
 
 ## 3. 모듈 의존성
@@ -13,3 +14,4 @@
 ## 4. 외부 의존성
 - Security
 - Jwt
+- Coolsms
