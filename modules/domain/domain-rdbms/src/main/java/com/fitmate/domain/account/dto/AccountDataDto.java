@@ -13,6 +13,8 @@ public class AccountDataDto {
     @AllArgsConstructor
     public static class Response {
 
+        private Long id;
+
         private String loginName;
 
         private String password;

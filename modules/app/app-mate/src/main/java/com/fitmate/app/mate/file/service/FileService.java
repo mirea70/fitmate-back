@@ -128,6 +128,8 @@ public class FileService {
     }
 
     public void deleteFile(Long fileId) {
+        if(fileId == null) return;
+
         AttachFile attachFile = attachFileRepository.findById(fileId)
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
 

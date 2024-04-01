@@ -21,7 +21,6 @@ public interface AccountDtoMapper {
                 .build();
     }
 
-    @Mapping(target = "password", source = "password", qualifiedByName = "extractPassword")
     AccountDto.Response toResponse(Account account);
 
     @Mapping(target = "password", source = "password", qualifiedByName = "extractPassword")

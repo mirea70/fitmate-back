@@ -22,16 +22,17 @@ public class AccountDto {
     @AllArgsConstructor
     public static class Response {
 
+        @Schema(description = "회원 식별 ID", example = "1")
+        private Long id;
+        @Schema(description = "로그인 ID", example = "abc2")
         private String loginName;
-
-        private String password;
-
+        @Schema(description = "회원 프로필 정보")
         private ProfileInfo profileInfo;
-
+        @Schema(description = "회원 개인 정보")
         private PrivateInfo privateInfo;
-
+        @Schema(description = "유저 권한 정보", example = "ADMIN")
         private AccountRole role;
-
+        @Schema(description = "유저 성별 정보", example = "MALE")
         private Gender gender;
     }
 
@@ -81,6 +82,8 @@ public class AccountDto {
     @Schema(description = "회원가입 반환 DTO")
     public static class JoinResponse {
 
+        @Schema(description = "회원 식별 ID", example = "1")
+        private Long id;
         @Schema(description = "로그인 ID", example = "abc2")
         private String loginName;
         @Schema(description = "로그인 패스워드", example = "!Qqweras33!!")
@@ -106,14 +109,14 @@ public class AccountDto {
         @JsonIgnore
         private Long accountId;
 
-        @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$",
-                message = "비밀번호는 8자리 이상 영문자 소문자, 대문자, 특수문자를 각각 하나 이상 포함해야 합니다.")
         @Valid
         @Schema(description = "회원 프로필 정보")
         private ProfileInfo profileInfo;
+
         @Valid
         @Schema(description = "회원 개인 정보")
         private PrivateInfo privateInfo;
+
         @JsonIgnore
         private MultipartFile profileImage;
     }

@@ -10,6 +10,7 @@ import com.fitmate.domain.account.dto.FollowDetailDto;
 import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.repository.AccountReadRepository;
 import com.fitmate.domain.account.repository.AccountRepository;
+import com.fitmate.domain.account.vo.ProfileInfo;
 import com.fitmate.domain.file.entity.AttachFile;
 import com.fitmate.domain.file.repository.AttachFileRepository;
 import com.fitmate.exceptions.exception.NotFoundException;
@@ -47,20 +48,28 @@ public class AccountProfileService {
         Account account = accountRepository.findById(updateRequest.getAccountId())
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
 
-        Long newImageFileId = modifyProfileImage(updateRequest.getProfileImage(), account.getProfileInfo().getProfileImageId());
-
-        updateRequest.getProfileInfo().updateProfileImageId(newImageFileId);
-        account.modifyProfile(updateRequest.getPrivateInfo(), updateRequest.getProfileInfo());
+        ProfileInfo updateProfileInfo = modifyProfileImage(updateRequest, account.getProfileInfo().getProfileImageId());
+        account.modifyProfile(updateRequest.getPrivateInfo(), updateProfileInfo);
 
         return AccountDtoMapper.INSTANCE.toResponse(account);
     }
 
-    private Long modifyProfileImage(MultipartFile imageFile, Long orgFileId) throws Exception {
-        if(imageFile == null) return null;
-        // 기존 파일 삭제
+    private ProfileInfo modifyProfileImage(AccountDto.UpdateRequest updateRequest, Long orgFileId) throws Exception {
+        if(updateRequest.getProfileImage() == null) return null;
+
         fileService.deleteFile(orgFileId);
-        // 실제 파일 업로드
-        return fileService.uploadFile(imageFile).getId();
+        Long newImageFileId = fileService.uploadFile(updateRequest.getProfileImage()).getId();
+
+        return getProfileInfoSet(updateRequest, newImageFileId);
+    }
+
+    private ProfileInfo getProfileInfoSet(AccountDto.UpdateRequest updateRequest, Long newImageFileId) {
+        ProfileInfo profileInfo = updateRequest.getProfileInfo();
+        if(profileInfo == null)
+            profileInfo = ProfileInfo.builder()
+                    .profileImageId(newImageFileId)
+                    .build();
+        return profileInfo;
     }
 
     /**
