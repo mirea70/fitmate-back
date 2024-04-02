@@ -1,11 +1,11 @@
-# Fitmate 프로젝트 - 서버
+![image](https://github.com/mirea70/fitmate-back/assets/101246806/d9f7af9e-be3d-444f-b103-271a4362243b)# Fitmate 프로젝트 - 서버
 운동 메이트가 필요한 운동 종목들에 대하여, 운동 메이트를 찾을 수 있는 소셜 플랫폼 애플리케이션을 위한 백엔드 서버입니다.
 
 지속적으로 업데이트 중입니다.
 
 - Framework : Spring Boot 2.7.11
 - Language : Java 17
-- Database : Oracle, Redis
+- Database : Oracle, Redis, MongoDB
 - Deployment : Jenkins/Docker/Oracle Cloud Infrastructure
 - [API Docs](http://144.24.78.25:8090/swagger)
 
@@ -14,9 +14,9 @@
 # 실행 방법
 - **requirement**
   - Jdk 17+
-  - database install && connect (RDBMS : Oracle recommend, Redis)
+  - database install && connect (RDBMS : Oracle recommend, Redis, MongoDB)
   - coolsms join
-  - make yml files on each modules (total : 5)
+  - make yml files on each modules (total : 7)
 ```
 git clone https://github.com/mirea70/fitmate-back.git
 
@@ -84,10 +84,16 @@ coolsms:
 
 - **Running Application**
 ```
+# mate_service
 chmod +x gradlew
 ./gradlew :app-mate:clean :app-mate:build -x test
 cd modules/app/app-mate/build/libs
 java -jar app-mate-0.0.1-SNAPSHOT.jar
+
+# chat_service
+./gradlew :app-chat:clean :app-chat:build -x test
+cd modules/app/app-chat/build/libs
+java -jar app-chat-0.0.1-SNAPSHOT.jar
 ```
 
 </br>
