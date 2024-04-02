@@ -56,6 +56,8 @@ public interface MatingDtoMapper {
     @Named("convertToEntryFeeInfo")
     default EntryFeeInfo convertToEntryFeeInfo(EntryFeeDataInfo entryFeeDataInfo) {
 
+        if(entryFeeDataInfo == null) return null;
+
         GatherFeeSet gatherFeeSet = convertToGatherFees(entryFeeDataInfo.getGatherFees());
         OperateFeeSet operateFeeSet = convertToOperateFees(entryFeeDataInfo.getOperateFees());
 
@@ -69,6 +71,8 @@ public interface MatingDtoMapper {
 
     @Named("convertToEntryDataInfo")
     default EntryFeeDataInfo convertToEntryDataInfo(EntryFeeInfo entryFeeInfo) {
+
+        if(entryFeeInfo == null) return null;
 
         return EntryFeeDataInfo.builder()
                 .entryFee(entryFeeInfo.getEntryFee())

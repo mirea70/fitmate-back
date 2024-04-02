@@ -1,6 +1,5 @@
 package com.fitmate.domain.account.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.persistence.Column;
