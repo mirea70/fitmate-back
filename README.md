@@ -1,4 +1,4 @@
-![image](https://github.com/mirea70/fitmate-back/assets/101246806/d9f7af9e-be3d-444f-b103-271a4362243b)# Fitmate 프로젝트 - 서버
+# Fitmate 프로젝트 - 서버
 운동 메이트가 필요한 운동 종목들에 대하여, 운동 메이트를 찾을 수 있는 소셜 플랫폼 애플리케이션을 위한 백엔드 서버입니다.
 
 지속적으로 업데이트 중입니다.
