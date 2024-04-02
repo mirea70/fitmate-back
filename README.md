@@ -16,76 +16,14 @@
   - Jdk 17+
   - database install && connect (RDBMS : Oracle recommend, Redis, MongoDB)
   - coolsms join
-  - make yml files on each modules (total : 7)
-```
-git clone https://github.com/mirea70/fitmate-back.git
-
-mkdir modules/app/app-mate/src/main/resources
-vim modules/app/app-mate/src/main/resources/application.yml
-
-#application.yml 예시
-springdoc:
-  show-login-endpoint: true
-spring:
-  profiles:
-    include:
-      - rdbms
-      - redis
-      - security
-      - sms
-    active: dev
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
-mkdir modules/domain/domain-rdbms/src/main/resources
-vim modules/domain/domain-rdbms/src/main/resources/application-rdbms.yml
-
-#application-rdbms.yml 예시
-spring:
-  datasource:
-    driver-class-name: {your_driver_class_name}
-    url: {DB_URL}
-    username: {your_username}
-    password: {your_password}
-  jpa:
-    hibernate:
-      ddl-auto: {ddl-auto}
-    properties:
-        dialect: {your_dialect}
-
-mkdir modules/domain/domain-redis/src/main/resources
-vim modules/domain/domain-redis/src/main/resources/application-redis.yml
-
-#application-redis.yml 예시
-redis:
-  port: {PORT_NUMBER}
-
-mkdir modules/system/system-security/src/main/resources
-vim modules/system/system-security/src/main/resources/application-security.yml
-
-#application-security.yml 예시
-jwt:
-  secretKey: {your_secretKey}
-
-mkdir modules/system/system-sms/src/main/resources
-vim modules/system/system-sms/src/main/resources/application-sms.yml
-
-#application-sms.yml 예시
-coolsms:
-  api:
-    key: {your_key}
-    secret: {your_secret_key}
-  url: {coolsms_url}
-  from:
-    num: {your_from_num}
-
-```
+  - make property or yml files on each modules (total : 7)
 
 - **Running Application**
 ```
-# mate_service
+git clone https://github.com/mirea70/fitmate-back.git
 chmod +x gradlew
+
+# mate_service
 ./gradlew :app-mate:clean :app-mate:build -x test
 cd modules/app/app-mate/build/libs
 java -jar app-mate-0.0.1-SNAPSHOT.jar
