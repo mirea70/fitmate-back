@@ -22,7 +22,7 @@ tasks.named('test') {
 
 tasks {
     processResources {
-        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
 
