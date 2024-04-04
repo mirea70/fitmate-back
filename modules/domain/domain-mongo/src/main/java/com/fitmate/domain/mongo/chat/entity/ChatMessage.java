@@ -26,9 +26,6 @@ public class ChatMessage {
 
     private String roomId;
 
-    @Field(targetType = FieldType.STRING)
-    private MessageType messageType;
-
     private String message;
 
     private Long senderId;
@@ -40,11 +37,4 @@ public class ChatMessage {
 
     @Version
     private Integer version;
-
-    public enum MessageType {
-        ENTER("입장"),
-        TALK("채팅");
-        public final String label;
-        MessageType(String label) { this.label = label; }
-    }
 }

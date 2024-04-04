@@ -12,6 +12,7 @@ public enum NotFoundErrorResult {
     NOT_FOUND_ENUM_DATA("존재하지 않는 열거형 값입니다."),
     NOT_FOUND_MATING_DATA("존재하지 않는 메이팅 글입니다."),
     NOT_FOUND_VALIDATE_DATA("존재하지 않는 인증 코드입니다."),
+    NOT_FOUND_CHAT_ROOM_DATA("존재하지 않는 채팅방입니다."),
     ;
 
     private final String message;

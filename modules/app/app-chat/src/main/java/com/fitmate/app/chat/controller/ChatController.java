@@ -9,19 +9,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
-@Tag(name = "Chat", description = "회원 관리 API")
+@Tag(name = "Chat", description = "채팅 관리 API")
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
 public class ChatController {
     private final ChatService chatService;
 
-    @Operation(summary = "그룹 채팅방 생성", description = "그룹 채팅방 생성 API")
+    @Operation(summary = "채팅방 생성", description = """
+            채팅방 생성 API
+            
+            **roomType = GROUP** : matingId가 없을 시 400 Bad Request 에러가 발생, accountId는 필요 X
+            
+            **roomType = DM** : accountId가 없을 시 400 Bad Request 에러가 발생, matingId는 필요 X
+            """)
     @PostMapping("/room")
-    public ResponseEntity<ChatRoomDto.Response> createGroupChatRoom(@RequestBody ChatRoomDto.CreateGroup createGroup) {
-        return ResponseEntity.ok(chatService.createGroupChatRoom(createGroup));
+    public ResponseEntity<ChatRoomDto.Response> createGroupChatRoom(@Valid @RequestBody ChatRoomDto.Create createGroup) {
+        return ResponseEntity.ok(chatService.createChatRoom(createGroup));
     }
 
     @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지 조회 API")

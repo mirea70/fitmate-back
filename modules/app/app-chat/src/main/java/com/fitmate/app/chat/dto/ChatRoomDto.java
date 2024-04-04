@@ -1,7 +1,10 @@
 package com.fitmate.app.chat.dto;
 
+import com.fitmate.domain.mongo.chat.entity.ChatRoom;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import javax.validation.constraints.NotNull;
 
 
 public class ChatRoomDto {
@@ -19,6 +22,8 @@ public class ChatRoomDto {
         private String name;
         @Schema(description = "종속된 메이팅 식별 ID", example = "1")
         private Long matingId;
+        @Schema(description = "채팅방 종류", example = "GROUP")
+        private ChatRoom.RoomType roomType;
     }
 
     @Getter
@@ -26,18 +31,14 @@ public class ChatRoomDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    @Schema(description = "그룹 채팅방 생성 요청 DTO")
-    public static class CreateGroup {
+    @Schema(description = "채팅방 생성 요청 DTO")
+    public static class Create {
         @Schema(description = "종속된 메이팅 식별 ID", example = "1")
         private Long matingId;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class CreateDm {
+        @NotNull
+        @Schema(description = "채팅방 종류", example = "GROUP")
+        private ChatRoom.RoomType roomType;
+        @Schema(description = "생성 요청 회원 ID", example = "1")
         private Long accountId;
     }
 }

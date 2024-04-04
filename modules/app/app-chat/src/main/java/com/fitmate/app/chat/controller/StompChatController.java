@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -16,8 +15,8 @@ public class StompChatController {
 
     @MessageMapping("/{roomId}/enter")
     @SendTo("/sub/{roomId}")
-    public ChatMessageDto enter(@DestinationVariable("roomId") String roomId, ChatMessageDto chatMessageDto) {chatService.getEnterMessageDto(chatMessageDto);
-        return chatService.getEnterMessageDto(chatMessageDto);
+    public ChatMessageDto enter(@DestinationVariable("roomId") String roomId, ChatMessageDto chatMessageDto) {
+        return chatService.enterChatRoom(roomId, chatMessageDto);
     }
 
     @MessageMapping("/{roomId}/chat")

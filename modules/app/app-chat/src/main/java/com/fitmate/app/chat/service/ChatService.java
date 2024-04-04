@@ -4,6 +4,8 @@ import com.fitmate.app.chat.dto.ChatMessageDto;
 import com.fitmate.app.chat.dto.ChatRoomDto;
 import com.fitmate.app.chat.mapper.ChatMessageDtoMapper;
 import com.fitmate.app.chat.mapper.ChatRoomDtoMapper;
+import com.fitmate.domain.account.entity.Account;
+import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.domain.mating.mate.domain.entity.Mating;
 import com.fitmate.domain.mating.mate.domain.repository.MatingRepository;
 import com.fitmate.domain.mongo.chat.entity.ChatMessage;
@@ -14,7 +16,6 @@ import com.fitmate.exceptions.exception.NotFoundException;
 import com.fitmate.exceptions.result.NotFoundErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,9 +27,17 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final MatingRepository matingRepository;
+    private final AccountRepository accountRepository;
     private static final String DEFAULT_ENTER_MESSAGE = "님이 채팅방에 참여하였습니다.";
 
-    public ChatMessageDto getEnterMessageDto(ChatMessageDto chatMessageDto) {
+    public ChatMessageDto enterChatRoom(String roomId, ChatMessageDto chatMessageDto) {
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_CHAT_ROOM_DATA));
+        chatRoom.addJoinAccountId(chatMessageDto.getSenderId());
+        return getEnterMessageDto(chatMessageDto);
+    }
+
+    private ChatMessageDto getEnterMessageDto(ChatMessageDto chatMessageDto) {
         chatMessageDto.setMessage(chatMessageDto.getSenderNickName() + DEFAULT_ENTER_MESSAGE);
         return chatMessageDto;
     }
@@ -38,11 +47,30 @@ public class ChatService {
         chatMessageRepository.save(chatMessage);
     }
 
-    @Transactional(readOnly = true)
-    public ChatRoomDto.Response createGroupChatRoom(ChatRoomDto.CreateGroup createGroup) {
-        Mating mating = matingRepository.findById(createGroup.getMatingId())
+    public ChatRoomDto.Response createChatRoom(ChatRoomDto.Create create) {
+        ChatRoomDto.Response response;
+        if(create.getRoomType() == ChatRoom.RoomType.GROUP)
+            response = createGroupChatRoom(create);
+        else
+            response = createDmChatRoom(create);
+
+        return response;
+    }
+
+    private ChatRoomDto.Response createGroupChatRoom(ChatRoomDto.Create create) {
+        if(create.getMatingId() == null) throw new IllegalArgumentException("matingId 값은 필수입니다.");
+        Mating mating = matingRepository.findById(create.getMatingId())
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_MATING_DATA));
         ChatRoom chatRoom = chatRoomRepository.save(ChatRoomDtoMapper.INSTANCE.toEntity(mating.getTitle(), mating.getId()));
+
+        return ChatRoomDtoMapper.INSTANCE.toResponse(chatRoom);
+    }
+
+    private ChatRoomDto.Response createDmChatRoom(ChatRoomDto.Create create) {
+        if(create.getAccountId() == null) throw new IllegalArgumentException("accountId 값은 필수입니다.");
+        Account account = accountRepository.findById(create.getAccountId())
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoomDtoMapper.INSTANCE.toEntityByName(account.getProfileInfo().getNickName()));
 
         return ChatRoomDtoMapper.INSTANCE.toResponse(chatRoom);
     }
