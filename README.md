@@ -10,6 +10,7 @@
 - **API Docs**
   - [Mate Service](http://144.24.78.25:8090/swagger)
   - [Chat Service](http://144.24.78.25:9090/swagger)
+- **ERD** : [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ)
 
 </br>
 
