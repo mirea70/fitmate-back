@@ -22,7 +22,7 @@ public class ChatController {
     @Operation(summary = "채팅방 생성", description = """
             채팅방 생성 API
             
-            **roomType = GROUP** : matingId가 없을 시 400 Bad Request 에러가 발생, accountId는 필요 X
+            **roomType = GROUP** : matingId가 없을 시 400 Bad Request 에러가 발생
             
             **roomType = DM** : accountId가 없을 시 400 Bad Request 에러가 발생, matingId는 필요 X
             """)

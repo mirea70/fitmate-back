@@ -12,7 +12,9 @@ import com.fitmate.domain.mongo.chat.entity.ChatMessage;
 import com.fitmate.domain.mongo.chat.entity.ChatRoom;
 import com.fitmate.domain.mongo.chat.repository.ChatMessageRepository;
 import com.fitmate.domain.mongo.chat.repository.ChatRoomRepository;
+import com.fitmate.exceptions.exception.DuplicatedException;
 import com.fitmate.exceptions.exception.NotFoundException;
+import com.fitmate.exceptions.result.DuplicatedErrorResult;
 import com.fitmate.exceptions.result.NotFoundErrorResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +22,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ChatService {
 
     private final ChatMessageRepository chatMessageRepository;
@@ -58,21 +60,39 @@ public class ChatService {
     }
 
     private ChatRoomDto.Response createGroupChatRoom(ChatRoomDto.Create create) {
-        if(create.getMatingId() == null) throw new IllegalArgumentException("matingId 값은 필수입니다.");
-        Mating mating = matingRepository.findById(create.getMatingId())
-                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_MATING_DATA));
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoomDtoMapper.INSTANCE.toEntity(mating.getTitle(), mating.getId()));
+        Mating mating = getMatingValidated(create.getMatingId());
+        ChatRoom chatRoom = ChatRoomDtoMapper.INSTANCE.toEntity(mating.getTitle(), mating.getId());
+        chatRoom.addJoinAccountId(create.getAccountId());
+        chatRoomRepository.save(chatRoom);
 
         return ChatRoomDtoMapper.INSTANCE.toResponse(chatRoom);
     }
 
+    private Mating getMatingValidated(Long matingId) {
+        if(matingId == null) throw new IllegalArgumentException("matingId 값은 필수입니다.");
+        Mating mating = matingRepository.findById(matingId)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_MATING_DATA));
+        if(chatRoomRepository.existsByMatingId(mating.getId()))
+            throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_CHAT_ROOM_ABOUT_MATE);
+        return mating;
+    }
+
     private ChatRoomDto.Response createDmChatRoom(ChatRoomDto.Create create) {
-        if(create.getAccountId() == null) throw new IllegalArgumentException("accountId 값은 필수입니다.");
-        Account account = accountRepository.findById(create.getAccountId())
-                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoomDtoMapper.INSTANCE.toEntityByName(account.getProfileInfo().getNickName()));
+        Account account = getAccountValidated(create.getAccountId());
+        ChatRoom chatRoom = ChatRoomDtoMapper.INSTANCE.toEntityByName(account.getProfileInfo().getNickName());
+        chatRoom.addJoinAccountId(account.getId());
+        chatRoomRepository.save(chatRoom);
 
         return ChatRoomDtoMapper.INSTANCE.toResponse(chatRoom);
+    }
+
+    private Account getAccountValidated(Long accountId) {
+        if(accountId == null) throw new IllegalArgumentException("accountId 값은 필수입니다.");
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
+        if(chatRoomRepository.existsByJoinAccountIdsContaining(accountId))
+            throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_CHAT_ROOM_ABOUT_ACCOUNT);
+        return account;
     }
 
     public List<ChatMessageDto> getMessagesBtRoomId(String roomId) {
