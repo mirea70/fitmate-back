@@ -22,16 +22,16 @@ public class ChatController {
     @Operation(summary = "채팅방 생성", description = """
             채팅방 생성 API
             
-            **roomType = GROUP** : matingId가 없을 시 400 Bad Request 에러가 발생
+            **roomType = GROUP** : 모든 파라미터 필수
             
-            **roomType = DM** : accountId가 없을 시 400 Bad Request 에러가 발생, matingId는 필요 X
+            **roomType = DM** : accountId 필수
             """)
     @PostMapping("/room")
     public ResponseEntity<ChatRoomDto.Response> createGroupChatRoom(@Valid @RequestBody ChatRoomDto.Create createGroup) {
         return ResponseEntity.ok(chatService.createChatRoom(createGroup));
     }
 
-    @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지 조회 API")
+    @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 내림차순)")
     @GetMapping("/{roomId}/messages")
     public ResponseEntity<List<ChatMessageDto>> getMessagesByRoomId(@PathVariable String roomId) {
         return ResponseEntity.ok(chatService.getMessagesBtRoomId(roomId));
