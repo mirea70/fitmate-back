@@ -45,5 +45,4 @@ public class SwaggerConfig {
                 .scheme("Bearer")
                 .bearerFormat("JWT");
     }
-
 }
