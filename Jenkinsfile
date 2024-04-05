@@ -80,13 +80,24 @@ pipeline {
                                 sshPublisherDesc(
                                         configName: 'instance-fitmate',
                                         verbose: true,
-                                        transfers: [],
-                                        execCommand:
-                                            '''docker rmi -f mirea720/fitmate:mate \
-                                               ~/backend/mate/mate-deploy.sh \
+                                        transfers: [
+                                                sshTransfer(
+                                                        cleanRemote: false,
+                                                        excludes: '',
+                                                        execCommand:
+                                                                '''docker rmi -f mirea720/fitmate:mate \
+                                               ~/backend/mate/deploy.sh \
                                                docker rmi -f $(docker images -f "dangling=true" -q)
                                             ''',
-                                        execTimeout: 120000
+                                                        execTimeout: 120000,
+                                                        flatten: false,
+                                                        makeEmptyDirs: false,
+                                                        noDefaultExcludes: false,
+                                                        patternSeparator: '[, ]+',
+                                                        remoteDirectory: './backend/mate/',
+                                                        remoteDirectorySDF: false,
+                                                )
+                                        ]
                                 )
                         ]
                 )
@@ -102,13 +113,24 @@ pipeline {
                                 sshPublisherDesc(
                                         configName: 'instance-fitmate',
                                         verbose: true,
-                                        transfers: [],
-                                        execCommand:
-                                            '''docker rmi -f mirea720/fitmate:chat \
-                                               ~/backend/chat/chat-deploy.sh \
+                                        transfers: [
+                                                sshTransfer(
+                                                        cleanRemote: false,
+                                                        excludes: '',
+                                                        execCommand:
+                                                                '''docker rmi -f mirea720/fitmate:mate \
+                                               ~/backend/mate/deploy.sh \
                                                docker rmi -f $(docker images -f "dangling=true" -q)
                                             ''',
-                                        execTimeout: 120000
+                                                        execTimeout: 120000,
+                                                        flatten: false,
+                                                        makeEmptyDirs: false,
+                                                        noDefaultExcludes: false,
+                                                        patternSeparator: '[, ]+',
+                                                        remoteDirectory: './backend/mate/',
+                                                        remoteDirectorySDF: false,
+                                                )
+                                        ]
                                 )
                         ]
                 )
