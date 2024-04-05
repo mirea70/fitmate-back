@@ -85,10 +85,10 @@ pipeline {
                                                         cleanRemote: false,
                                                         excludes: '',
                                                         execCommand:
-                                                                '''docker rmi -f mirea720/fitmate:mate \
-                                               ~/backend/mate/mate-deploy.sh \
-                                               docker rmi -f $(docker images -f "dangling=true" -q)
-                                            ''',
+                                                                '''docker rmi -f mirea720/fitmate:mate
+                                                                    ~/backend/mate/mate-deploy.sh
+                                                                    docker rmi -f $(docker images -f "dangling=true" -q)
+                                                                ''',
                                                         execTimeout: 120000,
                                                         flatten: false,
                                                         makeEmptyDirs: false,
