@@ -47,6 +47,8 @@ public class SecurityConfig {
                 .antMatchers("/").permitAll()
                 .antMatchers(swaggerAuthMatchers()).permitAll()
                 .antMatchers("/api/accounts/join").permitAll()
+                .antMatchers("/api/mating/check").permitAll()
+                .antMatchers("/api/chat/check").permitAll()
                 .antMatchers("/api/**").authenticated()
 //                .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll()
