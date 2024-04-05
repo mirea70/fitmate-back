@@ -3,11 +3,14 @@
 
 지속적으로 업데이트 중입니다.
 
-- Framework : Spring Boot 2.7.11
-- Language : Java 17
-- Database : Oracle, Redis, MongoDB
-- Deployment : Jenkins/Docker/Oracle Cloud Infrastructure
-- [API Docs](http://144.24.78.25:8090/swagger)
+- **Framework** : Spring Boot 2.7.11
+- **Language** : Java 17
+- **Database** : Oracle, Redis, MongoDB
+- **Deployment** : Jenkins, Docker, Oracle Cloud Infrastructure
+- **API Docs**
+  - [Mate Service](http://144.24.78.25:8090/swagger)
+  - [Chat Service](http://144.24.78.25:9090/swagger)
+- **ERD** : [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ)
 
 </br>
 
