@@ -73,7 +73,7 @@ pipeline {
 
         stage('Deploy Mate Service') {
             steps {
-                ssh_publisher(
+                sshPublisher(
                         continueOnError: false,
                         failOnError: true,
                         publishers:[
@@ -95,7 +95,7 @@ pipeline {
 
         stage('Deploy Chat Service') {
             steps {
-                ssh_publisher(
+                sshPublisher(
                         continueOnError: false,
                         failOnError: true,
                         publishers:[
