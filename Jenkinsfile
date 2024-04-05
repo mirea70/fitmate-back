@@ -86,7 +86,7 @@ pipeline {
                                                         excludes: '',
                                                         execCommand:
                                                                 '''docker rmi -f mirea720/fitmate:mate \
-                                               ~/backend/mate/deploy.sh \
+                                               ~/backend/mate/mate-deploy.sh \
                                                docker rmi -f $(docker images -f "dangling=true" -q)
                                             ''',
                                                         execTimeout: 120000,
@@ -118,8 +118,8 @@ pipeline {
                                                         cleanRemote: false,
                                                         excludes: '',
                                                         execCommand:
-                                                                '''docker rmi -f mirea720/fitmate:mate \
-                                               ~/backend/mate/deploy.sh \
+                                                                '''docker rmi -f mirea720/fitmate:chat \
+                                               ~/backend/chat/chat-deploy.sh \
                                                docker rmi -f $(docker images -f "dangling=true" -q)
                                             ''',
                                                         execTimeout: 120000,
@@ -127,7 +127,7 @@ pipeline {
                                                         makeEmptyDirs: false,
                                                         noDefaultExcludes: false,
                                                         patternSeparator: '[, ]+',
-                                                        remoteDirectory: './backend/mate/',
+                                                        remoteDirectory: './backend/chat/',
                                                         remoteDirectorySDF: false,
                                                 )
                                         ]
