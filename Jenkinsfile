@@ -12,7 +12,7 @@ pipeline {
             }
         }
 
-        stage('Build Jar') {
+        stage('Build Jar Mate Service') {
             steps {
                 script {
                     sh "chmod +x gradlew"
@@ -22,33 +22,56 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Build Jar Chat Service') {
+                    steps {
+                        script {
+                            sh "chmod +x gradlew"
+                            echo 'chat-service Build...'
+                            sh "./gradlew :app-chat:clean :app-chat:build -Pprofile=prd -x test"
+                        }
+                    }
+                }
+
+        stage('Build Image Mate Service') {
             steps {
                 script {
                     echo 'mate-service docker build...'
                     dir('modules/app/app-mate') {
-                        sh "docker build -t $repository:latest -f ./Dockerfile ."
+                        sh "docker build -t $repository:mate -f ./Dockerfile ."
                     }
                 }
             }
         }
 
-        stage('Image Push') {
+        stage('Build Image Chat Service') {
+                    steps {
+                        script {
+                            echo 'chat-service docker build...'
+                            dir('modules/app/app-chat') {
+                                sh "docker build -t $repository:chat -f ./Dockerfile ."
+                            }
+                        }
+                    }
+                }
+
+        stage('Images Push') {
             steps {
                 script {
                     sh "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
-                    sh "docker push $repository:latest"
+                    sh "docker push $repository:mate"
+                    sh "docker push $repository:chat"
                 }
             }
         }
 
-        stage('Image Clean') {
+        stage('Images Clean') {
             steps {
-                sh "docker rmi $repository:latest"
+                sh "docker rmi $repository:mate"
+                sh "docker rmi $repository:chat"
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Mate Service') {
             steps {
                 ssh_publisher(
                         continueOnError: false,
@@ -57,24 +80,35 @@ pipeline {
                                 sshPublisherDesc(
                                         configName: 'instance-fitmate',
                                         verbose: true,
-                                        transfers: [
-                                                sshTransfer(
-                                                        cleanRemote: false,
-                                                        excludes: '',
-                                                        execCommand:
-                                                                '''docker rmi -f mirea720/fitmate \
-                                               ~/backend/deploy.sh \
+                                        transfers: [],
+                                        execCommand:
+                                            '''docker rmi -f mirea720/fitmate:mate \
+                                               ~/backend/mate/mate-deploy.sh \
                                                docker rmi -f $(docker images -f "dangling=true" -q)
                                             ''',
-                                                        execTimeout: 120000,
-                                                        flatten: false,
-                                                        makeEmptyDirs: false,
-                                                        noDefaultExcludes: false,
-                                                        patternSeparator: '[, ]+',
-                                                        remoteDirectory: './backend/',
-                                                        remoteDirectorySDF: false,
-                                                )
-                                        ]
+                                        execTimeout: 120000
+                                )
+                        ]
+                )
+            }
+        }
+
+        stage('Deploy Chat Service') {
+            steps {
+                ssh_publisher(
+                        continueOnError: false,
+                        failOnError: true,
+                        publishers:[
+                                sshPublisherDesc(
+                                        configName: 'instance-fitmate',
+                                        verbose: true,
+                                        transfers: [],
+                                        execCommand:
+                                            '''docker rmi -f mirea720/fitmate:chat \
+                                               ~/backend/chat/chat-deploy.sh \
+                                               docker rmi -f $(docker images -f "dangling=true" -q)
+                                            ''',
+                                        execTimeout: 120000
                                 )
                         ]
                 )
