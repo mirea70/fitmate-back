@@ -34,7 +34,7 @@ import java.util.List;
 
 @Tag(name = "01-02. Account Profile", description = "회원 프로필 관련 API")
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("mate/api/account")
 @RequiredArgsConstructor
 public class AccountProfileController {
 

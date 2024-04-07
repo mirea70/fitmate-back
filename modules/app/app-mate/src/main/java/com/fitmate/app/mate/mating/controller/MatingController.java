@@ -22,9 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 
-@Tag(name = "02-01. Mating", description = "메이트 글 관리 API")
+@Tag(name = "02-01. Mate", description = "메이트 글 관리 API")
 @RestController
-@RequestMapping("/api/mating")
+@RequestMapping("/mate/api")
 @RequiredArgsConstructor
 public class MatingController {
     private final MatingRegisterService matingRegisterService;
@@ -44,9 +44,9 @@ public class MatingController {
     }
 
     @Operation(summary = "메이팅 글 단일조회", description = "메이팅 글 단일조회 API")
-    @GetMapping("/{matingId}")
-    public ResponseEntity<MatingDto.Response> findOne(@PathVariable Long matingId) {
-        Mating findMating = matingService.validateFindById(matingId);
+    @GetMapping("/{mateId}")
+    public ResponseEntity<MatingDto.Response> findOne(@PathVariable Long mateId) {
+        Mating findMating = matingService.validateFindById(mateId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(MatingDtoMapper.INSTANCE.toResponse(findMating));
     }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "02-02. Mate Request", description = "메이트 신청 관리 API")
 @RestController
-@RequestMapping("/api/mating/{matingId}/request")
+@RequestMapping("/mate/api/{mateId}/request")
 @RequiredArgsConstructor
 public class MatingRequestController {
 
@@ -25,17 +25,17 @@ public class MatingRequestController {
 
     @Operation(summary = "메이트 신청 질문 조회", description = "메이트 신청 질문 조회 API")
     @GetMapping("/question")
-    public ResponseEntity<MatingQuestionDto.Response> getComeQuestion(@PathVariable Long matingId) {
+    public ResponseEntity<MatingQuestionDto.Response> getComeQuestion(@PathVariable Long mateId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(matingReadRepository.readQuestion(matingId));
+                .body(matingReadRepository.readQuestion(mateId));
     }
 
     @Operation(summary = "메이트 신청", description = "메이트 신청 API(결제기능 연동 전)")
     @PostMapping
-    public ResponseEntity<?> applyMate(@PathVariable Long matingId,
+    public ResponseEntity<?> applyMate(@PathVariable Long mateId,
                                        @RequestBody MatingDto.Apply applyDto,
                                        @AuthenticationPrincipal AuthDetails authDetails) {
-        applyDto.setMatingId(matingId);
+        applyDto.setMatingId(mateId);
         applyDto.setAccountId(authDetails.getAccount().getId());
         matingRequestService.matingRequest(applyDto);
 
@@ -44,10 +44,10 @@ public class MatingRequestController {
 
     @Operation(summary = "메이트 신청 승인", description = "메이트 신청 승인 API")
     @PutMapping
-    public ResponseEntity<?> approveMate(@PathVariable Long matingId,
+    public ResponseEntity<?> approveMate(@PathVariable Long mateId,
                                          @RequestBody MatingDto.Approve approveDto,
                                          @AuthenticationPrincipal AuthDetails authDetails) {
-        approveDto.setMatingId(matingId);
+        approveDto.setMatingId(mateId);
         matingRequestService.approveRequest(approveDto, authDetails.getAccount().getId());
 
         return ResponseEntity.ok().build();
