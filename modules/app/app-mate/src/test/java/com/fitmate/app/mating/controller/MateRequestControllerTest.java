@@ -1,51 +1,30 @@
 package com.fitmate.app.mating.controller;
 
 
-import com.fitmate.app.config.annotation.WithMockCustomUser;
 import com.fitmate.app.config.factory.WithMockCustomUserSecurityContextFactory;
 import com.fitmate.app.mate.exceptions.GlobalExceptionHandler;
-import com.fitmate.app.mate.mating.controller.MatingRequestController;
+import com.fitmate.app.mate.mating.controller.MateRequestController;
 import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.service.MatingRequestService;
 import com.fitmate.app.mating.helper.MatingAppTestHelper;
 import com.fitmate.app.mating.helper.MatingMockMvcHelper;
 import com.fitmate.config.GsonUtil;
-import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.domain.mating.mate.domain.repository.MatingReadRepository;
 import com.fitmate.domain.mating.mate.dto.MatingQuestionDto;
-import com.fitmate.system.security.config.SecurityConfig;
-import com.fitmate.system.security.dto.AuthDetails;
-import com.fitmate.system.security.service.AuthDetailsService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithSecurityContext;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,10 +38,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @WebAppConfiguration
 @Import(WithMockCustomUserSecurityContextFactory.class)
-public class MatingRequestControllerTest {
+public class MateRequestControllerTest {
 
     @Autowired
-    private MatingRequestController target;
+    private MateRequestController target;
 
     @MockBean
     private MatingReadRepository matingReadRepository;

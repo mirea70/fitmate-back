@@ -24,9 +24,9 @@ import java.util.List;
 
 @Tag(name = "02-01. Mate", description = "메이트 글 관리 API")
 @RestController
-@RequestMapping("/mate/api")
+@RequestMapping("/api/mate")
 @RequiredArgsConstructor
-public class MatingController {
+public class MateController {
     private final MatingRegisterService matingRegisterService;
     private final MatingService matingService;
     private final MatingReadRepository matingReadRepository;

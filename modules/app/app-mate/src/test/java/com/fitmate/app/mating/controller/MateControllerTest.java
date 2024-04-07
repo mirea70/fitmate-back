@@ -2,7 +2,7 @@ package com.fitmate.app.mating.controller;
 
 import com.fitmate.app.account.helper.FileTestHelper;
 import com.fitmate.app.mate.exceptions.GlobalExceptionHandler;
-import com.fitmate.app.mate.mating.controller.MatingController;
+import com.fitmate.app.mate.mating.controller.MateController;
 import com.fitmate.app.mate.mating.dto.MatingDto;
 import com.fitmate.app.mate.mating.service.MatingRegisterService;
 import com.fitmate.app.mating.helper.MatingAppTestHelper;
@@ -35,9 +35,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class MatingControllerTest {
+public class MateControllerTest {
     @InjectMocks
-    private MatingController target;
+    private MateController target;
     @Mock
     private MatingRegisterService matingRegisterService;
     @Mock

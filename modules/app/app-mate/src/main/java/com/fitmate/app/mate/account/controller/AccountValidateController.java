@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "01-03. Account Validate", description = "회원 인증 관련 API")
 @RestController
-@RequestMapping("mate/api/account/validate")
+@RequestMapping("/api/account/validate")
 @RequiredArgsConstructor
 public class AccountValidateController {
 
