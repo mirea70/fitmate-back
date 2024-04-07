@@ -8,8 +8,8 @@
 - **Database** : Oracle, Redis, MongoDB
 - **Deployment** : Jenkins, Docker, Oracle Cloud Infrastructure
 - **API Docs**
-  - [Mate Service](http://144.24.78.25:8090/swagger)
-  - [Chat Service](http://144.24.78.25:9090/swagger)
+  - [Mate Service](http://43.202.192.116/mate/swagger-ui)
+  - [Chat Service](http://43.202.192.116/chat/swagger-ui)
 - **ERD** : [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ)
 
 </br>
