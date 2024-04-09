@@ -73,5 +73,5 @@ java -jar app-chat-0.0.1-SNAPSHOT.jar
 # CI/CD 구성
 ![image](https://github.com/mirea70/fitmate-back/assets/101246806/5d244622-022f-4ed7-a275-b928eef680f4)
 - 배포 Flow는 위와 같습니다.
-- Jenkinse의 빌드 과정이 리소스 소모가 많이되어 별도 서버로 분리하였습니다.
+- Jenkinse의 빌드 과정이 리소스 소모가 많이들어 별도 서버로 분리하였습니다.
 - Docker의 컨테이너와 NginX의 Reverse Proxy를 활용해 Blue/Green 전략으로 무중단 배포로 구축하였습니다.
