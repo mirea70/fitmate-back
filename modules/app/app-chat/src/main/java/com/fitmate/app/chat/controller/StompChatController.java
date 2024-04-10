@@ -14,13 +14,13 @@ public class StompChatController {
     private final ChatService chatService;
 
     @MessageMapping("/{roomId}/enter")
-    @SendTo("/chat/sub/{roomId}")
+    @SendTo("/sub/{roomId}")
     public ChatMessageDto enter(@DestinationVariable("roomId") String roomId, ChatMessageDto chatMessageDto) {
         return chatService.enterChatRoom(roomId, chatMessageDto);
     }
 
     @MessageMapping("/{roomId}/chat")
-    @SendTo("/chat/sub/{roomId}")
+    @SendTo("/sub/{roomId}")
     public ChatMessageDto chat(@DestinationVariable("roomId") String roomId, ChatMessageDto chatMessageDto) {
         chatService.saveChatMessage(roomId, chatMessageDto);
         return chatMessageDto;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @GetMapping("/chat/api/check")
+    @GetMapping("/api/chat/check")
     @Operation(hidden = true)
     public String test() {
         return "check";
