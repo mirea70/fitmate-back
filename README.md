@@ -6,7 +6,7 @@
 - **Framework** : Spring Boot 2.7.11
 - **Language** : Java 17
 - **Database** : Oracle, Redis, MongoDB
-- **Deployment** : Jenkins, Docker, Oracle Cloud Infrastructure
+- **Deployment** : Jenkins, Docker, Oracle Cloud Infrastructure, Amajon Web Service
 - **API Docs**
   - [Mate Service](http://www.fitmates.store:8090/swagger-ui/index.html)
   - [Chat Service](http://www.fitmates.store:9090/swagger-ui/index.html)
