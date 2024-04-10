@@ -19,7 +19,7 @@ import javax.validation.Valid;
 
 @Tag(name = "01-01. Account", description = "회원 관리 API")
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/account/api")
 @RequiredArgsConstructor
 public class AccountController {
 
