@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "02-02. Mate Request", description = "메이트 신청 관리 API")
 @RestController
-@RequestMapping("/api/mate/{mateId}/request")
+@RequestMapping("/request/{mateId}")
 @RequiredArgsConstructor
 public class MateRequestController {
 

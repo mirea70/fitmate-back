@@ -17,7 +17,7 @@ import java.net.MalformedURLException;
 
 @Tag(name = "99 File", description = "파일 관리 API")
 @RestController
-@RequestMapping("/api/files")
+@RequestMapping("/file")
 @RequiredArgsConstructor
 public class FileController {
 

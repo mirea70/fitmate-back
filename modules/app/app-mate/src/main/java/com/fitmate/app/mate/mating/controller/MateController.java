@@ -24,7 +24,6 @@ import java.util.List;
 
 @Tag(name = "02-01. Mate", description = "메이트 글 관리 API")
 @RestController
-@RequestMapping("/api/mate")
 @RequiredArgsConstructor
 public class MateController {
     private final MatingRegisterService matingRegisterService;
@@ -58,7 +57,4 @@ public class MateController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responses);
     }
-
-
-
 }
