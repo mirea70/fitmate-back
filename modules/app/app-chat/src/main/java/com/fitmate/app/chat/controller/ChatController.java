@@ -18,17 +18,19 @@ import java.util.List;
 public class ChatController {
     private final ChatService chatService;
 
-    @Operation(summary = "채팅방 생성", description = """
-            채팅방 생성 API
-            
-            **roomType = GROUP** : 모든 파라미터 필수
-            
-            **roomType = DM** : accountId 필수
-            """)
-    @PostMapping("/room")
-    public ResponseEntity<ChatRoomDto.Response> createGroupChatRoom(@Valid @RequestBody ChatRoomDto.Create createGroup) {
-        return ResponseEntity.ok(chatService.createChatRoom(createGroup));
+    @Operation(summary = "그룹 채팅방 생성", description = "그룹 채팅방 생성 API")
+    @PostMapping("/room/group")
+    public ResponseEntity<ChatRoomDto.Response> createGroupChatRoom(@Valid @RequestBody ChatRoomDto.CreateGroup createGroup) {
+        return ResponseEntity.ok(chatService.createGroupChatRoom(createGroup));
     }
+
+    @Operation(summary = "DM 채팅방 생성", description = "DM 채팅방 생성 API")
+    @PostMapping("/room/dm")
+    public ResponseEntity<ChatRoomDto.Response> createDmChatRoom(@Valid @RequestBody ChatRoomDto.CreateDM createGroup) {
+        return ResponseEntity.ok(chatService.createDmChatRoom(createGroup));
+    }
+
+
 
     @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 내림차순)")
     @GetMapping("/{roomId}/messages")
