@@ -33,6 +33,6 @@ public class ChatController {
     @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 내림차순)")
     @GetMapping("/{roomId}/messages")
     public ResponseEntity<List<ChatMessageDto>> getMessagesByRoomId(@PathVariable String roomId) {
-        return ResponseEntity.ok(chatService.getMessagesBtRoomId(roomId));
+        return ResponseEntity.ok(chatService.getMessagesByRoomId(roomId));
     }
 }
