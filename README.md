@@ -14,6 +14,7 @@
 
 - **Websocket 통신 사용방법**
   - **protocol** : STOMP
+  - **base url** : https://www.fitmates.store
   - **connection endpoint** : /api/chat/stomp
   - **subscribe endpoint** : /sub/{roomId}
   - **publish endpoint(enter)** : /pub/{roomId}/enter
