@@ -51,7 +51,7 @@ java -jar app-chat-0.0.1-SNAPSHOT.jar
 </br>
 
 # 시스템 아키텍처
-![image](https://github.com/mirea70/fitmate-back/assets/101246806/30b02e73-9501-49ce-8aec-73225a58be34)
+![fitmate_system_architecture](https://github.com/mirea70/fitmate-back/assets/101246806/cd0dfff0-ebec-4783-8af3-1e9d8d4a96e8)
 
 </br>
 
