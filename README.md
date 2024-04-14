@@ -12,6 +12,16 @@
   - [Chat Service](https://www.fitmates.store/api/chat/swagger-ui/index.html)
 - **ERD** : [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ)
 
+- **Websocket 통신 사용방법**
+  - **protocol** : STOMP
+  - **connection endpoint** : /api/chat/stomp
+  - **subscribe endpoint** : /sub/{roomId}
+  - **publish endpoint(enter)** : /pub/{roomId}/enter
+  - **publish endpoint(chat)** : /pub/{roomId}/chat
+  - **message data format** : Json
+    - {"senderNickName": "사용자1", "senderId": 1, "message": "테스트1"}
+  - **test** : https://apic.app/online/#/tester
+
 </br>
 
 # 실행 방법
