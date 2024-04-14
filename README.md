@@ -12,6 +12,17 @@
   - [Chat Service](https://www.fitmates.store/api/chat/swagger-ui/index.html)
 - **ERD** : [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ)
 
+- **Websocket 통신 사용방법**
+  - **protocol** : STOMP
+  - **base url** : https://www.fitmates.store
+  - **connection endpoint** : /api/chat/stomp
+  - **subscribe endpoint** : /sub/{roomId}
+  - **publish endpoint(enter)** : /pub/{roomId}/enter
+  - **publish endpoint(chat)** : /pub/{roomId}/chat
+  - **message data format** : Json
+    - {"senderNickName": "사용자1", "senderId": 1, "message": "테스트1"}
+  - **test** : https://apic.app/online/#/tester
+
 </br>
 
 # 실행 방법
@@ -36,6 +47,11 @@ java -jar app-mate-0.0.1-SNAPSHOT.jar
 cd modules/app/app-chat/build/libs
 java -jar app-chat-0.0.1-SNAPSHOT.jar
 ```
+
+</br>
+
+# 시스템 아키텍처
+![fitmate_system_architecture](https://github.com/mirea70/fitmate-back/assets/101246806/cd0dfff0-ebec-4783-8af3-1e9d8d4a96e8)
 
 </br>
 
