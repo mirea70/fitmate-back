@@ -50,6 +50,11 @@ java -jar app-chat-0.0.1-SNAPSHOT.jar
 
 </br>
 
+# 시스템 아키텍처
+![image](https://github.com/mirea70/fitmate-back/assets/101246806/96decfcb-ad33-4689-9245-51db72198e7d)
+
+</br>
+
 # 멀티모듈 구성
 
 ## 1. 멀티모듈 구성 목적
