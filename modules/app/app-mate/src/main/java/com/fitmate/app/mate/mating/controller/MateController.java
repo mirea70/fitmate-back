@@ -10,6 +10,7 @@ import com.fitmate.domain.mating.mate.service.MatingService;
 import com.fitmate.system.security.dto.AuthDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,15 @@ public class MateController {
     private final MatingService matingService;
     private final MatingReadRepository matingReadRepository;
 
-    @Operation(summary = "메이팅 글 작성", description = "메이팅 글 작성 API")
+    @Operation(summary = "메이팅 글 작성", description = """
+            메이팅 글 작성 API
+            
+            **operateFees**: enumSet (Enum 타입 operateFee의 집합)
+            - operateFee: {HOST_FEE, AVOID_NO_SHOW, PLATFORM_FEE} <- {호스트 수고비, 노쇼 방지비, 플랫폼 수수료}
+            
+            **gatherFees**: enumSet (Enum 타입 gatherFee의 집합)
+            - gatherFee: {RENTAL_FEE, SNACK_FEE, MATERIAL_FEE} <- {대관료, 다과비, 재료비}
+            """)
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MatingDto.Response> register(@Valid @RequestPart MatingDto.Create createDto,
                                                        @Parameter(description = "소개 이미지 (여러개)")

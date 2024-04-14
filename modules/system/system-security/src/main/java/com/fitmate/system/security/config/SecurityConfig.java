@@ -44,7 +44,6 @@ public class SecurityConfig {
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
                 .antMatchers(swaggerAuthMatchers()).permitAll()
                 .antMatchers("/account/join").permitAll()
                 .antMatchers("/check").permitAll()
