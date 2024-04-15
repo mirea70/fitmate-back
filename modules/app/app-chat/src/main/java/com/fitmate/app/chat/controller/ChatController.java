@@ -30,11 +30,15 @@ public class ChatController {
         return ResponseEntity.ok(chatService.createDmChatRoom(createGroup));
     }
 
-
-
     @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 내림차순)")
     @GetMapping("/{roomId}/messages")
     public ResponseEntity<List<ChatMessageDto>> getMessagesByRoomId(@PathVariable String roomId) {
         return ResponseEntity.ok(chatService.getMessagesByRoomId(roomId));
+    }
+
+    @Operation(summary = "나의 채팅방 목록 조회", description = "나의 채팅방 목록 조회 API")
+    @GetMapping("/my/rooms")
+    public ResponseEntity<List<ChatRoomDto.Response>> getMyChatRooms(@RequestParam Long accountId) {
+        return ResponseEntity.ok(chatService.getMyChatRooms(accountId));
     }
 }

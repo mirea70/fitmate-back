@@ -94,4 +94,9 @@ public class ChatService {
         List<ChatMessage> chatMessages = chatMessageRepository.findAllByRoomIdOrderByCreatedAtDesc(roomId);
         return ChatMessageDtoMapper.INSTANCE.toChatMessageDtoList(chatMessages);
     }
+
+    public List<ChatRoomDto.Response> getMyChatRooms(Long accountId) {
+        List<ChatRoom> chatRooms = chatRoomQueryRepository.findAllByJoinAccountId(accountId);
+        return ChatRoomDtoMapper.INSTANCE.toResponses(chatRooms);
+    }
 }
