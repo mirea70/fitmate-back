@@ -3,6 +3,7 @@ package com.fitmate.app.chat.controller;
 import com.fitmate.app.chat.dto.ChatMessageDto;
 import com.fitmate.app.chat.dto.ChatRoomDto;
 import com.fitmate.app.chat.service.ChatService;
+import com.fitmate.domain.mongo.chat.dto.ChatRoomListItemDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class ChatController {
 
     @Operation(summary = "나의 채팅방 목록 조회", description = "나의 채팅방 목록 조회 API")
     @GetMapping("/my/rooms")
-    public ResponseEntity<List<ChatRoomDto.Response>> getMyChatRooms(@RequestParam Long accountId) {
+    public ResponseEntity<List<ChatRoomListItemDto>> getMyChatRooms(@RequestParam Long accountId) {
         return ResponseEntity.ok(chatService.getMyChatRooms(accountId));
     }
 }

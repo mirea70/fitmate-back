@@ -21,7 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class ChatRoom {
 
-    @MongoId(targetType = FieldType.OBJECT_ID)
+    @MongoId(targetType = FieldType.STRING)
     private String id;
 
     private String name;

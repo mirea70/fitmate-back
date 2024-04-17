@@ -21,7 +21,7 @@ import java.util.Date;
 @Getter
 public class ChatMessage {
 
-    @MongoId(targetType = FieldType.OBJECT_ID)
+    @MongoId(targetType = FieldType.STRING)
     private String id;
 
     private String roomId;

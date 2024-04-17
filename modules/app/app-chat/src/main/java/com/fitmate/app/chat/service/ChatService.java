@@ -8,6 +8,7 @@ import com.fitmate.domain.account.entity.Account;
 import com.fitmate.domain.account.repository.AccountRepository;
 import com.fitmate.domain.mating.mate.domain.entity.Mating;
 import com.fitmate.domain.mating.mate.domain.repository.MatingRepository;
+import com.fitmate.domain.mongo.chat.dto.ChatRoomListItemDto;
 import com.fitmate.domain.mongo.chat.entity.ChatMessage;
 import com.fitmate.domain.mongo.chat.entity.ChatRoom;
 import com.fitmate.domain.mongo.chat.repository.ChatMessageRepository;
@@ -95,8 +96,13 @@ public class ChatService {
         return ChatMessageDtoMapper.INSTANCE.toChatMessageDtoList(chatMessages);
     }
 
-    public List<ChatRoomDto.Response> getMyChatRooms(Long accountId) {
-        List<ChatRoom> chatRooms = chatRoomQueryRepository.findAllByJoinAccountId(accountId);
-        return ChatRoomDtoMapper.INSTANCE.toResponses(chatRooms);
+//    public List<ChatRoomDto.Response> getMyChatRooms(Long accountId) {
+//        List<ChatRoom> chatRooms = chatRoomQueryRepository.findAllByJoinAccountId(accountId);
+//        return ChatRoomDtoMapper.INSTANCE.toResponses(chatRooms);
+//    }
+
+    public List<ChatRoomListItemDto> getMyChatRooms(Long accountId) {
+        List<ChatRoomListItemDto> documents = chatRoomQueryRepository.findAllByMyAccountId(accountId);
+        return documents;
     }
 }
