@@ -53,6 +53,11 @@ java -jar app-chat-0.0.1-SNAPSHOT.jar
 # 시스템 아키텍처
 ![fitmate_system_architecture](https://github.com/mirea70/fitmate-back/assets/101246806/cd0dfff0-ebec-4783-8af3-1e9d8d4a96e8)
 
+- 크게 Mate Service와 Chat Service로 나눠지며 Docker Container 단위로 분리하였습니다.
+- Request 엔드포인트에 맞춰 Nginx의 리버스 프록시를 통해 알맞은 컨테이너로 요청이 전달됩니다.
+- 캐싱 데이터는 Redis에서 관리되며, 채팅 데이터는 MongoDB에서 관리됩니다.
+- 나머지 다른 데이터들은 Oracle DB에서 관리되며, Chat Service에서는 로직 구현을 위해 이 DB에서 조회만 하게 됩니다.
+
 </br>
 
 # 멀티모듈 구성
