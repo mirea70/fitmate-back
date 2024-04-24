@@ -7,9 +7,7 @@
 - **Language** : Java 17
 - **Database** : Oracle, Redis, MongoDB
 - **Deployment** : Jenkins, Docker, Oracle Cloud Infrastructure, Amajon Web Service
-- **API Docs**
-  - [Mate Service](https://www.fitmates.store/api/mate/swagger-ui/index.html)
-  - [Chat Service](https://www.fitmates.store/api/chat/swagger-ui/index.html)
+- **API Docs** : https://www.fitmates.store/swagger-ui/index.html
 - **ERD** : [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ)
 
 - **Websocket 통신 사용방법**
