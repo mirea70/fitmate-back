@@ -34,11 +34,10 @@
 ```
 git clone https://github.com/mirea70/fitmate-back.git
 chmod +x gradlew
-
-# mate_service
 ./gradlew :adapter:clean :adapter:build -x test
 cd modules/adapter/build/libs
 java -jar adapter-0.0.1-SNAPSHOT.jar
+```
 
 </br>
 
