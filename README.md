@@ -7,15 +7,13 @@
 - **Language** : Java 17
 - **Database** : Oracle, Redis, MongoDB
 - **Deployment** : Jenkins, Docker, Oracle Cloud Infrastructure, Amajon Web Service
-- **API Docs**
-  - [Mate Service](https://www.fitmates.store/api/mate/swagger-ui/index.html)
-  - [Chat Service](https://www.fitmates.store/api/chat/swagger-ui/index.html)
+- **API Docs** : https://www.fitmates.store/swagger-ui/index.html
 - **ERD** : [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ)
 
 - **Websocket 통신 사용방법**
   - **protocol** : STOMP
   - **base url** : https://www.fitmates.store
-  - **connection endpoint** : /api/chat/stomp
+  - **connection endpoint** : /stomp
   - **subscribe endpoint** : /sub/{roomId}
   - **publish endpoint(enter)** : /pub/{roomId}/enter
   - **publish endpoint(chat)** : /pub/{roomId}/chat
@@ -30,22 +28,15 @@
   - Jdk 17+
   - database install && connect (RDBMS : Oracle recommend, Redis, MongoDB)
   - coolsms join
-  - make property or yml files on each modules (total : 7)
+  - make property or yml file
 
 - **Running Application**
 ```
 git clone https://github.com/mirea70/fitmate-back.git
 chmod +x gradlew
-
-# mate_service
-./gradlew :app-mate:clean :app-mate:build -x test
-cd modules/app/app-mate/build/libs
-java -jar app-mate-0.0.1-SNAPSHOT.jar
-
-# chat_service
-./gradlew :app-chat:clean :app-chat:build -x test
-cd modules/app/app-chat/build/libs
-java -jar app-chat-0.0.1-SNAPSHOT.jar
+./gradlew :adapter:clean :adapter:build -x test
+cd modules/adapter/build/libs
+java -jar adapter-0.0.1-SNAPSHOT.jar
 ```
 
 </br>
