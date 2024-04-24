@@ -1,0 +1,9 @@
+rootProject.name = 'fitmate'
+include 'adapter'
+include 'domain'
+include 'port'
+include 'usecase'
+
+for (project in rootProject.children) {
+    project.projectDir = file("modules/${project.name}")
+}

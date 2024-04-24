@@ -1,0 +1,14 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks {
+    processResources {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+}

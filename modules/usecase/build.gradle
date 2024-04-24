@@ -1,0 +1,22 @@
+bootJar { enabled = false }
+jar { enabled = true }
+
+dependencies {
+    // 모듈
+    implementation project(':domain')
+    implementation project(':port')
+    // 유틸
+    implementation 'org.springframework:spring-tx:5.3.12'
+    implementation 'org.springframework.security:spring-security-crypto:5.7.0'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks {
+    processResources {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+}
