@@ -30,7 +30,7 @@ public class MateController {
     private final MateUseCasePort mateUseCasePort;
     private final MateWebAdapterMapper mateWebAdapterMapper;
 
-    @Operation(summary = "메이팅 글 작성", description = "메이팅 글 작성 API")
+    @Operation(summary = "메이트 글 작성", description = "메이트 글 작성 API")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@Valid @RequestBody MateCreateRequest createRequest,
                                       @AuthenticationPrincipal AuthDetails authDetails) throws Exception {
@@ -38,7 +38,7 @@ public class MateController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "메이팅 글 단일조회", description = "메이팅 글 단일조회 API")
+    @Operation(summary = "메이트 글 단일조회", description = "메이트 글 단일조회 API")
     @GetMapping("/{mateId}")
     public ResponseEntity<MateDetailResponse> findOne(@PathVariable Long mateId) {
         MateDetailResponse response = mateUseCasePort.findMate(mateId);
