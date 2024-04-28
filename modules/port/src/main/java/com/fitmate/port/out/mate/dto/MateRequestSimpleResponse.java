@@ -1,6 +1,6 @@
 package com.fitmate.port.out.mate.dto;
 
-import com.fitmate.domain.mate.vo.FitPlace;
+import com.fitmate.domain.mate.FitPlace;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

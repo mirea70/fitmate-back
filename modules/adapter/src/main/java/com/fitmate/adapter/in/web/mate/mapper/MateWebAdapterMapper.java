@@ -3,15 +3,38 @@ package com.fitmate.adapter.in.web.mate.mapper;
 import com.fitmate.adapter.in.web.mate.dto.MateApplyRequest;
 import com.fitmate.adapter.in.web.mate.dto.MateApproveRequest;
 import com.fitmate.adapter.in.web.mate.dto.MateCreateRequest;
+import com.fitmate.adapter.in.web.mate.dto.MateModifyRequest;
 import com.fitmate.port.in.mate.command.MateApplyCommand;
 import com.fitmate.port.in.mate.command.MateApproveCommand;
 import com.fitmate.port.in.mate.command.MateCreateCommand;
+import com.fitmate.port.in.mate.command.MateModifyCommand;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MateWebAdapterMapper {
     public MateCreateCommand requestToCommand(MateCreateRequest request, Long writerId) {
         return new MateCreateCommand(
+                request.getFitCategory(),
+                request.getTitle(),
+                request.getIntroduction(),
+                request.getIntroImageIds(),
+                request.getMateAt(),
+                request.getFitPlaceName(),
+                request.getFitPlaceAddress(),
+                request.getGatherType(),
+                request.getPermitGender(),
+                request.getPermitMaxAge(),
+                request.getPermitMinAge(),
+                request.getPermitPeopleCnt(),
+                request.getMateFees(),
+                request.getApplyQuestion(),
+                writerId
+        );
+    }
+
+    public MateModifyCommand requestToCommand(Long mateId, MateModifyRequest request, Long writerId) {
+        return new MateModifyCommand(
+                mateId,
                 request.getFitCategory(),
                 request.getTitle(),
                 request.getIntroduction(),

@@ -1,7 +1,7 @@
 package com.fitmate.adapter.in.web.account.dto;
 
-import com.fitmate.domain.account.vo.AccountRole;
-import com.fitmate.domain.account.vo.Gender;
+import com.fitmate.domain.account.enums.AccountRole;
+import com.fitmate.domain.account.enums.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

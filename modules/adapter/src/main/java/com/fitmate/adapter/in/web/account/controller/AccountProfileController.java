@@ -4,7 +4,7 @@ import com.fitmate.adapter.WebAdapter;
 import com.fitmate.adapter.in.web.account.dto.AccountModifyRequest;
 import com.fitmate.adapter.in.web.account.mapper.AccountWebAdapterMapper;
 import com.fitmate.adapter.in.web.security.dto.AuthDetails;
-import com.fitmate.domain.mate.vo.ApproveStatus;
+import com.fitmate.domain.mate.enums.ApproveStatus;
 import com.fitmate.port.in.account.usecase.AccountProfileUseCasePort;
 import com.fitmate.port.out.follow.FollowDetailResponse;
 import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
@@ -30,7 +30,7 @@ public class AccountProfileController {
     private final AccountProfileUseCasePort accountProfileUseCasePort;
     private final AccountWebAdapterMapper accountWebAdapterMapper;
 
-    @Operation(summary = "회원 프로필 변경", description = "회원 프로필 변경 API")
+    @Operation(summary = "회원 프로필 변경", description = "**[참고]** : profileImageId를 입력하려면 파일 관리 API를 통한 파일 업로드를 선행해주세요.")
     @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> modifyProfile(@Valid @RequestBody AccountModifyRequest modifyRequest,
                                            @AuthenticationPrincipal AuthDetails authDetails) throws Exception {

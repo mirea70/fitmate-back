@@ -5,8 +5,8 @@ import com.fitmate.adapter.out.persistence.jpa.account.mapper.AccountPersistence
 import com.fitmate.adapter.out.persistence.jpa.account.entity.AccountJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.account.repository.AccountQueryRepository;
 import com.fitmate.adapter.out.persistence.jpa.account.repository.AccountRepository;
-import com.fitmate.domain.account.aggregate.Account;
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.AccountId;
 import com.fitmate.port.out.account.LoadAccountPort;
 import lombok.RequiredArgsConstructor;
 

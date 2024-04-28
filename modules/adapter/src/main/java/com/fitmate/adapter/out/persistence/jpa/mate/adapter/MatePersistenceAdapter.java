@@ -8,10 +8,10 @@ import com.fitmate.adapter.out.persistence.jpa.mate.mapper.MatePersistenceMapper
 import com.fitmate.adapter.out.persistence.jpa.mate.repository.MateFeeRepository;
 import com.fitmate.adapter.out.persistence.jpa.mate.repository.MateQueryRepository;
 import com.fitmate.adapter.out.persistence.jpa.mate.repository.MateRepository;
-import com.fitmate.domain.account.vo.AccountId;
-import com.fitmate.domain.mate.aggregate.Mate;
-import com.fitmate.domain.mate.vo.MateFee;
-import com.fitmate.domain.mate.vo.MateId;
+import com.fitmate.domain.account.AccountId;
+import com.fitmate.domain.mate.Mate;
+import com.fitmate.domain.mate.MateFee;
+import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +34,8 @@ public class MatePersistenceAdapter implements LoadMatePort {
     }
 
     @Override
-    public void saveMateFeeEntities(List<MateFee> mateFees, Long mateId) {
-        List<MateFeeJpaEntity> mateFeeEntities = matePersistenceMapper.domainsToEntities(mateFees, mateId);
+    public void saveMateFeeEntities(List<MateFee> mateFees, MateId mateId) {
+        List<MateFeeJpaEntity> mateFeeEntities = matePersistenceMapper.domainsToEntities(mateFees, mateId.getValue());
         mateFeeRepository.saveAll(mateFeeEntities);
     }
 
@@ -55,5 +55,10 @@ public class MatePersistenceAdapter implements LoadMatePort {
     @Override
     public void deleteAllMateByWriter(AccountId id) {
         mateRepository.deleteAllByWriterId(id.getValue());
+    }
+
+    @Override
+    public void deleteAllMateFeeByMateId(MateId id) {
+        mateFeeRepository.deleteAllByMateId(id.getValue());
     }
 }

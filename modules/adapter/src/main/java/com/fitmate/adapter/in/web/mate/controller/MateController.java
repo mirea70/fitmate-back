@@ -2,6 +2,7 @@ package com.fitmate.adapter.in.web.mate.controller;
 
 import com.fitmate.adapter.WebAdapter;
 import com.fitmate.adapter.in.web.mate.dto.MateCreateRequest;
+import com.fitmate.adapter.in.web.mate.dto.MateModifyRequest;
 import com.fitmate.adapter.in.web.mate.mapper.MateWebAdapterMapper;
 import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.port.in.mate.usecase.MateUseCasePort;
@@ -30,7 +31,7 @@ public class MateController {
     private final MateUseCasePort mateUseCasePort;
     private final MateWebAdapterMapper mateWebAdapterMapper;
 
-    @Operation(summary = "메이트 글 작성", description = "메이트 글 작성 API")
+    @Operation(summary = "메이트 글 작성", description = "introImageIds를 입력하려면 파일 관리 API를 통한 파일 업로드를 선행해주세요.")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@Valid @RequestBody MateCreateRequest createRequest,
                                       @AuthenticationPrincipal AuthDetails authDetails) throws Exception {
@@ -55,5 +56,20 @@ public class MateController {
         List<MateSimpleResponse> responses = mateUseCasePort.findAllMate(lastMatingId, limit);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responses);
+    }
+
+    @Operation(summary = "메이트 글 수정", description = """
+            요청 Body에는 수정 하고싶은 내용만 포함시키면됩니다.
+            
+            <U>단, introImageIds 및 참여비 리스트의 경우 기존 값을 함께 포함시켜야 합니다.</U>
+            
+            **[참고]** : profileImageId를 입력하려면 파일 관리 API를 통한 파일 업로드를 선행해주세요.
+            """)
+    @PatchMapping(path = "/{mateId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> register(@PathVariable Long mateId,
+                                      @Valid @RequestBody MateModifyRequest modifyRequest,
+                                      @AuthenticationPrincipal AuthDetails authDetails) throws Exception {
+        mateUseCasePort.modifyMate(mateWebAdapterMapper.requestToCommand(mateId, modifyRequest, authDetails.getAccount().getId()));
+        return ResponseEntity.ok().build();
     }
 }

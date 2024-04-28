@@ -1,6 +1,6 @@
 package com.fitmate.port.out.chat.dto;
 
-import com.fitmate.domain.chat.vo.RoomType;
+import com.fitmate.domain.chat.enums.RoomType;
 import lombok.Getter;
 
 @Getter

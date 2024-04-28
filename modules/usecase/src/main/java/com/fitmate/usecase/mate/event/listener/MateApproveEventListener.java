@@ -1,8 +1,8 @@
 package com.fitmate.usecase.mate.event.listener;
 
-import com.fitmate.domain.account.aggregate.Account;
-import com.fitmate.domain.account.aggregate.Notice;
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.notice.Notice;
+import com.fitmate.domain.account.AccountId;
 import com.fitmate.port.out.account.LoadAccountPort;
 import com.fitmate.port.out.notice.LoadNoticePort;
 import com.fitmate.port.out.sms.LoadSmsPort;
@@ -37,7 +37,7 @@ public class MateApproveEventListener {
     }
 
     private void sendNotice(MateApproveEventDto eventDto, String content) {
-        Notice notice = Notice.withMatingId(
+        Notice notice = Notice.withMateId(
                 eventDto.getApplierId(),
                 eventDto.getMateId(),
                 content

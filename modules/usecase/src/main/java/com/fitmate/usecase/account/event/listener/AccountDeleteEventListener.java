@@ -1,6 +1,6 @@
 package com.fitmate.usecase.account.event.listener;
 
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.account.AccountId;
 import com.fitmate.port.out.follow.LoadFollowPort;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;

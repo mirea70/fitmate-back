@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface MateFeeRepository extends JpaRepository<MateFeeJpaEntity, Long> {
     List<MateFeeJpaEntity> findAllByMateId(Long mateId);
+    void deleteAllByMateId(Long mateId);
 }

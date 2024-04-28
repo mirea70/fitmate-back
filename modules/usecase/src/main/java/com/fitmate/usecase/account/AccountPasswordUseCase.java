@@ -1,7 +1,7 @@
 package com.fitmate.usecase.account;
 
-import com.fitmate.domain.account.aggregate.Account;
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.AccountId;
 import com.fitmate.port.in.account.usecase.AccountPasswordUseCasePort;
 import com.fitmate.port.out.account.LoadAccountPort;
 import com.fitmate.domain.error.exceptions.NotMatchException;

@@ -1,6 +1,6 @@
 package com.fitmate.port.out.follow;
 
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.account.AccountId;
 
 import java.util.List;
 

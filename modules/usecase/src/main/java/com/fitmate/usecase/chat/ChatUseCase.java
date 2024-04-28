@@ -1,13 +1,13 @@
 package com.fitmate.usecase.chat;
 
-import com.fitmate.domain.account.aggregate.Account;
-import com.fitmate.domain.account.vo.AccountId;
-import com.fitmate.domain.chat.aggregate.ChatMessage;
-import com.fitmate.domain.chat.aggregate.ChatRoom;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.AccountId;
+import com.fitmate.domain.chat.message.ChatMessage;
+import com.fitmate.domain.chat.room.ChatRoom;
 import com.fitmate.domain.error.exceptions.DuplicatedException;
 import com.fitmate.domain.error.results.DuplicatedErrorResult;
-import com.fitmate.domain.mate.aggregate.Mate;
-import com.fitmate.domain.mate.vo.MateId;
+import com.fitmate.domain.mate.Mate;
+import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.chat.dto.ChatMessageCommand;
 import com.fitmate.port.in.chat.dto.ChatRoomCreateDmCommand;
 import com.fitmate.port.in.chat.dto.ChatRoomCreateGroupCommand;

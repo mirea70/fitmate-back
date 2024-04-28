@@ -1,9 +1,9 @@
 package com.fitmate.adapter.in.web.mate.dto;
 
-import com.fitmate.domain.mate.vo.FitCategory;
-import com.fitmate.domain.mate.vo.GatherType;
-import com.fitmate.domain.mate.vo.MateFee;
-import com.fitmate.domain.mate.vo.PermitGender;
+import com.fitmate.domain.mate.enums.FitCategory;
+import com.fitmate.domain.mate.enums.GatherType;
+import com.fitmate.domain.mate.MateFee;
+import com.fitmate.domain.mate.enums.PermitGender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.Set;
 
 @Getter
 @AllArgsConstructor
-@Schema(description = "메이트 모집 작성 요청 DTO")
+@Schema(description = "메이트 글 요청 DTO")
 public class MateCreateRequest {
     @Schema(description = "운동 종류", example = "FITNESS")
     @NotNull(message = "카테고리 입력은 필수입니다.")

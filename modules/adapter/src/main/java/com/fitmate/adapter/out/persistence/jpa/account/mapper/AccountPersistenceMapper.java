@@ -1,8 +1,9 @@
 package com.fitmate.adapter.out.persistence.jpa.account.mapper;
 
 import com.fitmate.adapter.out.persistence.jpa.account.entity.AccountJpaEntity;
-import com.fitmate.domain.account.aggregate.Account;
-import com.fitmate.domain.account.vo.*;
+import com.fitmate.domain.account.*;
+import com.fitmate.domain.account.enums.AccountRole;
+import com.fitmate.domain.account.enums.Gender;
 import org.springframework.stereotype.Component;
 
 @Component

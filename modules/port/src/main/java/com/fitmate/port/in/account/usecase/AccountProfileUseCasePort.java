@@ -1,6 +1,6 @@
 package com.fitmate.port.in.account.usecase;
 
-import com.fitmate.domain.mate.vo.ApproveStatus;
+import com.fitmate.domain.mate.enums.ApproveStatus;
 import com.fitmate.port.in.account.command.AccountJoinCommand;
 import com.fitmate.port.in.account.command.AccountModifyCommand;
 import com.fitmate.port.out.account.AccountProfileResponse;

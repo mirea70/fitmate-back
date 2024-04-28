@@ -1,7 +1,7 @@
 package com.fitmate.port.out.notice;
 
-import com.fitmate.domain.account.aggregate.Notice;
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.notice.Notice;
+import com.fitmate.domain.account.AccountId;
 
 import java.util.List;
 

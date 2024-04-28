@@ -1,14 +1,18 @@
 package com.fitmate.adapter.out.persistence.jpa.mate.mapper;
 
+import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateApplySimpleJpaResponse;
 import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateQuestionJpaResponse;
-import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateRequestJpaEntity;
-import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateRequestSimpleJpaResponse;
+import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateApplyJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateSimpleJpaResponse;
 import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateFeeJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateJpaEntity;
-import com.fitmate.domain.mate.aggregate.Mate;
-import com.fitmate.domain.mate.aggregate.MateRequest;
-import com.fitmate.domain.mate.vo.*;
+import com.fitmate.domain.mate.*;
+import com.fitmate.domain.mate.enums.ApproveStatus;
+import com.fitmate.domain.mate.enums.FitCategory;
+import com.fitmate.domain.mate.enums.GatherType;
+import com.fitmate.domain.mate.enums.PermitGender;
+import com.fitmate.domain.mate.apply.MateApply;
+import com.fitmate.domain.mate.apply.MateApplyId;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
 import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
@@ -51,7 +55,7 @@ public class MatePersistenceMapper {
     public MateFeeJpaEntity domainToEntity(MateFee mateFee, Long mateId) {
 
         return new MateFeeJpaEntity(
-                null,
+                mateFee.getId() != null ? mateFee.getId().getValue() : null,
                 mateId,
                 mateFee.getName(),
                 mateFee.getFee()
@@ -77,7 +81,8 @@ public class MatePersistenceMapper {
         );
 
         List<MateFee> mateFees = mateFeeEntities.stream()
-                .map(mateFeeJpaEntity ->  new MateFee(
+                .map(mateFeeJpaEntity ->  MateFee.withId(
+                        new MateFeeId(mateFeeJpaEntity.getId()),
                         mateFeeJpaEntity.getMateId(),
                         mateFeeJpaEntity.getName(),
                         mateFeeJpaEntity.getFee()
@@ -105,21 +110,21 @@ public class MatePersistenceMapper {
         );
     }
 
-    public MateRequestJpaEntity domainToEntity(MateRequest mateRequest) {
-        return new MateRequestJpaEntity(
-                mateRequest.getId() != null ? mateRequest.getId().getValue() : null,
-                mateRequest.getComeAnswer(),
-                mateRequest.getMateId(),
-                mateRequest.getApproveStatus().name(),
-                mateRequest.getApplierId(),
-                mateRequest.getCreatedAt(),
-                mateRequest.getUpdatedAt()
+    public MateApplyJpaEntity domainToEntity(MateApply mateApply) {
+        return new MateApplyJpaEntity(
+                mateApply.getId() != null ? mateApply.getId().getValue() : null,
+                mateApply.getComeAnswer(),
+                mateApply.getMateId(),
+                mateApply.getApproveStatus().name(),
+                mateApply.getApplierId(),
+                mateApply.getCreatedAt(),
+                mateApply.getUpdatedAt()
         );
     }
 
-    public MateRequest entityToDomain(MateRequestJpaEntity mateRequestEntity) {
-        return MateRequest.withId(
-                new MateRequestId(mateRequestEntity.getId()),
+    public MateApply entityToDomain(MateApplyJpaEntity mateRequestEntity) {
+        return MateApply.withId(
+                new MateApplyId(mateRequestEntity.getId()),
                 mateRequestEntity.getComeAnswer(),
                 mateRequestEntity.getMateId(),
                 mateRequestEntity.getApplierId(),
@@ -161,7 +166,7 @@ public class MatePersistenceMapper {
         );
     }
 
-    public MateRequestSimpleResponse jpaResponseToResponse(MateRequestSimpleJpaResponse jpaResponse) {
+    public MateRequestSimpleResponse jpaResponseToResponse(MateApplySimpleJpaResponse jpaResponse) {
 
         FitPlace fitPlace = new FitPlace(
                 jpaResponse.getFitPlaceName(),
@@ -181,7 +186,7 @@ public class MatePersistenceMapper {
         );
     }
 
-    public List<MateRequestSimpleResponse> jpaResponsesToResponsesForMateRequest(List<MateRequestSimpleJpaResponse> jpaResponses) {
+    public List<MateRequestSimpleResponse> jpaResponsesToResponsesForMateRequest(List<MateApplySimpleJpaResponse> jpaResponses) {
         return jpaResponses.stream()
                 .map(this::jpaResponseToResponse)
                 .toList();

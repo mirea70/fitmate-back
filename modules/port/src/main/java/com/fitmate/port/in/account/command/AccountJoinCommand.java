@@ -1,7 +1,7 @@
 package com.fitmate.port.in.account.command;
 
-import com.fitmate.domain.account.vo.AccountRole;
-import com.fitmate.domain.account.vo.Gender;
+import com.fitmate.domain.account.enums.AccountRole;
+import com.fitmate.domain.account.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

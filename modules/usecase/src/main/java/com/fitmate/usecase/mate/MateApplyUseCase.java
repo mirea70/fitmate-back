@@ -2,11 +2,11 @@ package com.fitmate.usecase.mate;
 
 import com.fitmate.domain.error.exceptions.NotMatchException;
 import com.fitmate.domain.error.results.NotMatchErrorResult;
-import com.fitmate.domain.mate.aggregate.Mate;
-import com.fitmate.domain.mate.aggregate.MateRequest;
-import com.fitmate.domain.mate.vo.ApproveStatus;
-import com.fitmate.domain.mate.vo.GatherType;
-import com.fitmate.domain.mate.vo.MateId;
+import com.fitmate.domain.mate.Mate;
+import com.fitmate.domain.mate.apply.MateApply;
+import com.fitmate.domain.mate.enums.ApproveStatus;
+import com.fitmate.domain.mate.enums.GatherType;
+import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.mate.command.MateApplyCommand;
 import com.fitmate.port.in.mate.command.MateApproveCommand;
 import com.fitmate.port.in.mate.usecase.MateApplyUseCasePort;
@@ -63,8 +63,8 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
             approveStatus = ApproveStatus.APPROVE;
         else
             approveStatus = ApproveStatus.WAIT;
-        MateRequest mateRequest = mateUseCaseMapper.commandToDomain(mateApplyCommand, approveStatus);
-        loadMateRequestPort.saveMateRequestEntity(mateRequest);
+        MateApply mateApply = mateUseCaseMapper.commandToDomain(mateApplyCommand, approveStatus);
+        loadMateRequestPort.saveMateRequestEntity(mateApply);
 
         return approveStatus;
     }
@@ -95,9 +95,9 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
     }
 
     private void doApproveMateRequest(Long mateId, Long applierId) {
-        MateRequest mateRequest = loadMateRequestPort.loadMateRequestEntity(mateId, applierId);
-        mateRequest.changeToApprove();
-        loadMateRequestPort.saveMateRequestEntity(mateRequest);
+        MateApply mateApply = loadMateRequestPort.loadMateRequestEntity(mateId, applierId);
+        mateApply.changeToApprove();
+        loadMateRequestPort.saveMateRequestEntity(mateApply);
     }
 
     private void publishMateApproveEvent(Mate mate, Long applierId) {

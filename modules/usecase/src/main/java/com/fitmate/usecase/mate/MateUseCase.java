@@ -1,8 +1,11 @@
 package com.fitmate.usecase.mate;
 
-import com.fitmate.domain.mate.aggregate.Mate;
-import com.fitmate.domain.mate.vo.MateId;
+import com.fitmate.domain.error.exceptions.NotMatchException;
+import com.fitmate.domain.error.results.NotMatchErrorResult;
+import com.fitmate.domain.mate.Mate;
+import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.mate.command.MateCreateCommand;
+import com.fitmate.port.in.mate.command.MateModifyCommand;
 import com.fitmate.port.in.mate.usecase.MateUseCasePort;
 import com.fitmate.port.out.file.LoadAttachFilePort;
 import com.fitmate.port.out.mate.LoadMatePort;
@@ -32,7 +35,7 @@ public class MateUseCase implements MateUseCasePort {
             loadAttachFilePort.checkExistFiles(introImageIds);
         Mate mate = mateUseCaseMapper.commandToDomain(mateCreateCommand);
         Long mateEntityId = loadMatePort.saveMateEntity(mate);
-        loadMatePort.saveMateFeeEntities(mate.getMateFees(), mateEntityId);
+        loadMatePort.saveMateFeeEntities(mate.getMateFees(), new MateId(mateEntityId));
     }
 
     @Override
@@ -46,5 +49,39 @@ public class MateUseCase implements MateUseCasePort {
     @Transactional(readOnly = true)
     public List<MateSimpleResponse> findAllMate(Long lastMatingId, Integer limit) {
         return loadMatePort.loadMates(lastMatingId, limit);
+    }
+
+    @Override
+    public void modifyMate(MateModifyCommand command) {
+        Mate mate = loadMatePort.loadMateEntity(new MateId(command.getMateId()));
+        validateModifyCommand(command, mate);
+
+        mate.update(
+                command.getFitCategory(),
+                command.getTitle(),
+                command.getIntroduction(),
+                command.getIntroImageIds(),
+                command.getMateAt(),
+                command.getFitPlaceName(),
+                command.getFitPlaceAddress(),
+                command.getGatherType(),
+                command.getPermitGender(),
+                command.getPermitMaxAge(),
+                command.getPermitMinAge(),
+                command.getPermitPeopleCnt(),
+                command.getMateFees(),
+                command.getApplyQuestion()
+        );
+        loadMatePort.saveMateEntity(mate);
+        loadMatePort.deleteAllMateFeeByMateId(mate.getId());
+        loadMatePort.saveMateFeeEntities(mate.getMateFees(), mate.getId());
+    }
+
+    private void validateModifyCommand(MateModifyCommand command, Mate mate) {
+        if(!mate.getWriterId().equals(command.getWriterId()))
+            throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);
+        Set<Long> introImageIds = command.getIntroImageIds();
+        if(introImageIds != null && !introImageIds.isEmpty())
+            loadAttachFilePort.checkExistFiles(introImageIds);
     }
 }

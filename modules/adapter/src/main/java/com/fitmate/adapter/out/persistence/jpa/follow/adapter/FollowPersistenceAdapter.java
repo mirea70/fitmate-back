@@ -6,7 +6,7 @@ import com.fitmate.adapter.out.persistence.jpa.follow.entity.FollowJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.follow.mapper.FollowPersistenceMapper;
 import com.fitmate.adapter.out.persistence.jpa.follow.repository.FollowQueryRepository;
 import com.fitmate.adapter.out.persistence.jpa.follow.repository.FollowRepository;
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.account.AccountId;
 import com.fitmate.port.out.follow.FollowDetailResponse;
 import com.fitmate.port.out.follow.LoadFollowPort;
 import lombok.RequiredArgsConstructor;

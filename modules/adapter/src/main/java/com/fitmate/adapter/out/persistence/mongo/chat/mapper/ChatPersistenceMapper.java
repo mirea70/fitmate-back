@@ -2,10 +2,10 @@ package com.fitmate.adapter.out.persistence.mongo.chat.mapper;
 
 import com.fitmate.adapter.out.persistence.mongo.chat.entity.ChatMessageMongoEntity;
 import com.fitmate.adapter.out.persistence.mongo.chat.entity.ChatRoomMongoEntity;
-import com.fitmate.domain.chat.aggregate.ChatMessage;
-import com.fitmate.domain.chat.aggregate.ChatRoom;
-import com.fitmate.domain.chat.vo.ChatRoomId;
-import com.fitmate.domain.chat.vo.RoomType;
+import com.fitmate.domain.chat.message.ChatMessage;
+import com.fitmate.domain.chat.room.ChatRoom;
+import com.fitmate.domain.chat.room.ChatRoomId;
+import com.fitmate.domain.chat.enums.RoomType;
 import com.fitmate.port.out.chat.dto.ChatMessageResponse;
 import org.springframework.stereotype.Component;
 

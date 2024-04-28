@@ -1,7 +1,11 @@
 package com.fitmate.usecase.account.mapper;
 
-import com.fitmate.domain.account.aggregate.Account;
-import com.fitmate.domain.account.vo.*;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.Password;
+import com.fitmate.domain.account.PrivateInfo;
+import com.fitmate.domain.account.ProfileInfo;
+import com.fitmate.domain.account.enums.AccountRole;
+import com.fitmate.domain.account.enums.Gender;
 import com.fitmate.port.in.account.command.AccountJoinCommand;
 import com.fitmate.port.out.account.AccountProfileResponse;
 import lombok.RequiredArgsConstructor;

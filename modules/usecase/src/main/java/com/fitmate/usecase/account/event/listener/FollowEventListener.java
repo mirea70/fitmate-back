@@ -1,6 +1,6 @@
 package com.fitmate.usecase.account.event.listener;
 
-import com.fitmate.domain.account.aggregate.Notice;
+import com.fitmate.domain.notice.Notice;
 import com.fitmate.port.out.notice.LoadNoticePort;
 import com.fitmate.usecase.account.event.FollowCancelEvent;
 import com.fitmate.usecase.account.event.FollowEvent;
@@ -27,7 +27,7 @@ public class FollowEventListener {
         FollowEventDto eventDto = event.getEventDto();
 
         String content = eventDto.getTargetNickName() + FOLLOW_MSG;
-        Notice notice = Notice.withOutMatingId(eventDto.getFromAccountId(), content);
+        Notice notice = Notice.withOutMateId(eventDto.getFromAccountId(), content);
         loadNoticePort.saveNoticeEntity(notice);
     }
 
@@ -38,7 +38,7 @@ public class FollowEventListener {
         FollowEventDto eventDto = event.getEventDto();
 
         String content = eventDto.getTargetNickName() + FOLLOW_CANCEL_MSG;
-        Notice notice = Notice.withOutMatingId(eventDto.getFromAccountId(), content);
+        Notice notice = Notice.withOutMateId(eventDto.getFromAccountId(), content);
         loadNoticePort.saveNoticeEntity(notice);
     }
 }

@@ -1,10 +1,10 @@
 package com.fitmate.usecase.mate.mapper;
 
-import com.fitmate.domain.mate.aggregate.Mate;
-import com.fitmate.domain.mate.aggregate.MateRequest;
-import com.fitmate.domain.mate.vo.ApproveStatus;
-import com.fitmate.domain.mate.vo.FitPlace;
-import com.fitmate.domain.mate.vo.PermitAges;
+import com.fitmate.domain.mate.Mate;
+import com.fitmate.domain.mate.apply.MateApply;
+import com.fitmate.domain.mate.enums.ApproveStatus;
+import com.fitmate.domain.mate.FitPlace;
+import com.fitmate.domain.mate.PermitAges;
 import com.fitmate.port.in.mate.command.MateApplyCommand;
 import com.fitmate.port.in.mate.command.MateCreateCommand;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
@@ -70,8 +70,8 @@ public class MateUseCaseMapper {
         );
     }
 
-    public MateRequest commandToDomain(MateApplyCommand command, ApproveStatus approveStatus) {
-        return MateRequest.withoutId(
+    public MateApply commandToDomain(MateApplyCommand command, ApproveStatus approveStatus) {
+        return MateApply.withoutId(
                 command.getComeAnswer(),
                 command.getMateId(),
                 command.getApplierId(),

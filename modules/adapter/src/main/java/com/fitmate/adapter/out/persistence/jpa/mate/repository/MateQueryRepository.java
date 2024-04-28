@@ -1,8 +1,5 @@
 package com.fitmate.adapter.out.persistence.jpa.mate.repository;
 
-import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateQuestionJpaResponse;
-import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateRequestSimpleJpaResponse;
-import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateSimpleJpaResponse;
 import com.fitmate.adapter.out.persistence.jpa.mate.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,7 +10,6 @@ import java.util.List;
 
 import static com.fitmate.adapter.out.persistence.jpa.account.entity.QAccountJpaEntity.accountJpaEntity;
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateJpaEntity.mateJpaEntity;
-import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateRequestJpaEntity.mateRequestJpaEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -60,23 +56,24 @@ public class MateQueryRepository {
                 .fetchOne();
     }
 
-    public List<MateRequestSimpleJpaResponse> getMyMateRequests(List<Long> matingIds) {
-        return queryFactory
-                .select(new QMateRequestSimpleJpaResponse(
-                        mateJpaEntity.id,
-                        mateJpaEntity.introImageIds,
-                        mateJpaEntity.title,
-                        mateJpaEntity.mateAt,
-                        mateJpaEntity.fitPlaceName,
-                        mateJpaEntity.fitPlaceAddress,
-                        mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds,
-                        mateJpaEntity.totalFee,
-                        mateRequestJpaEntity.createdAt))
-                .from(mateJpaEntity)
-                .innerJoin(mateRequestJpaEntity).on(mateJpaEntity.id.eq(mateRequestJpaEntity.mateId))
-                .where(mateJpaEntity.id.in(matingIds))
-                .orderBy(mateRequestJpaEntity.createdAt.desc())
-                .fetch();
+    public List<MateApplySimpleJpaResponse> getMyMateRequests(List<Long> matingIds) {
+        return null;
+//        return queryFactory
+//                .select(new QMateRequestSimpleJpaResponse(
+//                        mateJpaEntity.id,
+//                        mateJpaEntity.introImageIds,
+//                        mateJpaEntity.title,
+//                        mateJpaEntity.mateAt,
+//                        mateJpaEntity.fitPlaceName,
+//                        mateJpaEntity.fitPlaceAddress,
+//                        mateJpaEntity.permitPeopleCnt,
+//                        mateJpaEntity.approvedAccountIds,
+//                        mateJpaEntity.totalFee,
+//                        mateRequestJpaEntity.createdAt))
+//                .from(mateJpaEntity)
+//                .innerJoin(mateRequestJpaEntity).on(mateJpaEntity.id.eq(mateRequestJpaEntity.mateId))
+//                .where(mateJpaEntity.id.in(matingIds))
+//                .orderBy(mateRequestJpaEntity.createdAt.desc())
+//                .fetch();
     }
 }

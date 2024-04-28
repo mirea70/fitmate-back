@@ -7,9 +7,9 @@ import com.fitmate.adapter.out.persistence.mongo.chat.mapper.ChatPersistenceMapp
 import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatMessageRepository;
 import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatRoomQueryRepository;
 import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatRoomRepository;
-import com.fitmate.domain.chat.aggregate.ChatMessage;
-import com.fitmate.domain.chat.aggregate.ChatRoom;
-import com.fitmate.domain.mate.vo.MateId;
+import com.fitmate.domain.chat.message.ChatMessage;
+import com.fitmate.domain.chat.room.ChatRoom;
+import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.out.chat.LoadChatPort;
 import com.fitmate.port.out.chat.dto.ChatMessageResponse;
 import com.fitmate.port.out.chat.dto.ChatRoomListItemResponse;

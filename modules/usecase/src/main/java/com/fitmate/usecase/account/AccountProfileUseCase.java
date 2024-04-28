@@ -1,10 +1,10 @@
 package com.fitmate.usecase.account;
 
-import com.fitmate.domain.account.aggregate.Account;
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.AccountId;
 import com.fitmate.domain.error.exceptions.DuplicatedException;
 import com.fitmate.domain.error.results.DuplicatedErrorResult;
-import com.fitmate.domain.mate.vo.ApproveStatus;
+import com.fitmate.domain.mate.enums.ApproveStatus;
 import com.fitmate.port.in.account.command.AccountCheckCommand;
 import com.fitmate.port.in.account.command.AccountJoinCommand;
 import com.fitmate.port.in.account.command.AccountModifyCommand;

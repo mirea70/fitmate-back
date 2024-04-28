@@ -1,7 +1,7 @@
 package com.fitmate.port.out.account;
 
-import com.fitmate.domain.account.aggregate.Account;
-import com.fitmate.domain.account.vo.AccountId;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.AccountId;
 
 public interface LoadAccountPort {
     Account loadAccountEntity(AccountId id);

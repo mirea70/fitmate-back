@@ -27,7 +27,11 @@ public class AccountController {
     private final AccountProfileUseCasePort accountProfileUseCasePort;
     private final AccountWebAdapterMapper accountWebAdapterMapper;
 
-    @Operation(summary = "회원가입", description = "회원가입 API : 토큰 필요 X")
+    @Operation(summary = "회원가입", description = """
+            회원가입 API : 토큰 필요 X
+            
+            **[참고]** : profileImageId를 입력하려면 파일 관리 API를 통한 파일 업로드를 선행해주세요.
+            """)
     @PostMapping(path = "/join", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> join(@Valid @RequestBody AccountJoinRequest joinRequest) throws Exception {
 
