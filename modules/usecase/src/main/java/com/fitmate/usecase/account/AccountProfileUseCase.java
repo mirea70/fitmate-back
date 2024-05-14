@@ -151,4 +151,18 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
         if(isDuplicated)
             throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_ACCOUNT_JOIN);
     }
+
+    public void checkDuplicatedLoginName(String loginName) {
+        boolean isDuplicated = loadAccountPort.checkDuplicatedLoginName(loginName);
+
+        if(isDuplicated)
+            throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_ACCOUNT_JOIN);
+    }
+
+    public void checkDuplicatedPhone(String phone) {
+        boolean isDuplicated = loadAccountPort.checkDuplicatedPhone(phone);
+
+        if(isDuplicated)
+            throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_ACCOUNT_JOIN);
+    }
 }

@@ -17,6 +17,7 @@ import javax.validation.constraints.Size;
 public class AccountJoinRequest {
 
     @Schema(description = "로그인 ID (중복 불가)", example = "abc2")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{1,20}$")
     @NotNull(message = "로그인 ID 입력은 필수입니다.")
     private String loginName;
 

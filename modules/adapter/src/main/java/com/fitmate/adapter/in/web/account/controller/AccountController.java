@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 @WebAdapter
 @RestController
@@ -36,6 +37,24 @@ public class AccountController {
     public ResponseEntity<?> join(@Valid @RequestBody AccountJoinRequest joinRequest) throws Exception {
 
         accountProfileUseCasePort.join(accountWebAdapterMapper.requestToCommand(joinRequest));
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "로그인 ID 중복체크", description = "회원가입 시, 로그인 ID 중복 체크 API")
+    @GetMapping(path = "/check/loginName")
+    public ResponseEntity<?> checkDuplicatedLoginName(@Parameter(description = "로그인 ID : 2~20자의 영문+숫자")
+                                                          @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{1,20}$")
+                                                          @RequestParam String loginName) {
+        accountProfileUseCasePort.checkDuplicatedLoginName(loginName);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "휴대폰번호 중복체크", description = "회원가입 시, 휴대폰번호 중복 체크 API")
+    @GetMapping(path = "/check/phone")
+    public ResponseEntity<?> checkDuplicatedPhone(@Parameter(description = "휴대폰번호 : 01011112222 (11자)")
+                                                      @Pattern(regexp = "^010\\d{4}\\d{4}$")
+                                                      @RequestParam String phone) {
+        accountProfileUseCasePort.checkDuplicatedPhone(phone);
         return ResponseEntity.ok().build();
     }
 

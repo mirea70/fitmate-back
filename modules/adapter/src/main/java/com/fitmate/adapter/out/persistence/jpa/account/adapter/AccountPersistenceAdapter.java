@@ -31,6 +31,16 @@ public class AccountPersistenceAdapter implements LoadAccountPort {
     }
 
     @Override
+    public boolean checkDuplicatedLoginName(String loginName) {
+        return accountRepository.existsByLoginName(loginName);
+    }
+
+    @Override
+    public boolean checkDuplicatedPhone(String phone) {
+        return accountRepository.existsByPhone(phone);
+    }
+
+    @Override
     public Account loadAccountEntity(AccountId id) {
         AccountJpaEntity accountEntity = accountRepository.getById(id.getValue());
         return accountPersistenceMapper.entityToDomain(accountEntity);

@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface AccountProfileUseCasePort {
     void join(AccountJoinCommand accountJoinCommand) throws IOException;
+    void checkDuplicatedLoginName(String loginName);
+    void checkDuplicatedPhone(String phone);
     AccountProfileResponse findAccount(Long accountId);
     void modify(AccountModifyCommand accountModifyCommand);
     void delete(Long accountId);
