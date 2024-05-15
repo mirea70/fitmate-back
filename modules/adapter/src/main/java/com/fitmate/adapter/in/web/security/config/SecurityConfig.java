@@ -88,6 +88,8 @@ public class SecurityConfig {
                 "/api/account/join",
                 "/api/account/check/phone",
                 "/api/account/check/loginName",
+                "/api/sms/request/code",
+                "/api/sms/check/code",
         };
     }
 }
