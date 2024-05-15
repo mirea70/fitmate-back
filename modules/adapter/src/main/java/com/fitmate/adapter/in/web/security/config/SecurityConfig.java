@@ -45,10 +45,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers(swaggerAuthMatchers()).permitAll()
-                .antMatchers("/api/account/join").permitAll()
-                .antMatchers("/check").permitAll()
+                .antMatchers(excludeApi()).permitAll()
                 .antMatchers("/api/**").authenticated()
-//                .antMatchers("/api/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
@@ -82,6 +80,14 @@ public class SecurityConfig {
                 "/swagger-ui/**",
                 "/api-docs/**",
                 "/swagger-ui/index.html"
+        };
+    }
+
+    private String[] excludeApi() {
+        return new String[]{
+                "/api/account/join",
+                "/api/account/check/phone",
+                "/api/account/check/loginName",
         };
     }
 }
