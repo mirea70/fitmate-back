@@ -18,8 +18,8 @@ public class AccountWebAdapterMapper {
                 request.getPhone(),
                 request.getEmail(),
                 request.getRole(),
-                request.getGender(),
-                request.getProfileImageId());
+                request.getGender()
+        );
     }
 
     public AccountModifyCommand requestToCommand(Long accountId, AccountModifyRequest request) {

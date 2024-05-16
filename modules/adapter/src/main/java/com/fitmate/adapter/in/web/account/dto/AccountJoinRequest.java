@@ -60,7 +60,4 @@ public class AccountJoinRequest {
     @Schema(description = "유저 성별 정보: [MALE, FEMALE]", example = "MALE")
     @NotNull(message = "성별 입력은 필수입니다.")
     private Gender gender;
-
-    @Schema(description = "유저 프로필 이미지 식별 ID", example = "2")
-    private Long profileImageId;
 }

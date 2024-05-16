@@ -18,5 +18,4 @@ public class AccountJoinCommand implements AccountCheckCommand {
     private String email;
     private AccountRole role;
     private Gender gender;
-    private Long profileImageId;
 }

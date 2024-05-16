@@ -46,8 +46,6 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
 
     @Override
     public void join(AccountJoinCommand joinCommand) {
-        Long profileImageId = joinCommand.getProfileImageId();
-        if(profileImageId != null) loadAttachFilePort.checkExistFile(profileImageId);
         checkDuplicated(null, joinCommand);
 
         Account account = accountUseCaseMapper.commandToDomain(joinCommand);
