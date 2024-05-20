@@ -143,6 +143,14 @@ public class TokenProvider {
         return null;
     }
 
+    public String resolveToken(String rawToken) {
+
+        if(rawToken != null && rawToken.startsWith("Bearer")) {
+            return rawToken.replace("Bearer ", "");
+        }
+        return null;
+    }
+
     public static enum JwtCode {
         DENIED,
         ACCESS,

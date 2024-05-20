@@ -90,6 +90,7 @@ public class SecurityConfig {
                 "/api/account/check/loginName",
                 "/api/sms/request/code",
                 "/api/sms/check/code",
+                "/api/auth/refresh",
         };
     }
 }
