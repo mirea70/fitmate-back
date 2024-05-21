@@ -1,5 +1,6 @@
 package com.fitmate.adapter.in.web.security.config;
 
+import com.fitmate.adapter.in.web.security.error.CustomAuthenticationFailureHandler;
 import com.fitmate.adapter.in.web.security.error.JwtAccessDeniedHandler;
 import com.fitmate.adapter.in.web.security.error.JwtAuthenticationEntryPoint;
 import com.fitmate.adapter.in.web.security.error.TokenExpiredFilter;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +30,7 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtLogoutHandler jwtLogoutHandler;
     private final TokenExpiredFilter tokenExpiredFilter;
+    private final CustomAuthenticationFailureHandler failureHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -49,8 +52,7 @@ public class SecurityConfig {
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .formLogin()
-                .and()
+                .formLogin().disable()
                 .logout()
                 .addLogoutHandler(jwtLogoutHandler)
                 .logoutSuccessUrl("/");
@@ -62,7 +64,10 @@ public class SecurityConfig {
         public void configure(HttpSecurity httpSecurity) throws Exception {
             AuthenticationManager authenticationManager = httpSecurity.getSharedObject(AuthenticationManager.class);
             httpSecurity
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager, tokenProvider))
+                    .addFilterBefore(new JwtAuthenticationFilter("/login",
+                            authenticationManager,
+                            tokenProvider,
+                            failureHandler), UsernamePasswordAuthenticationFilter.class)
                     .addFilter(new JwtAuthorizationFilter(authenticationManager, tokenProvider));
         }
     }

@@ -6,10 +6,13 @@ import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.adapter.in.web.security.provider.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -18,12 +21,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@RequiredArgsConstructor
 @Slf4j
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public JwtAuthenticationFilter(String defaultFilterProcessesUrl,
+                                      AuthenticationManager authenticationManager,
+                                      TokenProvider tokenProvider,
+                                      AuthenticationFailureHandler failureHandler) {
+        super(defaultFilterProcessesUrl);
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+        this.setAuthenticationFailureHandler(failureHandler);
+    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {

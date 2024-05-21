@@ -6,6 +6,7 @@ import com.fitmate.adapter.out.persistence.jpa.account.repository.AccountReposit
 import com.fitmate.domain.error.exceptions.NotFoundException;
 import com.fitmate.domain.error.results.NotFoundErrorResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class AuthDetailsService implements UserDetailsService {
     @Override
     public AuthDetails loadUserByUsername(String loginName) throws UsernameNotFoundException {
         AccountJpaEntity accountEntity = accountRepository.findByLoginName(loginName).orElseThrow(
-                () -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
+                () -> new BadCredentialsException("존재하지 않는 로그인 ID입니다."));
         return new AuthDetails(accountEntity);
     }
 }
