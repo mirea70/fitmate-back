@@ -10,14 +10,16 @@ import com.fitmate.port.in.mate.command.MateCreateCommand;
 import com.fitmate.port.in.mate.command.MateModifyCommand;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class MateWebAdapterMapper {
-    public MateCreateCommand requestToCommand(MateCreateRequest request, Long writerId) {
+    public MateCreateCommand requestToCommand(MateCreateRequest request, Long writerId, Set<Long> introImageIds) {
         return new MateCreateCommand(
                 request.getFitCategory(),
                 request.getTitle(),
                 request.getIntroduction(),
-                request.getIntroImageIds(),
+                introImageIds,
                 request.getMateAt(),
                 request.getFitPlaceName(),
                 request.getFitPlaceAddress(),

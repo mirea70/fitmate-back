@@ -5,6 +5,10 @@ import com.fitmate.adapter.in.web.mate.dto.MateCreateRequest;
 import com.fitmate.adapter.in.web.mate.dto.MateModifyRequest;
 import com.fitmate.adapter.in.web.mate.mapper.MateWebAdapterMapper;
 import com.fitmate.adapter.in.web.security.dto.AuthDetails;
+import com.fitmate.adapter.out.persistence.jpa.file.adapter.AttachFilePersistenceAdapter;
+import com.fitmate.adapter.out.persistence.jpa.file.dto.FileResponse;
+import com.fitmate.domain.error.exceptions.LimitException;
+import com.fitmate.domain.error.results.LimitErrorResult;
 import com.fitmate.port.in.mate.usecase.MateUseCasePort;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
@@ -17,9 +21,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @WebAdapter
 @RestController
@@ -30,12 +37,19 @@ public class MateController {
 
     private final MateUseCasePort mateUseCasePort;
     private final MateWebAdapterMapper mateWebAdapterMapper;
+    private final AttachFilePersistenceAdapter filePersistenceAdapter;
 
-    @Operation(summary = "메이트 글 작성", description = "introImageIds를 입력하려면 파일 관리 API를 통한 파일 업로드를 선행해주세요.")
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> register(@Valid @RequestBody MateCreateRequest createRequest,
+    @Operation(summary = "메이트 글 작성", description = "Request body의 설명은 application/json 타입으로 봐주시고 테스트는 multipart/form-data 타입으로 실행해주세요.")
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> register(@Valid @RequestPart MateCreateRequest createRequest,
+                                      @RequestPart(required = false)
+                                      @Parameter(description = "소개 이미지 파일(최대 3개)")
+                                      List<MultipartFile> introImages,
                                       @AuthenticationPrincipal AuthDetails authDetails) throws Exception {
-        mateUseCasePort.registerMate(mateWebAdapterMapper.requestToCommand(createRequest, authDetails.getAccount().getId()));
+        if(introImages.size() > 3) throw new LimitException(LimitErrorResult.OVER_PERMIT_FILE_COUNT);
+        List<FileResponse> fileResponses = filePersistenceAdapter.uploadFiles(introImages);
+        Set<Long> introImageIds = fileResponses.stream().map(FileResponse::getAttachFileId).collect(Collectors.toSet());
+        mateUseCasePort.registerMate(mateWebAdapterMapper.requestToCommand(createRequest, authDetails.getAccount().getId(), introImageIds));
         return ResponseEntity.ok().build();
     }
 

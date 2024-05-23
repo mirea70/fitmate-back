@@ -52,7 +52,8 @@ public class SecurityConfig {
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .formLogin().disable()
+                .formLogin()
+                .and()
                 .logout()
                 .addLogoutHandler(jwtLogoutHandler)
                 .logoutSuccessUrl("/");

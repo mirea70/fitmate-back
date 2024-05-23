@@ -31,9 +31,6 @@ public class MateCreateRequest {
     @Schema(description = "소개글", example = "같이 운동하실 분")
     private String introduction;
 
-    @Schema(description = "메이트 소개 이미지 식별 ID 리스트", example = "[1,2,3]")
-    private Set<Long> introImageIds;
-
     @Schema(description = "운동 일자", example = "2024-03-11'T'14:00:00")
     @NotNull(message = "메이팅 일자 입력은 필수입니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
