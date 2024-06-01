@@ -46,9 +46,11 @@ public class MateController {
                                       @Parameter(description = "소개 이미지 파일(최대 3개)")
                                       List<MultipartFile> introImages,
                                       @AuthenticationPrincipal AuthDetails authDetails) throws Exception {
-        if(introImages.size() > 3) throw new LimitException(LimitErrorResult.OVER_PERMIT_FILE_COUNT);
+        if(introImages != null && introImages.size() > 3) throw new LimitException(LimitErrorResult.OVER_PERMIT_FILE_COUNT);
         List<FileResponse> fileResponses = filePersistenceAdapter.uploadFiles(introImages);
-        Set<Long> introImageIds = fileResponses.stream().map(FileResponse::getAttachFileId).collect(Collectors.toSet());
+        Set<Long> introImageIds = null;
+        if(fileResponses != null)
+            introImageIds = fileResponses.stream().map(FileResponse::getAttachFileId).collect(Collectors.toSet());
         mateUseCasePort.registerMate(mateWebAdapterMapper.requestToCommand(createRequest, authDetails.getAccount().getId(), introImageIds));
         return ResponseEntity.ok().build();
     }
