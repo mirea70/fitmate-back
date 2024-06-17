@@ -66,10 +66,10 @@ public class MateController {
     @Operation(summary = "메이팅 글 목록 조회", description = "메이팅 글 목록 조회 API : 무한 스크롤")
     @GetMapping
     public ResponseEntity<List<MateSimpleResponse>> findList(@Parameter(description = "최하단의 메이팅 식별 ID 값 : 이후 메이팅 글들이 추가노출됨", example = "2")
-                                                             @RequestParam Long lastMatingId,
+                                                             @RequestParam Long lastMateId,
                                                              @Parameter(description = "한번에 가져올 메이팅 글의 수", example = "10")
                                                              @RequestParam Integer limit) {
-        List<MateSimpleResponse> responses = mateUseCasePort.findAllMate(lastMatingId, limit);
+        List<MateSimpleResponse> responses = mateUseCasePort.findAllMate(lastMateId, limit);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responses);
     }

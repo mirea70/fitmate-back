@@ -34,6 +34,7 @@ public class MateUseCase implements MateUseCasePort {
         if(introImageIds != null && !introImageIds.isEmpty())
             loadAttachFilePort.checkExistFiles(introImageIds);
         Mate mate = mateUseCaseMapper.commandToDomain(mateCreateCommand);
+        mate.autoApproveWriter();
         Long mateEntityId = loadMatePort.saveMateEntity(mate);
         loadMatePort.saveMateFeeEntities(mate.getMateFees(), new MateId(mateEntityId));
     }

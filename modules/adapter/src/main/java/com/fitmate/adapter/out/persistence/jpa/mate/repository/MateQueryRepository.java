@@ -31,7 +31,8 @@ public class MateQueryRepository {
                         mateJpaEntity.permitMinAge,
                         mateJpaEntity.permitPeopleCnt,
                         mateJpaEntity.waitingAccountIds,
-                        mateJpaEntity.approvedAccountIds
+                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.introImageIds
                         ))
                 .from(mateJpaEntity)
                 .orderBy(mateJpaEntity.createdAt.desc())

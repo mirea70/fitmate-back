@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @AllArgsConstructor
@@ -22,6 +23,7 @@ public class MateSimpleResponse {
     private Integer permitMaxAge;
     private Integer permitMinAge;
     private Integer permitPeopleCnt;
-    private int waitingAccountCnt;
-    private int approvedAccountCnt;
+    private Set<Long> waitingAccountIds;
+    private Set<Long> approvedAccountIds;
+    private Set<Long> introImageIds;
 }

@@ -18,6 +18,7 @@ import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -147,8 +148,9 @@ public class MatePersistenceMapper {
                 jpaResponse.getPermitMaxAge(),
                 jpaResponse.getPermitMinAge(),
                 jpaResponse.getPermitPeopleCnt(),
-                jpaResponse.getWaitingAccountIds() != null ? jpaResponse.getWaitingAccountIds().size() : 0,
-                jpaResponse.getApprovedAccountIds() != null ? jpaResponse.getApprovedAccountIds().size() : 0
+                jpaResponse.getWaitingAccountIds() != null ? jpaResponse.getWaitingAccountIds() : new HashSet<Long>(),
+                jpaResponse.getApprovedAccountIds() != null ? jpaResponse.getApprovedAccountIds() : new HashSet<Long>(),
+                jpaResponse.getIntroImageIds() != null ? jpaResponse.getIntroImageIds() : new HashSet<Long>()
         );
     }
 

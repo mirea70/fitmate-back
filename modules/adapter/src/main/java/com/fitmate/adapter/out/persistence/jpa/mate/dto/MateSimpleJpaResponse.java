@@ -21,10 +21,10 @@ public class MateSimpleJpaResponse {
     private final Integer permitPeopleCnt;
     private final Set<Long> waitingAccountIds;
     private final Set<Long> approvedAccountIds;
+    private final Set<Long> introImageIds;
 
     @QueryProjection
-
-    public MateSimpleJpaResponse(Long id, String fitCategory, String title, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, String gatherType, String permitGender, Integer permitMaxAge, Integer permitMinAge, Integer permitPeopleCnt, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds) {
+    public MateSimpleJpaResponse(Long id, String fitCategory, String title, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, String gatherType, String permitGender, Integer permitMaxAge, Integer permitMinAge, Integer permitPeopleCnt, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds, Set<Long> introImageIds) {
         this.id = id;
         this.fitCategory = fitCategory;
         this.title = title;
@@ -38,5 +38,6 @@ public class MateSimpleJpaResponse {
         this.permitPeopleCnt = permitPeopleCnt;
         this.waitingAccountIds = waitingAccountIds;
         this.approvedAccountIds = approvedAccountIds;
+        this.introImageIds = introImageIds;
     }
 }

@@ -161,6 +161,11 @@ public class Mate {
         this.approvedAccountIds.add(accountId);
     }
 
+    public void autoApproveWriter() {
+        if(this.approvedAccountIds == null) this.approvedAccountIds = new HashSet<>();
+        this.approvedAccountIds.add(this.writerId);
+    }
+
     private void checkForApprove(Long accountId) {
         if(accountId == null)
             throw new IllegalArgumentException("accountId 값이 존재해야 합니다.");
