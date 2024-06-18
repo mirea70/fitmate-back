@@ -20,23 +20,22 @@ public class MateQueryRepository {
         return  queryFactory
                 .select(new QMateSimpleJpaResponse(
                         mateJpaEntity.id,
+                        mateJpaEntity.introImageIds,
+                        accountJpaEntity.profileImageId,
+                        accountJpaEntity.nickName,
                         mateJpaEntity.fitCategory,
                         mateJpaEntity.title,
-                        mateJpaEntity.mateAt,
-                        mateJpaEntity.fitPlaceName,
                         mateJpaEntity.fitPlaceAddress,
+                        mateJpaEntity.mateAt,
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
-                        mateJpaEntity.permitMaxAge,
-                        mateJpaEntity.permitMinAge,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.waitingAccountIds,
-                        mateJpaEntity.approvedAccountIds,
-                        mateJpaEntity.introImageIds
+                        mateJpaEntity.approvedAccountIds
                         ))
                 .from(mateJpaEntity)
-                .orderBy(mateJpaEntity.createdAt.desc())
+                .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
                 .where(afterLastMatingId(lastMatingId))
+                .orderBy(mateJpaEntity.createdAt.desc())
                 .limit(limit)
                 .fetch();
     }

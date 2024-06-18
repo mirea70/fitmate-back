@@ -1,5 +1,8 @@
 package com.fitmate.adapter.out.persistence.jpa.mate.dto;
 
+import com.fitmate.domain.mate.enums.FitCategory;
+import com.fitmate.domain.mate.enums.GatherType;
+import com.fitmate.domain.mate.enums.PermitGender;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
@@ -9,35 +12,39 @@ import java.util.Set;
 @Getter
 public class MateSimpleJpaResponse {
     private final Long id;
+    private final Long thumbnailImageId;
+    private final Long writerImageId;
+    private final String writerNickName;
     private final String fitCategory;
     private final String title;
-    private final LocalDateTime mateAt;
-    private final String fitPlaceName;
     private final String fitPlaceAddress;
+    private final LocalDateTime mateAt;
     private final String gatherType;
     private final String permitGender;
-    private final Integer permitMaxAge;
-    private final Integer permitMinAge;
     private final Integer permitPeopleCnt;
-    private final Set<Long> waitingAccountIds;
-    private final Set<Long> approvedAccountIds;
-    private final Set<Long> introImageIds;
+    private final int approvedAccountCnt;
 
     @QueryProjection
-    public MateSimpleJpaResponse(Long id, String fitCategory, String title, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, String gatherType, String permitGender, Integer permitMaxAge, Integer permitMinAge, Integer permitPeopleCnt, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds, Set<Long> introImageIds) {
+    public MateSimpleJpaResponse(Long id, Set<Long> introImageIds, Long writerImageId, String writerNickName, String fitCategory, String title, String fitPlaceAddress, LocalDateTime mateAt, String gatherType, String permitGender, Integer permitPeopleCnt, Set<Long> approvedAccountIds) {
         this.id = id;
+        this.thumbnailImageId = getThumbnailId(introImageIds);
+        this.writerImageId = writerImageId;
+        this.writerNickName = writerNickName;
         this.fitCategory = fitCategory;
         this.title = title;
-        this.mateAt = mateAt;
-        this.fitPlaceName = fitPlaceName;
         this.fitPlaceAddress = fitPlaceAddress;
+        this.mateAt = mateAt;
         this.gatherType = gatherType;
         this.permitGender = permitGender;
-        this.permitMaxAge = permitMaxAge;
-        this.permitMinAge = permitMinAge;
         this.permitPeopleCnt = permitPeopleCnt;
-        this.waitingAccountIds = waitingAccountIds;
-        this.approvedAccountIds = approvedAccountIds;
-        this.introImageIds = introImageIds;
+        this.approvedAccountCnt = approvedAccountIds.size();
+    }
+
+    private Long getThumbnailId(Set<Long> introImageIds) {
+        if(introImageIds == null || introImageIds.isEmpty()) return null;
+        for(Long imageId : introImageIds) {
+            return imageId;
+        }
+        return null;
     }
 }

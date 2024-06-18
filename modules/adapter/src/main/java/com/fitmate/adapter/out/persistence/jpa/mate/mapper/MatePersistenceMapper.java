@@ -138,19 +138,17 @@ public class MatePersistenceMapper {
     public MateSimpleResponse jpaResponseToResponse(MateSimpleJpaResponse jpaResponse) {
         return new MateSimpleResponse(
                 jpaResponse.getId(),
+                jpaResponse.getThumbnailImageId(),
+                jpaResponse.getWriterImageId(),
+                jpaResponse.getWriterNickName(),
                 FitCategory.valueOf(jpaResponse.getFitCategory()),
                 jpaResponse.getTitle(),
-                jpaResponse.getMateAt(),
-                jpaResponse.getFitPlaceName(),
                 jpaResponse.getFitPlaceAddress(),
+                jpaResponse.getMateAt(),
                 GatherType.valueOf(jpaResponse.getGatherType()),
                 PermitGender.valueOf(jpaResponse.getPermitGender()),
-                jpaResponse.getPermitMaxAge(),
-                jpaResponse.getPermitMinAge(),
                 jpaResponse.getPermitPeopleCnt(),
-                jpaResponse.getWaitingAccountIds() != null ? jpaResponse.getWaitingAccountIds() : new HashSet<Long>(),
-                jpaResponse.getApprovedAccountIds() != null ? jpaResponse.getApprovedAccountIds() : new HashSet<Long>(),
-                jpaResponse.getIntroImageIds() != null ? jpaResponse.getIntroImageIds() : new HashSet<Long>()
+                jpaResponse.getApprovedAccountCnt()
         );
     }
 

@@ -13,17 +13,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class MateSimpleResponse {
     private Long id;
+    private Long thumbnailImageId;
+    private Long writerImageId;
+    private String writerNickName;
     private FitCategory fitCategory;
     private String title;
-    private LocalDateTime mateAt;
-    private String fitPlaceName;
     private String fitPlaceAddress;
+    private LocalDateTime mateAt;
     private GatherType gatherType;
     private PermitGender permitGender;
-    private Integer permitMaxAge;
-    private Integer permitMinAge;
     private Integer permitPeopleCnt;
-    private Set<Long> waitingAccountIds;
-    private Set<Long> approvedAccountIds;
-    private Set<Long> introImageIds;
+    private int approvedAccountCnt;
 }
