@@ -13,9 +13,13 @@ import com.fitmate.domain.mate.enums.GatherType;
 import com.fitmate.domain.mate.enums.PermitGender;
 import com.fitmate.domain.mate.apply.MateApply;
 import com.fitmate.domain.mate.apply.MateApplyId;
+import com.fitmate.port.in.common.SliceCommand;
+import com.fitmate.port.in.mate.command.MateListCommand;
+import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
 import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -150,6 +154,32 @@ public class MatePersistenceMapper {
                 jpaResponse.getPermitPeopleCnt(),
                 jpaResponse.getApprovedAccountCnt()
         );
+    }
+
+    public SliceResponse<MateSimpleResponse> jpaResponsesToSliceResponse(List<MateSimpleJpaResponse> jpaResponses, MateListCommand command) {
+
+        List<MateSimpleResponse> content = jpaResponsesToResponses(jpaResponses);
+        int pageSize = command.getSize();
+
+        boolean hasNext = false;
+        if(content.size() > pageSize) {
+            content.remove(pageSize);
+            hasNext = true;
+        }
+
+        Sort.Direction sortDir = command.getSortDir() == SliceCommand.SortDir.ASC
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
+        Pageable pageable = PageRequest.of(command.getPage(), pageSize, sortDir, command.getSortProperty());
+        Slice<MateSimpleResponse> slices = new SliceImpl<>(content, pageable, hasNext);
+        return new SliceResponse<MateSimpleResponse>(
+                    slices.getContent(),
+                    slices.getNumber(),
+                    slices.getSize(),
+                    slices.isFirst(),
+                    slices.isLast()
+                );
     }
 
     public List<MateSimpleResponse> jpaResponsesToResponses(List<MateSimpleJpaResponse> jpaResponses) {

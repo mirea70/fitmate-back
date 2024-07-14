@@ -12,6 +12,9 @@ import com.fitmate.domain.account.AccountId;
 import com.fitmate.domain.mate.Mate;
 import com.fitmate.domain.mate.MateFee;
 import com.fitmate.domain.mate.MateId;
+import com.fitmate.port.in.common.SliceCommand;
+import com.fitmate.port.in.mate.command.MateListCommand;
+import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,9 +50,9 @@ public class MatePersistenceAdapter implements LoadMatePort {
     }
 
     @Override
-    public List<MateSimpleResponse> loadMates(Long lastMatingId, Integer limit) {
-        List<MateSimpleJpaResponse> jpaResponses = mateQueryRepository.readList(lastMatingId, limit);
-        return matePersistenceMapper.jpaResponsesToResponses(jpaResponses);
+    public SliceResponse<MateSimpleResponse> loadMates(MateListCommand command) {
+        List<MateSimpleJpaResponse> jpaResponses = mateQueryRepository.readList(command);
+        return matePersistenceMapper.jpaResponsesToSliceResponse(jpaResponses, command);
     }
 
     @Override

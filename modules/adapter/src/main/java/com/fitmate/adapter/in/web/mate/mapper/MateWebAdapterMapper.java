@@ -1,13 +1,8 @@
 package com.fitmate.adapter.in.web.mate.mapper;
 
-import com.fitmate.adapter.in.web.mate.dto.MateApplyRequest;
-import com.fitmate.adapter.in.web.mate.dto.MateApproveRequest;
-import com.fitmate.adapter.in.web.mate.dto.MateCreateRequest;
-import com.fitmate.adapter.in.web.mate.dto.MateModifyRequest;
-import com.fitmate.port.in.mate.command.MateApplyCommand;
-import com.fitmate.port.in.mate.command.MateApproveCommand;
-import com.fitmate.port.in.mate.command.MateCreateCommand;
-import com.fitmate.port.in.mate.command.MateModifyCommand;
+import com.fitmate.adapter.in.web.mate.dto.*;
+import com.fitmate.port.in.common.SliceCommand;
+import com.fitmate.port.in.mate.command.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -68,6 +63,25 @@ public class MateWebAdapterMapper {
                 mateId,
                 request.getApplierId(),
                 accountId
+        );
+    }
+
+    public MateListCommand requestToCommand(MateListRequest request) {
+        return new MateListCommand(
+                request.getPage(),
+                request.getSize(),
+                SliceCommand.SortDir.valueOf(request.getSortDir().name()),
+                request.getSortProperty(),
+                request.getKeyword(),
+                request.getDayOfWeek(),
+                request.getStartMateAt(),
+                request.getEndMateAt(),
+                request.getFitPlaceRegions(),
+                request.getPermitMaxAge(),
+                request.getPermitMinAge(),
+                request.getStartLimitPeopleCnt(),
+                request.getEndLimitPeopleCnt(),
+                request.getFitCategory()
         );
     }
 }

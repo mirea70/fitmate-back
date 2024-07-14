@@ -5,8 +5,10 @@ import com.fitmate.domain.error.results.NotMatchErrorResult;
 import com.fitmate.domain.mate.Mate;
 import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.mate.command.MateCreateCommand;
+import com.fitmate.port.in.mate.command.MateListCommand;
 import com.fitmate.port.in.mate.command.MateModifyCommand;
 import com.fitmate.port.in.mate.usecase.MateUseCasePort;
+import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.file.LoadAttachFilePort;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
@@ -48,8 +50,8 @@ public class MateUseCase implements MateUseCasePort {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MateSimpleResponse> findAllMate(Long lastMatingId, Integer limit) {
-        return loadMatePort.loadMates(lastMatingId, limit);
+    public SliceResponse<MateSimpleResponse> findAllMate(MateListCommand command) {
+        return loadMatePort.loadMates(command);
     }
 
     @Override
