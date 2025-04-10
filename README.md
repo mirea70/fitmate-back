@@ -7,12 +7,12 @@
 - **Language** : Java 17
 - **Database** : Oracle, Redis, MongoDB
 - **Deployment** : Jenkins, Docker, Oracle Cloud Infrastructure, Amajon Web Service
-- **API Docs** : https://www.fitmates.store/swagger-ui/index.html
+- **API Docs** : http://www.fitmate.site/swagger-ui/index.html
 - **ERD** : [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ)
 
 - **Websocket 통신 사용방법**
   - **protocol** : STOMP
-  - **base url** : https://www.fitmates.store
+  - **base url** : https://www.fitmate.site
   - **connection endpoint** : /stomp
   - **subscribe endpoint** : /sub/{roomId}
   - **publish endpoint(enter)** : /pub/{roomId}/enter
