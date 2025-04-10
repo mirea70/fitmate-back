@@ -12,7 +12,7 @@
 
 - **Websocket 통신 사용방법**
   - **protocol** : STOMP
-  - **base url** : https://www.fitmate.site
+  - **base url** : http://www.fitmate.site
   - **connection endpoint** : /stomp
   - **subscribe endpoint** : /sub/{roomId}
   - **publish endpoint(enter)** : /pub/{roomId}/enter
