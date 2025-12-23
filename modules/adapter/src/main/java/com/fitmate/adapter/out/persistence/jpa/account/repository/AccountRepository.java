@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AccountRepository extends JpaRepository<AccountJpaEntity, Long> {
+public interface AccountRepository extends JpaRepository<AccountJpaEntity, Long>, AccountQueryRepository {
 
     @NonNull
     default AccountJpaEntity getById(@NonNull Long id) {

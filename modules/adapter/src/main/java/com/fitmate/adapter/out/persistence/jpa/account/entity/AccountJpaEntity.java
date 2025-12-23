@@ -3,6 +3,7 @@ package com.fitmate.adapter.out.persistence.jpa.account.entity;
 import com.fitmate.adapter.out.converter.SetConverter;
 import com.fitmate.adapter.out.persistence.jpa.common.BaseJpaEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -67,6 +68,7 @@ public class AccountJpaEntity extends BaseJpaEntity {
     @Convert(converter = SetConverter.class)
     private Set<Long> followers = new HashSet<>();
 
+    @Builder
     public AccountJpaEntity(Long id, String loginName, String password, String nickName, String introduction, Long profileImageId, String name, String phone, String email, String gender, String role, Set<Long> followings, Set<Long> followers, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.loginName = loginName;

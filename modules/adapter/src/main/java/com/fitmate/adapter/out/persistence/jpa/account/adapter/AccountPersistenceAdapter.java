@@ -3,7 +3,6 @@ package com.fitmate.adapter.out.persistence.jpa.account.adapter;
 import com.fitmate.adapter.PersistenceAdapter;
 import com.fitmate.adapter.out.persistence.jpa.account.mapper.AccountPersistenceMapper;
 import com.fitmate.adapter.out.persistence.jpa.account.entity.AccountJpaEntity;
-import com.fitmate.adapter.out.persistence.jpa.account.repository.AccountQueryRepository;
 import com.fitmate.adapter.out.persistence.jpa.account.repository.AccountRepository;
 import com.fitmate.domain.account.Account;
 import com.fitmate.domain.account.AccountId;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 public class AccountPersistenceAdapter implements LoadAccountPort {
 
     private final AccountRepository accountRepository;
-    private final AccountQueryRepository accountQueryRepository;
     private final AccountPersistenceMapper accountPersistenceMapper;
 
 
@@ -27,7 +25,7 @@ public class AccountPersistenceAdapter implements LoadAccountPort {
 
     @Override
     public boolean checkDuplicated(Long accountId, String nickName, String name, String email, String phone) {
-        return accountQueryRepository.checkDuplicated(accountId, nickName, name, email, phone);
+        return accountRepository.checkDuplicated(accountId, nickName, name, email, phone);
     }
 
     @Override

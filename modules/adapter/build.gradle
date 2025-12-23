@@ -31,6 +31,10 @@ dependencies {
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     // sms
     implementation 'net.nurigo:sdk:4.3.0'
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
