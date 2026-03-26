@@ -60,6 +60,14 @@ public class AccountController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "유저 프로필 조회", description = "특정 유저의 프로필을 조회하는 API")
+    @GetMapping("/{accountId}")
+    public ResponseEntity<AccountProfileResponse> findOneById(@Parameter(description = "조회 대상 회원 ID")
+                                                              @PathVariable Long accountId) {
+        AccountProfileResponse response = accountProfileUseCasePort.findAccount(accountId);
+        return ResponseEntity.ok(response);
+    }
+
     @Operation(summary = "회원탈퇴", description = "회원탈퇴 API")
     @DeleteMapping("/{accountId}")
     public ResponseEntity<?> delete(@Parameter(description = "요청 회원 ID")
