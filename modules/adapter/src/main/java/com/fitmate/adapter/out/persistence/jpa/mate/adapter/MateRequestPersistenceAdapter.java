@@ -17,6 +17,7 @@ import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
 import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -54,9 +55,11 @@ public class MateRequestPersistenceAdapter implements LoadMateRequestPort {
     }
 
     @Override
-    public List<MateRequestSimpleResponse> loadMateRequests(Long applierId, ApproveStatus approveStatus) {
+    public List<MateRequestSimpleResponse> loadMateApplies(Long applierId, ApproveStatus approveStatus) {
         List<Long> matingIds = mateApplyQueryRepository.getMateIdsFromMateRequest(applierId, approveStatus.name());
-        List<MateApplySimpleJpaResponse> jpaResponses = mateQueryRepository.getMyMateRequests(matingIds);
+        if(CollectionUtils.isEmpty(matingIds)) return List.of();
+
+        List<MateApplySimpleJpaResponse> jpaResponses = mateQueryRepository.getMyMateApplies(matingIds);
         return matePersistenceMapper.jpaResponsesToResponsesForMateRequest(jpaResponses);
     }
 

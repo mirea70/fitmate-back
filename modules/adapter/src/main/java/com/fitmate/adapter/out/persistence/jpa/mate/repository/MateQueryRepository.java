@@ -5,7 +5,6 @@ import com.fitmate.domain.mate.enums.FitCategory;
 import com.fitmate.port.in.mate.command.MateListCommand;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static com.fitmate.adapter.out.persistence.jpa.account.entity.QAccountJpaEntity.accountJpaEntity;
+import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateApplyJpaEntity.mateApplyJpaEntity;
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateJpaEntity.mateJpaEntity;
 
 @Repository
@@ -168,24 +168,23 @@ public class MateQueryRepository {
                 .fetchOne();
     }
 
-    public List<MateApplySimpleJpaResponse> getMyMateRequests(List<Long> matingIds) {
-        return null;
-//        return queryFactory
-//                .select(new QMateRequestSimpleJpaResponse(
-//                        mateJpaEntity.id,
-//                        mateJpaEntity.introImageIds,
-//                        mateJpaEntity.title,
-//                        mateJpaEntity.mateAt,
-//                        mateJpaEntity.fitPlaceName,
-//                        mateJpaEntity.fitPlaceAddress,
-//                        mateJpaEntity.permitPeopleCnt,
-//                        mateJpaEntity.approvedAccountIds,
-//                        mateJpaEntity.totalFee,
-//                        mateRequestJpaEntity.createdAt))
-//                .from(mateJpaEntity)
-//                .innerJoin(mateRequestJpaEntity).on(mateJpaEntity.id.eq(mateRequestJpaEntity.mateId))
-//                .where(mateJpaEntity.id.in(matingIds))
-//                .orderBy(mateRequestJpaEntity.createdAt.desc())
-//                .fetch();
+    public List<MateApplySimpleJpaResponse> getMyMateApplies(List<Long> mateIds) {
+        return queryFactory
+                .select(new QMateApplySimpleJpaResponse(
+                        mateJpaEntity.id,
+                        mateJpaEntity.introImageIds,
+                        mateJpaEntity.title,
+                        mateJpaEntity.mateAt,
+                        mateJpaEntity.fitPlaceName,
+                        mateJpaEntity.fitPlaceAddress,
+                        mateJpaEntity.permitPeopleCnt,
+                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.totalFee,
+                        mateApplyJpaEntity.createdAt))
+                .from(mateJpaEntity)
+                .innerJoin(mateApplyJpaEntity).on(mateJpaEntity.id.eq(mateApplyJpaEntity.mateId))
+                .where(mateJpaEntity.id.in(mateIds))
+                .orderBy(mateApplyJpaEntity.createdAt.desc())
+                .fetch();
     }
 }

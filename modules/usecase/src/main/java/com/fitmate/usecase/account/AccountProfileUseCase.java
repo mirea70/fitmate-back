@@ -139,8 +139,8 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
     }
 
     @Override
-    public List<MateRequestSimpleResponse> getMyMateRequests(Long applierId, ApproveStatus approveStatus) {
-        return loadMateRequestPort.loadMateRequests(applierId, approveStatus);
+    public List<MateRequestSimpleResponse> getMyMateApplies(Long applierId, ApproveStatus approveStatus) {
+        return loadMateRequestPort.loadMateApplies(applierId, approveStatus);
     }
 
     private void checkDuplicated(Long accountId, AccountCheckCommand command) {

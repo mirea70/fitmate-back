@@ -13,6 +13,6 @@ public interface LoadMateRequestPort {
     void isDuplicateMateRequest(Long mateId, Long accountId);
     void saveMateRequestEntity(MateApply mateApply);
     MateApply loadMateRequestEntity(Long mateId, Long applierId);
-    List<MateRequestSimpleResponse> loadMateRequests(Long applierId, ApproveStatus approveStatus);
+    List<MateRequestSimpleResponse> loadMateApplies(Long applierId, ApproveStatus approveStatus);
     void deleteAllMateRequestByApplier(AccountId id);
 }

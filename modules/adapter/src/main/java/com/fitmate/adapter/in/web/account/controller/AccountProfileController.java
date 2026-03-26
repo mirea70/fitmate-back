@@ -72,7 +72,7 @@ public class AccountProfileController {
     public ResponseEntity<List<MateRequestSimpleResponse>> getMyMateRequestList(@AuthenticationPrincipal AuthDetails authDetails,
                                                                                 @Parameter(description = "메이트 신청 목록 조회 시, 승인 상태 조건")
                                                                         @RequestParam ApproveStatus approveStatus) {
-        List<MateRequestSimpleResponse> responses = accountProfileUseCasePort.getMyMateRequests(authDetails.getAccount().getId(), approveStatus);
+        List<MateRequestSimpleResponse> responses = accountProfileUseCasePort.getMyMateApplies(authDetails.getAccount().getId(), approveStatus);
         return ResponseEntity.ok(responses);
     }
 }
