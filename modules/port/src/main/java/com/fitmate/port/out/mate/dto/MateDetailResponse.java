@@ -15,6 +15,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class MateDetailResponse {
     private Long id;
+    private Long writerAccountId;
+    private String writerNickName;
+    private Long writerImageId;
     private FitCategory fitCategory;
     private String title;
     private String introduction;

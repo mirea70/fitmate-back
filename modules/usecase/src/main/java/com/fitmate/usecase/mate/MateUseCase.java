@@ -2,12 +2,15 @@ package com.fitmate.usecase.mate;
 
 import com.fitmate.domain.error.exceptions.NotMatchException;
 import com.fitmate.domain.error.results.NotMatchErrorResult;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.AccountId;
 import com.fitmate.domain.mate.Mate;
 import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.mate.command.MateCreateCommand;
 import com.fitmate.port.in.mate.command.MateListCommand;
 import com.fitmate.port.in.mate.command.MateModifyCommand;
 import com.fitmate.port.in.mate.usecase.MateUseCasePort;
+import com.fitmate.port.out.account.LoadAccountPort;
 import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.file.LoadAttachFilePort;
 import com.fitmate.port.out.mate.LoadMatePort;
@@ -27,6 +30,7 @@ import java.util.Set;
 public class MateUseCase implements MateUseCasePort {
 
     private final LoadMatePort loadMatePort;
+    private final LoadAccountPort loadAccountPort;
     private final LoadAttachFilePort loadAttachFilePort;
     private final MateUseCaseMapper mateUseCaseMapper;
 
@@ -45,7 +49,8 @@ public class MateUseCase implements MateUseCasePort {
     @Transactional(readOnly = true)
     public MateDetailResponse findMate(Long id) {
         Mate mate = loadMatePort.loadMateEntity(new MateId(id));
-        return mateUseCaseMapper.domainToDetailResponse(mate);
+        Account writer = loadAccountPort.loadAccountEntity(new AccountId(mate.getWriterId()));
+        return mateUseCaseMapper.domainToDetailResponse(mate, writer);
     }
 
     @Override

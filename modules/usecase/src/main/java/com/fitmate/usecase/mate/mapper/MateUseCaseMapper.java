@@ -1,5 +1,7 @@
 package com.fitmate.usecase.mate.mapper;
 
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.ProfileInfo;
 import com.fitmate.domain.mate.Mate;
 import com.fitmate.domain.mate.apply.MateApply;
 import com.fitmate.domain.mate.enums.ApproveStatus;
@@ -43,13 +45,17 @@ public class MateUseCaseMapper {
         );
     }
 
-    public MateDetailResponse domainToDetailResponse(Mate mate) {
+    public MateDetailResponse domainToDetailResponse(Mate mate, Account writer) {
 
         FitPlace fitPlace = mate.getFitPlace();
         PermitAges permitAges = mate.getPermitAges();
+        ProfileInfo profileInfo = writer.getProfileInfo();
 
         return new MateDetailResponse(
                 mate.getId().getValue(),
+                writer.getId().getValue(),
+                profileInfo.getNickName(),
+                profileInfo.getProfileImageId(),
                 mate.getFitCategory(),
                 mate.getTitle(),
                 mate.getIntroduction(),
