@@ -10,7 +10,7 @@ import com.fitmate.port.out.chat.dto.ChatRoomSimpleResponse;
 import java.util.List;
 
 public interface ChatUseCasePort {
-    ChatMessageResponse enterChatRoom(ChatMessageCommand chatMessageCommand);
+    void enterChatRoom(ChatMessageCommand chatMessageCommand);
     void saveChatMessage(ChatMessageCommand chatMessageCommand);
     ChatRoomSimpleResponse createGroupChatRoom(ChatRoomCreateGroupCommand createGroupCommand);
     ChatRoomSimpleResponse createDmChatRoom(ChatRoomCreateDmCommand createDmCommand);

@@ -37,15 +37,13 @@ public class ChatUseCase implements ChatUseCasePort {
     private static final String DEFAULT_ENTER_MESSAGE = "님이 채팅방에 참여하였습니다.";
 
     @Override
-    public ChatMessageResponse enterChatRoom(ChatMessageCommand chatMessageCommand) {
+    public void enterChatRoom(ChatMessageCommand chatMessageCommand) {
         String roomId = chatMessageCommand.getRoomId();
         Long senderId = chatMessageCommand.getSenderId();
 
         ChatRoom chatRoom = loadChatPort.loadChatRoom(roomId);
         chatRoom.addJoinAccountId(senderId);
         loadChatPort.saveChatRoom(chatRoom);
-
-        return chatUseCaseMapper.commandToResponse(chatMessageCommand, DEFAULT_ENTER_MESSAGE);
     }
 
     @Override
@@ -81,11 +79,18 @@ public class ChatUseCase implements ChatUseCasePort {
         }
 
         Account fromAccount = loadAccountPort.loadAccountEntity(new AccountId(fromId));
+        Account toAccount = loadAccountPort.loadAccountEntity(new AccountId(toId));
         String fromNickName = fromAccount.getProfileInfo().getNickName();
+        String toNickName = toAccount.getProfileInfo().getNickName();
+
         ChatRoom chatRoom = ChatRoom.createByName(fromNickName);
         chatRoom.addJoinAccountId(fromId);
         chatRoom.addJoinAccountId(toId);
         String roomId = loadChatPort.saveChatRoom(chatRoom);
+
+        String enterMessage = fromNickName + " 님과 " + toNickName + DEFAULT_ENTER_MESSAGE;
+        ChatMessage chatMessage = ChatMessage.withoutId(roomId, enterMessage, fromId, fromNickName, null);
+        loadChatPort.saveChatMessage(chatMessage);
 
         return new ChatRoomSimpleResponse(roomId);
     }

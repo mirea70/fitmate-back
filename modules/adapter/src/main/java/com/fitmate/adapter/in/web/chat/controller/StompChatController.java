@@ -21,10 +21,9 @@ public class StompChatController {
     private final ChatWebAdapterMapper chatWebAdapterMapper;
 
     @MessageMapping("/{roomId}/enter")
-    @SendTo("/sub/{roomId}")
-    public ChatMessageResponse enter(@DestinationVariable("roomId") String roomId, ChatMessageRequest request, Principal principal) {
+    public void enter(@DestinationVariable("roomId") String roomId, ChatMessageRequest request, Principal principal) {
         AuthDetails authDetails = getAuthDetails(principal);
-        return chatUseCasePort.enterChatRoom(chatWebAdapterMapper.requestToCommand(request, roomId, authDetails));
+        chatUseCasePort.enterChatRoom(chatWebAdapterMapper.requestToCommand(request, roomId, authDetails));
     }
 
     @MessageMapping("/{roomId}/chat")
