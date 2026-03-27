@@ -16,6 +16,7 @@ import com.fitmate.port.out.chat.dto.ChatRoomListItemResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @PersistenceAdapter
@@ -51,8 +52,8 @@ public class ChatPersistenceAdapter implements LoadChatPort {
     }
 
     @Override
-    public boolean existChatRoom(Set<Long> accountIds) {
-        return chatRoomQueryRepository.existJoinAccountIdsContainsAll(accountIds);
+    public Optional<String> findChatRoomId(Set<Long> accountIds) {
+        return chatRoomQueryRepository.findRoomIdByExactJoinAccountIds(accountIds);
     }
 
     @Override

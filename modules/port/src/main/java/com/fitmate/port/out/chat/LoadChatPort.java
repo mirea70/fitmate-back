@@ -7,6 +7,7 @@ import com.fitmate.port.out.chat.dto.ChatMessageResponse;
 import com.fitmate.port.out.chat.dto.ChatRoomListItemResponse;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface LoadChatPort {
@@ -14,7 +15,7 @@ public interface LoadChatPort {
     String saveChatRoom(ChatRoom chatRoom);
     void saveChatMessage(ChatMessage chatMessage);
     boolean existChatRoom(MateId id);
-    boolean existChatRoom(Set<Long> accountIds);
+    Optional<String> findChatRoomId(Set<Long> accountIds);
     List<ChatMessageResponse> getMessagesByRoomId(String roomId);
     List<ChatRoomListItemResponse> getMyChatRooms(Long accountId);
 }

@@ -23,6 +23,7 @@ import com.fitmate.usecase.chat.mapper.ChatUseCaseMapper;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @UseCase
@@ -73,10 +74,13 @@ public class ChatUseCase implements ChatUseCasePort {
     public ChatRoomSimpleResponse createDmChatRoom(ChatRoomCreateDmCommand command) {
         Long fromId = command.getFromAccountId();
         Long toId = command.getToAccountId();
-        Account fromAccount = loadAccountPort.loadAccountEntity(new AccountId(fromId));
-        Account toAccount = loadAccountPort.loadAccountEntity(new AccountId(toId));
-        checkDuplicateChatRoom(fromId, toId);
 
+        Optional<String> existingRoomId = loadChatPort.findChatRoomId(Set.of(fromId, toId));
+        if (existingRoomId.isPresent()) {
+            return new ChatRoomSimpleResponse(existingRoomId.get());
+        }
+
+        Account fromAccount = loadAccountPort.loadAccountEntity(new AccountId(fromId));
         String fromNickName = fromAccount.getProfileInfo().getNickName();
         ChatRoom chatRoom = ChatRoom.createByName(fromNickName);
         chatRoom.addJoinAccountId(fromId);
@@ -84,11 +88,6 @@ public class ChatUseCase implements ChatUseCasePort {
         String roomId = loadChatPort.saveChatRoom(chatRoom);
 
         return new ChatRoomSimpleResponse(roomId);
-    }
-
-    private void checkDuplicateChatRoom(Long fromAccountId, Long toAccountId) {
-        if(loadChatPort.existChatRoom(Set.of(fromAccountId, toAccountId)))
-            throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_CHAT_ROOM_BETWEEN_ACCOUNT);
     }
 
     @Override

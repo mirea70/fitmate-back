@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -20,9 +21,13 @@ import java.util.Set;
 public class ChatRoomQueryRepository {
     private final MongoTemplate mongoTemplate;
 
-    public boolean existJoinAccountIdsContainsAll(Set<Long> accountIds) {
-        Query query = new Query(Criteria.where("joinAccountIds").all(accountIds));
-        return mongoTemplate.exists(query, ChatRoomMongoEntity.class);
+    public Optional<String> findRoomIdByExactJoinAccountIds(Set<Long> accountIds) {
+        Query query = new Query(new Criteria().andOperator(
+                Criteria.where("joinAccountIds").all(accountIds),
+                Criteria.where("joinAccountIds").size(accountIds.size())
+        ));
+        ChatRoomMongoEntity entity = mongoTemplate.findOne(query, ChatRoomMongoEntity.class);
+        return Optional.ofNullable(entity).map(ChatRoomMongoEntity::getId);
     }
 
     public List<ChatRoomListItemResponse> findAllByMyAccountId(Long accountId) {
