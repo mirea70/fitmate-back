@@ -84,7 +84,7 @@ public class ChatUseCase implements ChatUseCasePort {
         String fromNickName = fromAccount.getProfileInfo().getNickName();
         String toNickName = toAccount.getProfileInfo().getNickName();
 
-        ChatRoom chatRoom = ChatRoom.createByName(fromNickName);
+        ChatRoom chatRoom = ChatRoom.createByName(toNickName);
         chatRoom.addJoinAccountId(fromId);
         chatRoom.addJoinAccountId(toId);
         String roomId = loadChatPort.saveChatRoom(chatRoom);

@@ -59,7 +59,8 @@ public class ChatRoomQueryRepository {
                 .first("roomId").as("roomId")
                 .first("room.name").as("roomName")
                 .first("room.matingId").as("matingId")
-                .first("room.roomType").as("roomType");
+                .first("room.roomType").as("roomType")
+                .first("room.joinAccountIds").as("memberAccountIds");
 
         AggregationOperation projectOperation = Aggregation.project()
                 .andInclude("roomId")
@@ -67,7 +68,8 @@ public class ChatRoomQueryRepository {
                 .andInclude("lastMessage")
                 .andInclude("lastMessageTime")
                 .andInclude("matingId")
-                .andInclude("roomType");
+                .andInclude("roomType")
+                .andInclude("memberAccountIds");
 
         return Aggregation.newAggregation(
                 lookupOperation, unwindOperation, matchOperation, sortOperation, groupOperation, projectOperation

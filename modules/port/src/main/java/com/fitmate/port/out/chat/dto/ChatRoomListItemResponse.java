@@ -3,6 +3,7 @@ package com.fitmate.port.out.chat.dto;
 import lombok.Getter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 public class ChatRoomListItemResponse {
@@ -12,4 +13,5 @@ public class ChatRoomListItemResponse {
     private Date lastMessageTime;
     private Long matingId;
     private String roomType;
+    private List<Long> memberAccountIds;
 }
