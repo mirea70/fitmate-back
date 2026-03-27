@@ -3,6 +3,7 @@ package com.fitmate.adapter.in.web.chat.mapper;
 import com.fitmate.adapter.in.web.chat.dto.ChatMessageRequest;
 import com.fitmate.adapter.in.web.chat.dto.ChatRoomCreateDmRequest;
 import com.fitmate.adapter.in.web.chat.dto.ChatRoomCreateGroupRequest;
+import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.port.in.chat.dto.ChatMessageCommand;
 import com.fitmate.port.in.chat.dto.ChatRoomCreateDmCommand;
 import com.fitmate.port.in.chat.dto.ChatRoomCreateGroupCommand;
@@ -11,19 +12,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ChatWebAdapterMapper {
-    public ChatMessageCommand requestToCommand(ChatMessageRequest request, String roomId) {
+    public ChatMessageCommand requestToCommand(ChatMessageRequest request, String roomId, AuthDetails authDetails) {
         return new ChatMessageCommand(
-                request.getSenderNickName(),
-                request.getSenderId(),
+                authDetails.getAccount().getNickName(),
+                authDetails.getAccount().getId(),
                 request.getMessage(),
                 roomId
         );
     }
 
-    public ChatMessageResponse requestToResponse(ChatMessageRequest request) {
+    public ChatMessageResponse requestToResponse(ChatMessageRequest request, AuthDetails authDetails) {
         return new ChatMessageResponse(
-                request.getSenderNickName(),
-                request.getSenderId(),
+                authDetails.getAccount().getNickName(),
+                authDetails.getAccount().getId(),
                 request.getMessage()
         );
     }

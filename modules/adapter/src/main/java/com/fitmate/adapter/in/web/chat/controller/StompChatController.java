@@ -2,13 +2,17 @@ package com.fitmate.adapter.in.web.chat.controller;
 
 import com.fitmate.adapter.in.web.chat.dto.ChatMessageRequest;
 import com.fitmate.adapter.in.web.chat.mapper.ChatWebAdapterMapper;
+import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.port.in.chat.usecase.ChatUseCasePort;
 import com.fitmate.port.out.chat.dto.ChatMessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,14 +22,21 @@ public class StompChatController {
 
     @MessageMapping("/{roomId}/enter")
     @SendTo("/sub/{roomId}")
-    public ChatMessageResponse enter(@DestinationVariable("roomId") String roomId, ChatMessageRequest request) {
-        return chatUseCasePort.enterChatRoom(chatWebAdapterMapper.requestToCommand(request, roomId));
+    public ChatMessageResponse enter(@DestinationVariable("roomId") String roomId, ChatMessageRequest request, Principal principal) {
+        AuthDetails authDetails = getAuthDetails(principal);
+        return chatUseCasePort.enterChatRoom(chatWebAdapterMapper.requestToCommand(request, roomId, authDetails));
     }
 
     @MessageMapping("/{roomId}/chat")
     @SendTo("/sub/{roomId}")
-    public ChatMessageResponse chat(@DestinationVariable("roomId") String roomId, ChatMessageRequest request) {
-        chatUseCasePort.saveChatMessage(chatWebAdapterMapper.requestToCommand(request, roomId));
-        return chatWebAdapterMapper.requestToResponse(request);
+    public ChatMessageResponse chat(@DestinationVariable("roomId") String roomId, ChatMessageRequest request, Principal principal) {
+        AuthDetails authDetails = getAuthDetails(principal);
+        chatUseCasePort.saveChatMessage(chatWebAdapterMapper.requestToCommand(request, roomId, authDetails));
+        return chatWebAdapterMapper.requestToResponse(request, authDetails);
+    }
+
+    private AuthDetails getAuthDetails(Principal principal) {
+        UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) principal;
+        return (AuthDetails) authToken.getPrincipal();
     }
 }
