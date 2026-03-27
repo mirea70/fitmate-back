@@ -1,5 +1,6 @@
 package com.fitmate.usecase.chat.mapper;
 
+import com.fitmate.domain.chat.enums.MessageType;
 import com.fitmate.domain.chat.message.ChatMessage;
 import com.fitmate.domain.chat.room.ChatRoom;
 import com.fitmate.domain.chat.enums.RoomType;
@@ -14,7 +15,8 @@ public class ChatUseCaseMapper {
         return new ChatMessageResponse(
                 nickName,
                 command.getSenderId(),
-                nickName + messageDefault
+                nickName + messageDefault,
+                MessageType.ENTER
         );
     }
 
@@ -24,6 +26,7 @@ public class ChatUseCaseMapper {
                 command.getMessage(),
                 command.getSenderId(),
                 command.getSenderNickName(),
+                MessageType.CHAT,
                 null
         );
     }

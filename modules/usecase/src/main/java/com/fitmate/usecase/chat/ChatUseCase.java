@@ -2,6 +2,7 @@ package com.fitmate.usecase.chat;
 
 import com.fitmate.domain.account.Account;
 import com.fitmate.domain.account.AccountId;
+import com.fitmate.domain.chat.enums.MessageType;
 import com.fitmate.domain.chat.message.ChatMessage;
 import com.fitmate.domain.chat.room.ChatRoom;
 import com.fitmate.domain.error.exceptions.DuplicatedException;
@@ -89,7 +90,7 @@ public class ChatUseCase implements ChatUseCasePort {
         String roomId = loadChatPort.saveChatRoom(chatRoom);
 
         String enterMessage = fromNickName + " 님과 " + toNickName + DEFAULT_ENTER_MESSAGE;
-        ChatMessage chatMessage = ChatMessage.withoutId(roomId, enterMessage, fromId, fromNickName, null);
+        ChatMessage chatMessage = ChatMessage.withoutId(roomId, enterMessage, fromId, fromNickName, MessageType.ENTER, null);
         loadChatPort.saveChatMessage(chatMessage);
 
         return new ChatRoomSimpleResponse(roomId);

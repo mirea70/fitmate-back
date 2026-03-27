@@ -58,7 +58,7 @@ public class ChatPersistenceAdapter implements LoadChatPort {
 
     @Override
     public List<ChatMessageResponse> getMessagesByRoomId(String roomId) {
-        List<ChatMessageMongoEntity> chatMessages = chatMessageRepository.findAllByRoomIdOrderByCreatedAtDesc(roomId);
+        List<ChatMessageMongoEntity> chatMessages = chatMessageRepository.findAllByRoomIdOrderByCreatedAtAsc(roomId);
         return chatPersistenceMapper.entitiesToResponses(chatMessages);
     }
 

@@ -2,6 +2,7 @@ package com.fitmate.adapter.out.persistence.mongo.chat.mapper;
 
 import com.fitmate.adapter.out.persistence.mongo.chat.entity.ChatMessageMongoEntity;
 import com.fitmate.adapter.out.persistence.mongo.chat.entity.ChatRoomMongoEntity;
+import com.fitmate.domain.chat.enums.MessageType;
 import com.fitmate.domain.chat.message.ChatMessage;
 import com.fitmate.domain.chat.room.ChatRoom;
 import com.fitmate.domain.chat.room.ChatRoomId;
@@ -44,6 +45,7 @@ public class ChatPersistenceMapper {
                 chatMessage.getMessage(),
                 chatMessage.getSenderId(),
                 chatMessage.getSenderNickName(),
+                chatMessage.getMessageType().name(),
                 chatMessage.getCreatedAt(),
                 chatMessage.getVersion()
         );
@@ -53,7 +55,8 @@ public class ChatPersistenceMapper {
         return new ChatMessageResponse(
                 entity.getSenderNickName(),
                 entity.getSenderId(),
-                entity.getMessage()
+                entity.getMessage(),
+                MessageType.valueOf(entity.getMessageType())
         );
     }
 

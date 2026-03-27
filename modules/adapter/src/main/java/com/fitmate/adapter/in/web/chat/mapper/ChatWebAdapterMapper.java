@@ -4,6 +4,7 @@ import com.fitmate.adapter.in.web.chat.dto.ChatMessageRequest;
 import com.fitmate.adapter.in.web.chat.dto.ChatRoomCreateDmRequest;
 import com.fitmate.adapter.in.web.chat.dto.ChatRoomCreateGroupRequest;
 import com.fitmate.adapter.in.web.security.dto.AuthDetails;
+import com.fitmate.domain.chat.enums.MessageType;
 import com.fitmate.port.in.chat.dto.ChatMessageCommand;
 import com.fitmate.port.in.chat.dto.ChatRoomCreateDmCommand;
 import com.fitmate.port.in.chat.dto.ChatRoomCreateGroupCommand;
@@ -25,7 +26,8 @@ public class ChatWebAdapterMapper {
         return new ChatMessageResponse(
                 authDetails.getAccount().getNickName(),
                 authDetails.getAccount().getId(),
-                request.getMessage()
+                request.getMessage(),
+                MessageType.CHAT
         );
     }
 

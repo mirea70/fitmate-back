@@ -27,17 +27,19 @@ public class ChatMessageMongoEntity {
     private Long senderId;
     @Column(nullable = false)
     private String senderNickName;
+    private String messageType;
     @CreatedDate
     private Date createdAt;
     @Version
     private Integer version;
 
-    public ChatMessageMongoEntity(String id, String roomId, String message, Long senderId, String senderNickName, Date createdAt, Integer version) {
+    public ChatMessageMongoEntity(String id, String roomId, String message, Long senderId, String senderNickName, String messageType, Date createdAt, Integer version) {
         this.id = id;
         this.roomId = roomId;
         this.message = message;
         this.senderId = senderId;
         this.senderNickName = senderNickName;
+        this.messageType = messageType;
         this.createdAt = createdAt;
         this.version = version;
     }

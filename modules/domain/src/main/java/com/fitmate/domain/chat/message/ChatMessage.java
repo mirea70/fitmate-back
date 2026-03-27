@@ -1,5 +1,6 @@
 package com.fitmate.domain.chat.message;
 
+import com.fitmate.domain.chat.enums.MessageType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,29 +21,33 @@ public class ChatMessage {
 
     private String senderNickName;
 
+    private MessageType messageType;
+
     private Date createdAt;
 
     private Integer version;
 
-    public static ChatMessage withId(ChatMessageId id, String roomId, String message, Long senderId, String senderNickName, Date createdAt, Integer version) {
+    public static ChatMessage withId(ChatMessageId id, String roomId, String message, Long senderId, String senderNickName, MessageType messageType, Date createdAt, Integer version) {
         return new ChatMessage(
                 id,
                 roomId,
                 message,
                 senderId,
                 senderNickName,
+                messageType,
                 createdAt,
                 version
         );
     }
 
-    public static ChatMessage withoutId(String roomId, String message, Long senderId, String senderNickName, Date createdAt) {
+    public static ChatMessage withoutId(String roomId, String message, Long senderId, String senderNickName, MessageType messageType, Date createdAt) {
         return new ChatMessage(
                 null,
                 roomId,
                 message,
                 senderId,
                 senderNickName,
+                messageType,
                 createdAt,
                 null
         );
