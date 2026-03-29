@@ -71,8 +71,12 @@ public class ChatRoomQueryRepository {
                 .andInclude("roomType")
                 .andInclude("memberAccountIds");
 
+        AggregationOperation finalSortOperation = Aggregation.sort(
+                Sort.by(Sort.Direction.DESC, "lastMessageTime")
+        );
+
         return Aggregation.newAggregation(
-                lookupOperation, unwindOperation, matchOperation, sortOperation, groupOperation, projectOperation
+                lookupOperation, unwindOperation, matchOperation, sortOperation, groupOperation, projectOperation, finalSortOperation
         );
     }
 }
