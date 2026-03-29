@@ -19,8 +19,8 @@ public class SmsPersistenceAdapter implements LoadSmsPort {
     private final SmsUtil smsUtil;
 
     @Override
-    public void saveValidateCode(String code) {
-        ValidateCodeRedisEntity validateCodeRedisEntity = new ValidateCodeRedisEntity(code);
+    public void saveValidateCode(String phone, String code) {
+        ValidateCodeRedisEntity validateCodeRedisEntity = new ValidateCodeRedisEntity(phone, code);
         validateCodeRepository.save(validateCodeRedisEntity);
     }
 
@@ -30,8 +30,11 @@ public class SmsPersistenceAdapter implements LoadSmsPort {
     }
 
     @Override
-    public void checkValidateCode(String code) {
-        if(!validateCodeRepository.existsById(code))
+    public void checkValidateCode(String phone, String code) {
+        boolean isValid = validateCodeRepository.findById(phone)
+                .map(entity -> entity.getCode().equals(code))
+                .orElse(false);
+        if (!isValid)
             throw new NotFoundException(NotFoundErrorResult.NOT_FOUND_VALIDATE_DATA);
     }
 }

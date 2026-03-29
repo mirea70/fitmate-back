@@ -38,9 +38,11 @@ public class AccountPasswordController {
 
     @Operation(summary = "인증번호 체크", description = "인증번호 체크 API")
     @GetMapping("/check/code")
-    public ResponseEntity<?> checkValidateCode(@Parameter(description = "사용자 입력값 (인증번호)")
+    public ResponseEntity<?> checkValidateCode(@Parameter(description = "휴대전화번호")
+                                               @RequestParam String phone,
+                                               @Parameter(description = "사용자 입력값 (인증번호)")
                                                @RequestParam String inputCode) {
-        accountPasswordUseCasePort.checkValidateCode(inputCode);
+        accountPasswordUseCasePort.checkValidateCode(phone, inputCode);
         return ResponseEntity.ok().build();
     }
 

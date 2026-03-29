@@ -1,7 +1,7 @@
 package com.fitmate.port.out.sms;
 
 public interface LoadSmsPort {
-    void saveValidateCode(String code);
+    void saveValidateCode(String phone, String code);
     void sendMessageOne(String to, String content);
-    void checkValidateCode(String code);
+    void checkValidateCode(String phone, String code);
 }

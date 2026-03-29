@@ -37,11 +37,11 @@ public class AccountPasswordUseCase implements AccountPasswordUseCasePort {
     public void requestValidateCode(Long accountId) {
         Account account = loadAccountPort.loadAccountEntity(new AccountId(accountId));
         String code = createValidateCode(8);
-        loadSmsPort.saveValidateCode(code);
+        String phone = account.getPrivateInfo().getPhone();
+        loadSmsPort.saveValidateCode(phone, code);
 
-        String to = account.getPrivateInfo().getPhone();
         String content = "인증번호 : " + code;
-        loadSmsPort.sendMessageOne(to, content);
+        loadSmsPort.sendMessageOne(phone, content);
     }
 
     private String createValidateCode(int len) {
@@ -49,8 +49,8 @@ public class AccountPasswordUseCase implements AccountPasswordUseCasePort {
     }
 
     @Override
-    public void checkValidateCode(String inputCode) {
-        loadSmsPort.checkValidateCode(inputCode);
+    public void checkValidateCode(String phone, String inputCode) {
+        loadSmsPort.checkValidateCode(phone, inputCode);
     }
 
     @Override

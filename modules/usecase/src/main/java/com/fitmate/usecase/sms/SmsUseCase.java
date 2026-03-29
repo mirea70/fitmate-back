@@ -17,7 +17,7 @@ public class SmsUseCase implements SmsUseCasePort {
     @Override
     public void requestValidateCode(String to) {
         String code = createValidateCode(8);
-        loadSmsPort.saveValidateCode(code);
+        loadSmsPort.saveValidateCode(to, code);
 
         String content = "인증번호 : " + code;
         loadSmsPort.sendMessageOne(to, content);
@@ -28,7 +28,7 @@ public class SmsUseCase implements SmsUseCasePort {
     }
 
     @Override
-    public void checkValidateCode(String inputCode) {
-        loadSmsPort.checkValidateCode(inputCode);
+    public void checkValidateCode(String phone, String inputCode) {
+        loadSmsPort.checkValidateCode(phone, inputCode);
     }
 }

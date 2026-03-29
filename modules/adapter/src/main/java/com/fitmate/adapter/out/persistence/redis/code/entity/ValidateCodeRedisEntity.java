@@ -14,12 +14,15 @@ public class ValidateCodeRedisEntity {
     private final Long DEFAULT_TTL = 600L;
 
     @Id
+    private final String phone;
+
     private final String code;
 
     @TimeToLive
     public Long expiration;
 
-    public ValidateCodeRedisEntity(String code) {
+    public ValidateCodeRedisEntity(String phone, String code) {
+        this.phone = phone;
         this.code = code;
         this.expiration = DEFAULT_TTL;
     }

@@ -33,9 +33,11 @@ public class SmsController {
 
     @Operation(summary = "인증번호 체크", description = "인증번호 체크 API : 토큰 필요 X")
     @GetMapping("/check/code")
-    public ResponseEntity<?> checkValidateCode(@Parameter(description = "사용자 입력값 (인증번호)")
+    public ResponseEntity<?> checkValidateCode(@Parameter(description = "휴대전화번호")
+                                               @RequestParam String phone,
+                                               @Parameter(description = "사용자 입력값 (인증번호)")
                                                @RequestParam String inputCode) {
-        smsUseCasePort.checkValidateCode(inputCode);
+        smsUseCasePort.checkValidateCode(phone, inputCode);
         return ResponseEntity.ok().build();
     }
 }
