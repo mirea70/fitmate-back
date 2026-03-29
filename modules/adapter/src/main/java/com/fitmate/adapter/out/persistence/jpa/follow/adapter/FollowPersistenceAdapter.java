@@ -1,11 +1,13 @@
 package com.fitmate.adapter.out.persistence.jpa.follow.adapter;
 
 import com.fitmate.adapter.PersistenceAdapter;
+import com.fitmate.adapter.out.persistence.jpa.account.entity.AccountJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.follow.dto.FollowDetailJpaResponse;
 import com.fitmate.adapter.out.persistence.jpa.follow.entity.FollowJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.follow.mapper.FollowPersistenceMapper;
 import com.fitmate.adapter.out.persistence.jpa.follow.repository.FollowQueryRepository;
 import com.fitmate.adapter.out.persistence.jpa.follow.repository.FollowRepository;
+import com.fitmate.domain.account.Account;
 import com.fitmate.domain.account.AccountId;
 import com.fitmate.port.out.follow.FollowDetailResponse;
 import com.fitmate.port.out.follow.LoadFollowPort;
@@ -24,8 +26,11 @@ public class FollowPersistenceAdapter implements LoadFollowPort {
     private final FollowPersistenceMapper followPersistenceMapper;
 
     @Override
-    public void saveFollowEntity(Long fromAccountId, Long toAccountId) {
-        FollowJpaEntity followEntity = new FollowJpaEntity(fromAccountId, toAccountId);
+    public void saveFollowEntity(Account fromAccount, Account toAccount) {
+        FollowJpaEntity followEntity = new FollowJpaEntity(
+                AccountJpaEntity.from(fromAccount),
+                AccountJpaEntity.from(toAccount)
+        );
         followRepository.save(followEntity);
     }
 

@@ -1,7 +1,10 @@
 package com.fitmate.adapter.out.persistence.jpa.account.entity;
 
-import com.fitmate.adapter.out.converter.SetConverter;
 import com.fitmate.adapter.out.persistence.jpa.common.BaseJpaEntity;
+import com.fitmate.adapter.out.persistence.jpa.follow.entity.FollowJpaEntity;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.PrivateInfo;
+import com.fitmate.domain.account.ProfileInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +16,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "account")
@@ -60,16 +64,14 @@ public class AccountJpaEntity extends BaseJpaEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column
-    @Convert(converter = SetConverter.class)
-    private Set<Long> followings = new HashSet<>();
+    @OneToMany(mappedBy = "fromAccount", fetch = FetchType.LAZY)
+    private Set<FollowJpaEntity> followings = new HashSet<>();
 
-    @Column
-    @Convert(converter = SetConverter.class)
-    private Set<Long> followers = new HashSet<>();
+    @OneToMany(mappedBy = "toAccount", fetch = FetchType.LAZY)
+    private Set<FollowJpaEntity> followers = new HashSet<>();
 
     @Builder
-    public AccountJpaEntity(Long id, String loginName, String password, String nickName, String introduction, Long profileImageId, String name, String phone, String email, String gender, String role, Set<Long> followings, Set<Long> followers, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public AccountJpaEntity(Long id, String loginName, String password, String nickName, String introduction, Long profileImageId, String name, String phone, String email, String gender, String role, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.loginName = loginName;
         this.password = password;
@@ -83,8 +85,38 @@ public class AccountJpaEntity extends BaseJpaEntity {
         this.role = role;
         super.createdAt = createdAt;
         super.updatedAt = updatedAt;
-        this.followings = followings;
-        this.followers = followers;
+    }
+
+    public static AccountJpaEntity from(Account account) {
+        ProfileInfo profileInfo = account.getProfileInfo();
+        PrivateInfo privateInfo = account.getPrivateInfo();
+
+        return AccountJpaEntity.builder()
+                .id(account.getId().getValue())
+                .loginName(account.getLoginName())
+                .password(account.getPassword().getValue())
+                .nickName(profileInfo.getNickName())
+                .introduction(profileInfo.getIntroduction())
+                .profileImageId(profileInfo.getProfileImageId())
+                .phone(privateInfo.getPhone())
+                .email(privateInfo.getEmail())
+                .gender(account.getGender().name())
+                .role(account.getRole().name())
+                .createdAt(account.getCreatedAt())
+                .updatedAt(account.getUpdatedAt())
+                .build();
+    }
+
+    public Set<Long> getFollowingIds() {
+        return followings.stream()
+                .map(FollowJpaEntity::getToAccountId)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Long> getFollowerIds() {
+        return followers.stream()
+                .map(FollowJpaEntity::getFromAccountId)
+                .collect(Collectors.toSet());
     }
 
     public void anonymizeForDelete() {

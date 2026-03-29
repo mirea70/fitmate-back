@@ -28,8 +28,8 @@ public class AccountPersistenceMapper {
                 account.getCreatedAt(),
                 account.getUpdatedAt(),
                 account.getDeletedAt(),
-                account.getFollowings(),
-                account.getFollowers()
+                account.getFollowingIds(),
+                account.getFollowerIds()
                 );
     }
 
@@ -51,8 +51,6 @@ public class AccountPersistenceMapper {
                 privateInfo.getEmail(),
                 account.getGender().name(),
                 account.getRole().name(),
-                account.getFollowings(),
-                account.getFollowers(),
                 account.getCreatedAt(),
                 account.getUpdatedAt()
         );

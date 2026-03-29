@@ -100,7 +100,7 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
 
         from.addFollowing(targetId);
         target.addFollower(fromId);
-        loadFollowPort.saveFollowEntity(fromId, targetId);
+        loadFollowPort.saveFollowEntity(from, target);
 
         FollowEventDto eventDto = new FollowEventDto(fromId, targetId,target.getProfileInfo().getNickName());
         FollowEvent event = new FollowEvent(eventDto);
