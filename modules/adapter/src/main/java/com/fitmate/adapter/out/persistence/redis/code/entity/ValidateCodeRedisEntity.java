@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.TimeToLive;
 public class ValidateCodeRedisEntity {
 
     @Transient
-    private final Long DEFAULT_TTL = 60L;
+    private final Long DEFAULT_TTL = 600L;
 
     @Id
     private final String code;

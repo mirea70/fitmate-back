@@ -47,6 +47,8 @@ public class AccountPersistenceAdapter implements LoadAccountPort {
     @Override
     public void deleteAccountEntity(AccountId id) {
         AccountJpaEntity accountEntity = accountRepository.getById(id.getValue());
+        accountEntity.anonymizeForDelete();
+        accountRepository.saveAndFlush(accountEntity);
         accountRepository.delete(accountEntity);
     }
 }

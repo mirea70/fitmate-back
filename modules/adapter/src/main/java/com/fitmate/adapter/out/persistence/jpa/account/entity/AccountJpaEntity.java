@@ -42,10 +42,10 @@ public class AccountJpaEntity extends BaseJpaEntity {
     @Column
     private Long profileImageId;
 
-    @Column(length = 5,unique = true, nullable = false)
+    @Column(length = 32, unique = true, nullable = false)
     private String name;
 
-    @Column(length = 11, unique = true, nullable = false)
+    @Column(length = 37, unique = true, nullable = false)
     private String phone;
 
     @Column(unique = true, nullable = false)
@@ -85,5 +85,14 @@ public class AccountJpaEntity extends BaseJpaEntity {
         super.updatedAt = updatedAt;
         this.followings = followings;
         this.followers = followers;
+    }
+
+    public void anonymizeForDelete() {
+        String suffix = "_DEL_" + System.currentTimeMillis();
+        this.loginName = this.loginName + suffix;
+        this.nickName = this.nickName + suffix;
+        this.name = this.name + suffix;
+        this.phone = this.phone + suffix;
+        this.email = this.email + suffix;
     }
 }
