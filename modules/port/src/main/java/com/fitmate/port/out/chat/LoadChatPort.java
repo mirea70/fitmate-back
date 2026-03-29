@@ -18,4 +18,5 @@ public interface LoadChatPort {
     Optional<String> findChatRoomId(Set<Long> accountIds);
     List<ChatMessageResponse> getMessagesByRoomId(String roomId);
     List<ChatRoomListItemResponse> getMyChatRooms(Long accountId);
+    void updateReadStatus(String roomId, Long accountId);
 }

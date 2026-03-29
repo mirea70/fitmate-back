@@ -4,6 +4,7 @@ import com.fitmate.adapter.WebAdapter;
 import com.fitmate.adapter.in.web.chat.dto.ChatRoomCreateDmRequest;
 import com.fitmate.adapter.in.web.chat.dto.ChatRoomCreateGroupRequest;
 import com.fitmate.adapter.in.web.chat.mapper.ChatWebAdapterMapper;
+import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.port.in.chat.usecase.ChatUseCasePort;
 import com.fitmate.port.out.chat.dto.ChatMessageResponse;
 import com.fitmate.port.out.chat.dto.ChatRoomListItemResponse;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,7 +52,7 @@ public class ChatController {
             **[참고]** 채팅이 1회이상 이루어진 채팅방만 조회됩니다. 채팅 기능 사용방법은 GitHub 저장소를 확인해주세요.
             """)
     @GetMapping("/my/rooms")
-    public ResponseEntity<List<ChatRoomListItemResponse>> getMyChatRooms(@RequestParam Long accountId) {
-        return ResponseEntity.ok(chatUseCasePort.getMyChatRooms(accountId));
+    public ResponseEntity<List<ChatRoomListItemResponse>> getMyChatRooms(@AuthenticationPrincipal AuthDetails authDetails) {
+        return ResponseEntity.ok(chatUseCasePort.getMyChatRooms(authDetails.getAccount().getId()));
     }
 }

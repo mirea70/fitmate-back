@@ -38,6 +38,8 @@ public class ChatRoomQueryRepository {
     }
 
     private Aggregation getAggregationForFindAllByMyAccountId(Long accountId) {
+        String readStatusId = "\"_id\": {\"$concat\": [\"$roomId\", \"_\", \"" + accountId + "\"]}";
+
         AggregationOperation lookupOperation = Aggregation.lookup(
                 "ChatRoom", "roomId", "_id", "room"
         );
@@ -48,6 +50,42 @@ public class ChatRoomQueryRepository {
                 Criteria.where("room.joinAccountIds").in(accountId)
         );
 
+        AggregationOperation lookupReadStatus = context -> {
+            return new org.bson.Document("$lookup", new org.bson.Document()
+                    .append("from", "ChatReadStatus")
+                    .append("let", new org.bson.Document("rid", "$roomId"))
+                    .append("pipeline", java.util.Arrays.asList(
+                            new org.bson.Document("$match", new org.bson.Document("$expr",
+                                    new org.bson.Document("$eq", java.util.Arrays.asList(
+                                            "$_id",
+                                            new org.bson.Document("$concat", java.util.Arrays.asList("$$rid", "_", String.valueOf(accountId)))
+                                    ))
+                            ))
+                    ))
+                    .append("as", "readStatus")
+            );
+        };
+
+        AggregationOperation addReadStatusField = context -> {
+            return new org.bson.Document("$addFields", new org.bson.Document()
+                    .append("lastReadAt", new org.bson.Document("$ifNull",
+                            java.util.Arrays.asList(
+                                    new org.bson.Document("$arrayElemAt", java.util.Arrays.asList("$readStatus.lastReadAt", 0)),
+                                    new java.util.Date(0)
+                            )
+                    ))
+                    .append("isUnread", new org.bson.Document("$cond", java.util.Arrays.asList(
+                            new org.bson.Document("$gt", java.util.Arrays.asList(
+                                    "$createdAt",
+                                    new org.bson.Document("$ifNull", java.util.Arrays.asList(
+                                            new org.bson.Document("$arrayElemAt", java.util.Arrays.asList("$readStatus.lastReadAt", 0)),
+                                            new java.util.Date(0)
+                                    ))
+                            )),
+                            1, 0
+                    )))
+            );
+        };
 
         AggregationOperation sortOperation = Aggregation.sort(
                 Sort.by(Sort.Direction.DESC, "createdAt")
@@ -60,7 +98,8 @@ public class ChatRoomQueryRepository {
                 .first("room.name").as("roomName")
                 .first("room.matingId").as("matingId")
                 .first("room.roomType").as("roomType")
-                .first("room.joinAccountIds").as("memberAccountIds");
+                .first("room.joinAccountIds").as("memberAccountIds")
+                .sum("isUnread").as("unreadCount");
 
         AggregationOperation projectOperation = Aggregation.project()
                 .andInclude("roomId")
@@ -69,14 +108,15 @@ public class ChatRoomQueryRepository {
                 .andInclude("lastMessageTime")
                 .andInclude("matingId")
                 .andInclude("roomType")
-                .andInclude("memberAccountIds");
+                .andInclude("memberAccountIds")
+                .andInclude("unreadCount");
 
         AggregationOperation finalSortOperation = Aggregation.sort(
                 Sort.by(Sort.Direction.DESC, "lastMessageTime")
         );
 
         return Aggregation.newAggregation(
-                lookupOperation, unwindOperation, matchOperation, sortOperation, groupOperation, projectOperation, finalSortOperation
+                lookupOperation, unwindOperation, matchOperation, lookupReadStatus, addReadStatusField, sortOperation, groupOperation, projectOperation, finalSortOperation
         );
     }
 }

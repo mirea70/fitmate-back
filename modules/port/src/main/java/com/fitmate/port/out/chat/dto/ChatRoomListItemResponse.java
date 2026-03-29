@@ -14,4 +14,5 @@ public class ChatRoomListItemResponse {
     private Long matingId;
     private String roomType;
     private List<Long> memberAccountIds;
+    private int unreadCount;
 }

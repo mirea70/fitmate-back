@@ -2,9 +2,11 @@ package com.fitmate.adapter.out.persistence.mongo.chat.adapter;
 
 import com.fitmate.adapter.PersistenceAdapter;
 import com.fitmate.adapter.out.persistence.mongo.chat.entity.ChatMessageMongoEntity;
+import com.fitmate.adapter.out.persistence.mongo.chat.entity.ChatReadStatusMongoEntity;
 import com.fitmate.adapter.out.persistence.mongo.chat.entity.ChatRoomMongoEntity;
 import com.fitmate.adapter.out.persistence.mongo.chat.mapper.ChatPersistenceMapper;
 import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatMessageRepository;
+import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatReadStatusRepository;
 import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatRoomQueryRepository;
 import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatRoomRepository;
 import com.fitmate.domain.chat.message.ChatMessage;
@@ -27,6 +29,7 @@ public class ChatPersistenceAdapter implements LoadChatPort {
     private final ChatPersistenceMapper chatPersistenceMapper;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomQueryRepository chatRoomQueryRepository;
+    private final ChatReadStatusRepository chatReadStatusRepository;
 
     @Override
     public ChatRoom loadChatRoom(String roomId) {
@@ -65,5 +68,11 @@ public class ChatPersistenceAdapter implements LoadChatPort {
     @Override
     public List<ChatRoomListItemResponse> getMyChatRooms(Long accountId) {
         return chatRoomQueryRepository.findAllByMyAccountId(accountId);
+    }
+
+    @Override
+    public void updateReadStatus(String roomId, Long accountId) {
+        ChatReadStatusMongoEntity readStatus = new ChatReadStatusMongoEntity(roomId, accountId, new java.util.Date());
+        chatReadStatusRepository.save(readStatus);
     }
 }

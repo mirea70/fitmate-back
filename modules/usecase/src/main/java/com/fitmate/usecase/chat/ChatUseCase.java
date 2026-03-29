@@ -45,6 +45,7 @@ public class ChatUseCase implements ChatUseCasePort {
         ChatRoom chatRoom = loadChatPort.loadChatRoom(roomId);
         chatRoom.addJoinAccountId(senderId);
         loadChatPort.saveChatRoom(chatRoom);
+        loadChatPort.updateReadStatus(roomId, senderId);
     }
 
     @Override
