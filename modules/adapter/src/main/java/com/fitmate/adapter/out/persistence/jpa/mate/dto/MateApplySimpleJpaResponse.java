@@ -35,7 +35,7 @@ public class MateApplySimpleJpaResponse {
 
     private Long getThumbnailFileId(Set<Long> introImageIds) {
         if(introImageIds == null) return null;
-        long min = 0L;
+        long min = Long.MAX_VALUE;
         for (Long introImageId : introImageIds) {
             min = Math.min(min, introImageId);
         }

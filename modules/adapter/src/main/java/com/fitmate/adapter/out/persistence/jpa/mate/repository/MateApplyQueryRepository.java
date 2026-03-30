@@ -6,17 +6,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateApplyJpaEntity.mateApplyJpaEntity;
+
 @Repository
 @RequiredArgsConstructor
 public class MateApplyQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     public List<Long> getMateIdsFromMateRequest(Long applierId, String approveStatus) {
-        return null;
-//        return queryFactory
-//                .select(mateRequestJpaEntity.mateId)
-//                .from(mateRequestJpaEntity)
-//                .where(mateRequestJpaEntity.applierId.eq(applierId).and(mateRequestJpaEntity.approveStatus.eq(approveStatus)))
-//                .fetch();
+        return queryFactory
+                .select(mateApplyJpaEntity.mateId)
+                .from(mateApplyJpaEntity)
+                .where(mateApplyJpaEntity.applierId.eq(applierId).and(mateApplyJpaEntity.approveStatus.eq(approveStatus)))
+                .fetch();
     }
 }
