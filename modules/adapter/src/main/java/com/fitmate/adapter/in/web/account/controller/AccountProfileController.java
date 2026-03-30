@@ -80,7 +80,7 @@ public class AccountProfileController {
     }
 
     @Operation(summary = "내가 작성한 메이트 목록 조회", description = "로그인한 사용자가 작성한 메이트 글 목록 조회 API")
-    @GetMapping("/my")
+    @GetMapping("/my/mate/list")
     public ResponseEntity<List<MateSimpleResponse>> findMyMates(@AuthenticationPrincipal AuthDetails authDetails) {
         List<MateSimpleResponse> responses = mateUseCasePort.findMyMates(authDetails.getAccount().getId());
         return ResponseEntity.ok(responses);
