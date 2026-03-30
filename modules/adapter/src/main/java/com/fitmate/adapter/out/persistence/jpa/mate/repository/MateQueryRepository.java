@@ -191,7 +191,7 @@ public class MateQueryRepository {
                 .fetchOne();
     }
 
-    public List<MateApplySimpleJpaResponse> getMyMateApplies(List<Long> mateIds) {
+    public List<MateApplySimpleJpaResponse> getMyMateApplies(List<Long> mateIds, Long applierId) {
         return queryFactory
                 .select(new QMateApplySimpleJpaResponse(
                         mateJpaEntity.id,
@@ -205,7 +205,10 @@ public class MateQueryRepository {
                         mateJpaEntity.totalFee,
                         mateApplyJpaEntity.createdAt))
                 .from(mateJpaEntity)
-                .innerJoin(mateApplyJpaEntity).on(mateJpaEntity.id.eq(mateApplyJpaEntity.mateId))
+                .innerJoin(mateApplyJpaEntity).on(
+                        mateJpaEntity.id.eq(mateApplyJpaEntity.mateId)
+                                .and(mateApplyJpaEntity.applierId.eq(applierId))
+                )
                 .where(mateJpaEntity.id.in(mateIds))
                 .orderBy(mateApplyJpaEntity.createdAt.desc())
                 .fetch();

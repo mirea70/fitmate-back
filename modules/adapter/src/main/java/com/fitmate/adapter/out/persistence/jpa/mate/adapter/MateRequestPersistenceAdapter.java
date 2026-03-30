@@ -59,7 +59,7 @@ public class MateRequestPersistenceAdapter implements LoadMateRequestPort {
         List<Long> mateIds = mateApplyQueryRepository.getMateIdsFromMateRequest(applierId, approveStatus.name());
         if(CollectionUtils.isEmpty(mateIds)) return List.of();
 
-        List<MateApplySimpleJpaResponse> jpaResponses = mateQueryRepository.getMyMateApplies(mateIds);
+        List<MateApplySimpleJpaResponse> jpaResponses = mateQueryRepository.getMyMateApplies(mateIds, applierId);
         return matePersistenceMapper.jpaResponsesToResponsesForMateRequest(jpaResponses);
     }
 
