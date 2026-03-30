@@ -16,6 +16,7 @@ public interface LoadMatePort {
     void saveMateFeeEntities(List<MateFee> mateFees, MateId id);
     Mate loadMateEntity(MateId id);
     SliceResponse<MateSimpleResponse> loadMates(MateListCommand command);
+    List<MateSimpleResponse> loadMatesByWriterId(Long writerId);
     void deleteAllMateByWriter(AccountId id);
     void deleteAllMateFeeByMateId(MateId id);
 }

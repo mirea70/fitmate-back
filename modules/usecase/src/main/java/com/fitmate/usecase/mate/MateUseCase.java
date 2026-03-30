@@ -85,6 +85,12 @@ public class MateUseCase implements MateUseCasePort {
         loadMatePort.saveMateFeeEntities(mate.getMateFees(), mate.getId());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<MateSimpleResponse> findMyMates(Long writerId) {
+        return loadMatePort.loadMatesByWriterId(writerId);
+    }
+
     private void validateModifyCommand(MateModifyCommand command, Mate mate) {
         if(!mate.getWriterId().equals(command.getWriterId()))
             throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);

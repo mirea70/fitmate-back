@@ -156,6 +156,29 @@ public class MateQueryRepository {
         return mateJpaEntity.fitCategory.contains(keyword);
     }
 
+    public List<MateSimpleJpaResponse> readListByWriterId(Long writerId) {
+        return queryFactory
+                .select(new QMateSimpleJpaResponse(
+                        mateJpaEntity.id,
+                        mateJpaEntity.introImageIds,
+                        accountJpaEntity.profileImageId,
+                        accountJpaEntity.nickName,
+                        mateJpaEntity.fitCategory,
+                        mateJpaEntity.title,
+                        mateJpaEntity.fitPlaceAddress,
+                        mateJpaEntity.mateAt,
+                        mateJpaEntity.gatherType,
+                        mateJpaEntity.permitGender,
+                        mateJpaEntity.permitPeopleCnt,
+                        mateJpaEntity.approvedAccountIds
+                ))
+                .from(mateJpaEntity)
+                .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
+                .where(mateJpaEntity.writerId.eq(writerId))
+                .orderBy(mateJpaEntity.id.desc())
+                .fetch();
+    }
+
     public MateQuestionJpaResponse readQuestion(Long mateId) {
         return queryFactory
                 .select(new QMateQuestionJpaResponse(
