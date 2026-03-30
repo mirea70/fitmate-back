@@ -2,17 +2,17 @@ package com.fitmate.adapter.out.persistence.jpa.mate.mapper;
 
 import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateApplySimpleJpaResponse;
 import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateQuestionJpaResponse;
-import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateApplyJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateSimpleJpaResponse;
+import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateApplyJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateFeeJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateJpaEntity;
 import com.fitmate.domain.mate.*;
+import com.fitmate.domain.mate.apply.MateApply;
+import com.fitmate.domain.mate.apply.MateApplyId;
 import com.fitmate.domain.mate.enums.ApproveStatus;
 import com.fitmate.domain.mate.enums.FitCategory;
 import com.fitmate.domain.mate.enums.GatherType;
 import com.fitmate.domain.mate.enums.PermitGender;
-import com.fitmate.domain.mate.apply.MateApply;
-import com.fitmate.domain.mate.apply.MateApplyId;
 import com.fitmate.port.in.common.SliceCommand;
 import com.fitmate.port.in.mate.command.MateListCommand;
 import com.fitmate.port.out.common.SliceResponse;
@@ -22,7 +22,6 @@ import com.fitmate.port.out.mate.dto.MateSimpleResponse;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -173,13 +172,13 @@ public class MatePersistenceMapper {
 
         Pageable pageable = PageRequest.of(command.getPage(), pageSize, sortDir, command.getSortProperty());
         Slice<MateSimpleResponse> slices = new SliceImpl<>(content, pageable, hasNext);
-        return new SliceResponse<MateSimpleResponse>(
-                    slices.getContent(),
-                    slices.getNumber(),
-                    slices.getSize(),
-                    slices.isFirst(),
-                    slices.isLast()
-                );
+        return new SliceResponse<>(
+                slices.getContent(),
+                slices.getNumber(),
+                slices.getSize(),
+                slices.isFirst(),
+                slices.isLast()
+        );
     }
 
     public List<MateSimpleResponse> jpaResponsesToResponses(List<MateSimpleJpaResponse> jpaResponses) {
