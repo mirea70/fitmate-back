@@ -55,6 +55,12 @@ public class ChatPersistenceAdapter implements LoadChatPort {
     }
 
     @Override
+    public ChatRoom loadChatRoomByMateId(Long mateId) {
+        ChatRoomMongoEntity entity = chatRoomRepository.getByMateId(mateId);
+        return chatPersistenceMapper.entityToDomain(entity);
+    }
+
+    @Override
     public Optional<String> findChatRoomId(Set<Long> accountIds) {
         return chatRoomQueryRepository.findRoomIdByExactJoinAccountIds(accountIds);
     }

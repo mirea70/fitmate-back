@@ -10,6 +10,13 @@ import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.mate.command.MateApplyCommand;
 import com.fitmate.port.in.mate.command.MateApproveCommand;
 import com.fitmate.port.in.mate.usecase.MateApplyUseCasePort;
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.AccountId;
+import com.fitmate.domain.chat.enums.MessageType;
+import com.fitmate.domain.chat.message.ChatMessage;
+import com.fitmate.domain.chat.room.ChatRoom;
+import com.fitmate.port.out.account.LoadAccountPort;
+import com.fitmate.port.out.chat.LoadChatPort;
 import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
@@ -34,8 +41,11 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
     private final LoadMatePort loadMatePort;
     private final LoadMateRequestPort loadMateRequestPort;
+    private final LoadAccountPort loadAccountPort;
+    private final LoadChatPort loadChatPort;
     private final MateUseCaseMapper mateUseCaseMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private static final String DEFAULT_ENTER_MESSAGE = "님이 채팅방에 참여하였습니다.";
 
     @Override
     @Transactional(readOnly = true)
@@ -57,6 +67,10 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
             else
                 mate.addWaitingAccountId(applierId);
         });
+
+        if(approveStatus == ApproveStatus.APPROVE) {
+            addToChatRoom(mateApplyCommand.getMateId(), applierId);
+        }
 
         publishMateRequestEvent(loadedMate.get(), applierId);
     }
@@ -97,6 +111,9 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         loadedMateApply.update(MateApply::changeToApprove);
 
         loadedMate.update(mate -> mate.approve(applierId));
+
+        addToChatRoom(mateId, applierId);
+
         publishMateApproveEvent(loadedMate.get(), applierId);
     }
 
@@ -107,6 +124,18 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
         Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
         loadedMateApply.update(mateApply -> mateApply.cancel(cancelReason, LocalDateTime.now()));
+    }
+
+    private void addToChatRoom(Long mateId, Long accountId) {
+        ChatRoom chatRoom = loadChatPort.loadChatRoomByMateId(mateId);
+        chatRoom.addJoinAccountId(accountId);
+        String roomId = loadChatPort.saveChatRoom(chatRoom);
+
+        Account account = loadAccountPort.loadAccountEntity(new AccountId(accountId));
+        String nickName = account.getProfileInfo().getNickName();
+        String enterMessage = nickName + DEFAULT_ENTER_MESSAGE;
+        ChatMessage chatMessage = ChatMessage.withoutId(roomId, enterMessage, accountId, nickName, MessageType.ENTER, null);
+        loadChatPort.saveChatMessage(chatMessage);
     }
 
     private void publishMateApproveEvent(Mate mate, Long applierId) {

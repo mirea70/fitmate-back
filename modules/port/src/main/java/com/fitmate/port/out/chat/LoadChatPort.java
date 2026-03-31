@@ -15,6 +15,7 @@ public interface LoadChatPort {
     String saveChatRoom(ChatRoom chatRoom);
     void saveChatMessage(ChatMessage chatMessage);
     boolean existChatRoom(MateId id);
+    ChatRoom loadChatRoomByMateId(Long mateId);
     Optional<String> findChatRoomId(Set<Long> accountIds);
     List<ChatMessageResponse> getMessagesByRoomId(String roomId);
     List<ChatRoomListItemResponse> getMyChatRooms(Long accountId);

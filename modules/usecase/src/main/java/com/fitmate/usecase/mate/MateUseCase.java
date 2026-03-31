@@ -10,7 +10,12 @@ import com.fitmate.port.in.mate.command.MateCreateCommand;
 import com.fitmate.port.in.mate.command.MateListCommand;
 import com.fitmate.port.in.mate.command.MateModifyCommand;
 import com.fitmate.port.in.mate.usecase.MateUseCasePort;
+import com.fitmate.domain.chat.enums.MessageType;
+import com.fitmate.domain.chat.enums.RoomType;
+import com.fitmate.domain.chat.message.ChatMessage;
+import com.fitmate.domain.chat.room.ChatRoom;
 import com.fitmate.port.out.account.LoadAccountPort;
+import com.fitmate.port.out.chat.LoadChatPort;
 import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.file.LoadAttachFilePort;
@@ -32,8 +37,10 @@ public class MateUseCase implements MateUseCasePort {
 
     private final LoadMatePort loadMatePort;
     private final LoadAccountPort loadAccountPort;
+    private final LoadChatPort loadChatPort;
     private final LoadAttachFilePort loadAttachFilePort;
     private final MateUseCaseMapper mateUseCaseMapper;
+    private static final String DEFAULT_ENTER_MESSAGE = "님이 채팅방에 참여하였습니다.";
 
     @Override
     public void registerMate(MateCreateCommand mateCreateCommand) {
@@ -44,6 +51,17 @@ public class MateUseCase implements MateUseCasePort {
         mate.autoApproveWriter();
         Long mateEntityId = loadMatePort.saveMateEntity(mate);
         loadMatePort.saveMateFeeEntities(mate.getMateFees(), new MateId(mateEntityId));
+
+        ChatRoom chatRoom = ChatRoom.withoutId(mate.getTitle(), mateEntityId, null, null, RoomType.GROUP);
+        Long writerId = mateCreateCommand.getWriterId();
+        chatRoom.addJoinAccountId(writerId);
+        String roomId = loadChatPort.saveChatRoom(chatRoom);
+
+        Account writer = loadAccountPort.loadAccountEntity(new AccountId(writerId));
+        String writerNickName = writer.getProfileInfo().getNickName();
+        String enterMessage = writerNickName + DEFAULT_ENTER_MESSAGE;
+        ChatMessage chatMessage = ChatMessage.withoutId(roomId, enterMessage, writerId, writerNickName, MessageType.ENTER, null);
+        loadChatPort.saveChatMessage(chatMessage);
     }
 
     @Override
