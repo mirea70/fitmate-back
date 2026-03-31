@@ -119,6 +119,16 @@ public class AccountJpaEntity extends BaseJpaEntity {
                 .collect(Collectors.toSet());
     }
 
+    public void syncFrom(String password, String nickName, String introduction, Long profileImageId, String name, String phone, String email) {
+        this.password = password;
+        this.nickName = nickName;
+        this.introduction = introduction;
+        this.profileImageId = profileImageId;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
+
     public void anonymizeForDelete() {
         String suffix = "_DEL_" + System.currentTimeMillis();
         this.loginName = this.loginName + suffix;

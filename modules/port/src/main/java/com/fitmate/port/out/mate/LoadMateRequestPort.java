@@ -3,6 +3,7 @@ package com.fitmate.port.out.mate;
 import com.fitmate.domain.account.AccountId;
 import com.fitmate.domain.mate.apply.MateApply;
 import com.fitmate.domain.mate.enums.ApproveStatus;
+import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
 import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
 
@@ -13,6 +14,7 @@ public interface LoadMateRequestPort {
     void isDuplicateMateRequest(Long mateId, Long accountId);
     void saveMateRequestEntity(MateApply mateApply);
     MateApply loadMateRequestEntity(Long mateId, Long applierId);
+    Loaded<MateApply> loadMateApply(Long mateId, Long applierId);
     List<MateRequestSimpleResponse> loadMateApplies(Long applierId, ApproveStatus approveStatus);
     void deleteAllMateRequestByApplier(AccountId id);
 }

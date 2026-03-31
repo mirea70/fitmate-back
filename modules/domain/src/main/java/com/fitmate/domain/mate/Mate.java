@@ -192,4 +192,11 @@ public class Mate {
         if(this.approvedAccountIds.size() + 1 > this.permitPeopleCnt)
             throw new LimitException(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
     }
+
+    public void cancelApply(Long accountId) {
+        if(this.waitingAccountIds != null)
+            this.waitingAccountIds.remove(accountId);
+        if(this.approvedAccountIds != null)
+            this.approvedAccountIds.remove(accountId);
+    }
 }

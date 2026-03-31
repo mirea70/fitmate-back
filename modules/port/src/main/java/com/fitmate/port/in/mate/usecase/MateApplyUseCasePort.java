@@ -8,4 +8,5 @@ public interface MateApplyUseCasePort {
     MateQuestionResponse readQuestion(Long mateId);
     void applyMate(MateApplyCommand mateApplyCommand);
     void approveMate(MateApproveCommand mateApproveCommand);
+    void cancelMateApply(Long mateId, Long applierId, String cancelReason);
 }

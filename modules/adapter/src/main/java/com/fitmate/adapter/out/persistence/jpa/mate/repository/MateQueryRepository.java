@@ -208,6 +208,7 @@ public class MateQueryRepository {
                 .innerJoin(mateApplyJpaEntity).on(
                         mateJpaEntity.id.eq(mateApplyJpaEntity.mateId)
                                 .and(mateApplyJpaEntity.applierId.eq(applierId))
+                                .and(mateApplyJpaEntity.deletedAt.isNull())
                 )
                 .where(mateJpaEntity.id.in(mateIds))
                 .orderBy(mateApplyJpaEntity.createdAt.desc())

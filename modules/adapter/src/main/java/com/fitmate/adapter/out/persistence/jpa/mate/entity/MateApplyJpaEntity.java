@@ -4,16 +4,12 @@ import com.fitmate.adapter.out.persistence.jpa.common.BaseJpaEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mate_apply")
-@SQLDelete(sql = "UPDATE MATE_REQUEST SET DELETED_AT = CURRENT_TIMESTAMP WHERE ID = ? ")
-@Where(clause = "DELETED_AT IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class MateApplyJpaEntity extends BaseJpaEntity {
@@ -34,7 +30,10 @@ public class MateApplyJpaEntity extends BaseJpaEntity {
     @Column(nullable = false)
     private String approveStatus;
 
-    @Column(name = "deleted_at")
+    @Column
+    private String cancelReason;
+
+    @Column
     private LocalDateTime deletedAt;
 
     public MateApplyJpaEntity(Long id, String comeAnswer, Long mateId, String approveStatus, Long applierId, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -45,5 +44,16 @@ public class MateApplyJpaEntity extends BaseJpaEntity {
         this.applierId = applierId;
         super.createdAt = createdAt;
         super.updatedAt = updatedAt;
+    }
+
+    public void cancel(String cancelReason) {
+        this.cancelReason = cancelReason;
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public void syncFrom(String approveStatus, String cancelReason, LocalDateTime deletedAt) {
+        this.approveStatus = approveStatus;
+        this.cancelReason = cancelReason;
+        this.deletedAt = deletedAt;
     }
 }

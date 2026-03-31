@@ -13,6 +13,7 @@ import com.fitmate.domain.error.exceptions.DuplicatedException;
 import com.fitmate.domain.error.results.DuplicatedErrorResult;
 import com.fitmate.domain.mate.apply.MateApply;
 import com.fitmate.domain.mate.enums.ApproveStatus;
+import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
 import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
@@ -38,7 +39,7 @@ public class MateRequestPersistenceAdapter implements LoadMateRequestPort {
 
     @Override
     public void isDuplicateMateRequest(Long mateId, Long accountId) {
-        if(mateApplyRepository.existsByMateIdAndApplierId(mateId, accountId))
+        if(mateApplyRepository.existsByMateIdAndApplierIdAndDeletedAtIsNull(mateId, accountId))
             throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_MATE_REQUEST);
     }
 
@@ -61,6 +62,13 @@ public class MateRequestPersistenceAdapter implements LoadMateRequestPort {
 
         List<MateApplySimpleJpaResponse> jpaResponses = mateQueryRepository.getMyMateApplies(mateIds, applierId);
         return matePersistenceMapper.jpaResponsesToResponsesForMateRequest(jpaResponses);
+    }
+
+    @Override
+    public Loaded<MateApply> loadMateApply(Long mateId, Long applierId) {
+        MateApplyJpaEntity entity = mateApplyRepository.getByMateAndApplier(mateId, applierId);
+        MateApply domain = matePersistenceMapper.entityToDomain(entity);
+        return new Loaded<>(domain, updated -> matePersistenceMapper.syncToEntity(entity, updated));
     }
 
     @Override

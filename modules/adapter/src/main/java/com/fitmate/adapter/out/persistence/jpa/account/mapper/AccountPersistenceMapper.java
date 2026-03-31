@@ -33,6 +33,20 @@ public class AccountPersistenceMapper {
                 );
     }
 
+    public void syncToEntity(AccountJpaEntity entity, Account domain) {
+        ProfileInfo profileInfo = domain.getProfileInfo();
+        PrivateInfo privateInfo = domain.getPrivateInfo();
+        entity.syncFrom(
+                domain.getPassword().getValue(),
+                profileInfo.getNickName(),
+                profileInfo.getIntroduction(),
+                profileInfo.getProfileImageId(),
+                privateInfo.getName(),
+                privateInfo.getPhone(),
+                privateInfo.getEmail()
+        );
+    }
+
     public AccountJpaEntity domainToEntity(Account account) {
 
         Long id = account.getId() != null ? account.getId().getValue() : null;

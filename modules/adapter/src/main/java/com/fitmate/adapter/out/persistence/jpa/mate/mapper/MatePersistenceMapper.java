@@ -133,9 +133,37 @@ public class MatePersistenceMapper {
                 mateRequestEntity.getMateId(),
                 mateRequestEntity.getApplierId(),
                 ApproveStatus.valueOf(mateRequestEntity.getApproveStatus()),
+                mateRequestEntity.getCancelReason(),
                 mateRequestEntity.getCreatedAt(),
                 mateRequestEntity.getUpdatedAt()
         );
+    }
+
+    public void syncToEntity(MateJpaEntity entity, Mate domain) {
+        FitPlace fitPlace = domain.getFitPlace();
+        PermitAges permitAges = domain.getPermitAges();
+        entity.syncFrom(
+                domain.getFitCategory().name(),
+                domain.getTitle(),
+                domain.getIntroduction(),
+                domain.getIntroImageIds(),
+                domain.getMateAt(),
+                fitPlace.getName(),
+                fitPlace.getAddress(),
+                domain.getGatherType().name(),
+                domain.getPermitGender().name(),
+                permitAges.getMax(),
+                permitAges.getMin(),
+                domain.getPermitPeopleCnt(),
+                domain.getApplyQuestion(),
+                domain.getTotalFee(),
+                domain.getWaitingAccountIds(),
+                domain.getApprovedAccountIds()
+        );
+    }
+
+    public void syncToEntity(MateApplyJpaEntity entity, MateApply domain) {
+        entity.syncFrom(domain.getApproveStatus().name(), domain.getCancelReason(), domain.getDeletedAt());
     }
 
     public MateSimpleResponse jpaResponseToResponse(MateSimpleJpaResponse jpaResponse) {

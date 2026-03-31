@@ -11,6 +11,7 @@ import com.fitmate.port.in.mate.command.MateListCommand;
 import com.fitmate.port.in.mate.command.MateModifyCommand;
 import com.fitmate.port.in.mate.usecase.MateUseCasePort;
 import com.fitmate.port.out.account.LoadAccountPort;
+import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.file.LoadAttachFilePort;
 import com.fitmate.port.out.mate.LoadMatePort;
@@ -61,10 +62,10 @@ public class MateUseCase implements MateUseCasePort {
 
     @Override
     public void modifyMate(MateModifyCommand command) {
-        Mate mate = loadMatePort.loadMateEntity(new MateId(command.getMateId()));
-        validateModifyCommand(command, mate);
+        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(command.getMateId()));
+        validateModifyCommand(command, loadedMate.get());
 
-        mate.update(
+        loadedMate.update(mate -> mate.update(
                 command.getFitCategory(),
                 command.getTitle(),
                 command.getIntroduction(),
@@ -79,10 +80,9 @@ public class MateUseCase implements MateUseCasePort {
                 command.getPermitPeopleCnt(),
                 command.getMateFees(),
                 command.getApplyQuestion()
-        );
-        loadMatePort.saveMateEntity(mate);
-        loadMatePort.deleteAllMateFeeByMateId(mate.getId());
-        loadMatePort.saveMateFeeEntities(mate.getMateFees(), mate.getId());
+        ));
+        loadMatePort.deleteAllMateFeeByMateId(loadedMate.get().getId());
+        loadMatePort.saveMateFeeEntities(loadedMate.get().getMateFees(), loadedMate.get().getId());
     }
 
     @Override

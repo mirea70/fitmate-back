@@ -17,7 +17,9 @@ public class MateApplyQueryRepository {
         return queryFactory
                 .select(mateApplyJpaEntity.mateId)
                 .from(mateApplyJpaEntity)
-                .where(mateApplyJpaEntity.applierId.eq(applierId).and(mateApplyJpaEntity.approveStatus.eq(approveStatus)))
+                .where(mateApplyJpaEntity.applierId.eq(applierId)
+                        .and(mateApplyJpaEntity.approveStatus.eq(approveStatus))
+                        .and(mateApplyJpaEntity.deletedAt.isNull()))
                 .fetch();
     }
 }

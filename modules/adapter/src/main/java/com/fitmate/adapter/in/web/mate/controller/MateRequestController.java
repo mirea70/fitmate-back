@@ -3,6 +3,7 @@ package com.fitmate.adapter.in.web.mate.controller;
 import com.fitmate.adapter.WebAdapter;
 import com.fitmate.adapter.in.web.mate.dto.MateApplyRequest;
 import com.fitmate.adapter.in.web.mate.dto.MateApproveRequest;
+import com.fitmate.adapter.in.web.mate.dto.MateCancelRequest;
 import com.fitmate.adapter.in.web.mate.mapper.MateWebAdapterMapper;
 import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.port.in.mate.usecase.MateApplyUseCasePort;
@@ -42,6 +43,15 @@ public class MateRequestController {
                                        @AuthenticationPrincipal AuthDetails authDetails) {
         mateApplyUseCasePort.applyMate(mateWebAdapterMapper.requestToCommand(
                 applyRequest, mateId, authDetails.getAccount().getId()));
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "메이트 신청 취소", description = "메이트 신청 취소 API")
+    @DeleteMapping("/cancel")
+    public ResponseEntity<?> cancelMateApply(@PathVariable Long mateId,
+                                             @RequestBody MateCancelRequest cancelRequest,
+                                             @AuthenticationPrincipal AuthDetails authDetails) {
+        mateApplyUseCasePort.cancelMateApply(mateId, authDetails.getAccount().getId(), cancelRequest.getCancelReason());
         return ResponseEntity.ok().build();
     }
 

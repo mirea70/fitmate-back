@@ -4,6 +4,7 @@ import com.fitmate.domain.account.Account;
 import com.fitmate.domain.account.AccountId;
 import com.fitmate.port.in.account.usecase.AccountPasswordUseCasePort;
 import com.fitmate.port.out.account.LoadAccountPort;
+import com.fitmate.port.out.common.Loaded;
 import com.fitmate.domain.error.exceptions.NotMatchException;
 import com.fitmate.domain.error.results.NotMatchErrorResult;
 import com.fitmate.port.out.sms.LoadSmsPort;
@@ -55,8 +56,7 @@ public class AccountPasswordUseCase implements AccountPasswordUseCasePort {
 
     @Override
     public void saveNewPassword(Long accountId, String newPassword) {
-        Account account = loadAccountPort.loadAccountEntity(new AccountId(accountId));
-        account.changePassword(passwordEncoder.encode(newPassword));
-        loadAccountPort.saveAccountEntity(account);
+        Loaded<Account> loadedAccount = loadAccountPort.loadAccount(new AccountId(accountId));
+        loadedAccount.update(account -> account.changePassword(passwordEncoder.encode(newPassword)));
     }
 }

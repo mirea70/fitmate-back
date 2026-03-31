@@ -10,6 +10,7 @@ import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.mate.command.MateApplyCommand;
 import com.fitmate.port.in.mate.command.MateApproveCommand;
 import com.fitmate.port.in.mate.usecase.MateApplyUseCasePort;
+import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
@@ -22,6 +23,9 @@ import com.fitmate.usecase.mate.mapper.MateUseCaseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @UseCase
 @RequiredArgsConstructor
@@ -41,19 +45,20 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
     @Override
     public void applyMate(MateApplyCommand mateApplyCommand) {
-        Mate mate = loadMatePort.loadMateEntity(new MateId(mateApplyCommand.getMateId()));
+        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(mateApplyCommand.getMateId()));
         Long applierId = mateApplyCommand.getApplierId();
-        if(applierId.equals(mate.getWriterId()))
+        if(applierId.equals(loadedMate.get().getWriterId()))
             throw new NotMatchException(NotMatchErrorResult.CANNOT_APPLY_WRITER);
 
-        ApproveStatus approveStatus = saveNewMateRequest(mateApplyCommand, mate.getGatherType());
-        if(approveStatus == ApproveStatus.APPROVE)
-            mate.addApprovedAccountId(applierId);
-        else
-            mate.addWaitingAccountId(applierId);
-        loadMatePort.saveMateEntity(mate);
+        ApproveStatus approveStatus = saveNewMateRequest(mateApplyCommand, loadedMate.get().getGatherType());
+        loadedMate.update(mate -> {
+            if(approveStatus == ApproveStatus.APPROVE)
+                mate.addApprovedAccountId(applierId);
+            else
+                mate.addWaitingAccountId(applierId);
+        });
 
-        publishMateRequestEvent(mate, applierId);
+        publishMateRequestEvent(loadedMate.get(), applierId);
     }
 
     private ApproveStatus saveNewMateRequest(MateApplyCommand mateApplyCommand, GatherType gatherType) {
@@ -84,20 +89,24 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         Long mateId = mateApproveCommand.getMateId();
         Long applierId = mateApproveCommand.getApplierId();
 
-        Mate mate = loadMatePort.loadMateEntity(new MateId(mateApproveCommand.getMateId()));
-        if(!mateApproveCommand.getAccountId().equals(mate.getWriterId()))
+        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(mateId));
+        if(!mateApproveCommand.getAccountId().equals(loadedMate.get().getWriterId()))
             throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);
 
-        doApproveMateRequest(mateId, applierId);
-        mate.approve(applierId);
-        loadMatePort.saveMateEntity(mate);
-        publishMateApproveEvent(mate, applierId);
+        Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
+        loadedMateApply.update(MateApply::changeToApprove);
+
+        loadedMate.update(mate -> mate.approve(applierId));
+        publishMateApproveEvent(loadedMate.get(), applierId);
     }
 
-    private void doApproveMateRequest(Long mateId, Long applierId) {
-        MateApply mateApply = loadMateRequestPort.loadMateRequestEntity(mateId, applierId);
-        mateApply.changeToApprove();
-        loadMateRequestPort.saveMateRequestEntity(mateApply);
+    @Override
+    public void cancelMateApply(Long mateId, Long applierId, String cancelReason) {
+        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(mateId));
+        loadedMate.update(mate -> mate.cancelApply(applierId));
+
+        Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
+        loadedMateApply.update(mateApply -> mateApply.cancel(cancelReason, LocalDateTime.now()));
     }
 
     private void publishMateApproveEvent(Mate mate, Long applierId) {

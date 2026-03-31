@@ -81,7 +81,8 @@ public class MateUseCaseMapper {
                 command.getComeAnswer(),
                 command.getMateId(),
                 command.getApplierId(),
-                approveStatus
+                approveStatus,
+                null
         );
     }
 }

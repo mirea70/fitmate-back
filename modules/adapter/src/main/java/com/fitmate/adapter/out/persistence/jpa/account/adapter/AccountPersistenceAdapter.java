@@ -7,6 +7,7 @@ import com.fitmate.adapter.out.persistence.jpa.account.repository.AccountReposit
 import com.fitmate.domain.account.Account;
 import com.fitmate.domain.account.AccountId;
 import com.fitmate.port.out.account.LoadAccountPort;
+import com.fitmate.port.out.common.Loaded;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
@@ -42,6 +43,13 @@ public class AccountPersistenceAdapter implements LoadAccountPort {
     public Account loadAccountEntity(AccountId id) {
         AccountJpaEntity accountEntity = accountRepository.getById(id.getValue());
         return accountPersistenceMapper.entityToDomain(accountEntity);
+    }
+
+    @Override
+    public Loaded<Account> loadAccount(AccountId id) {
+        AccountJpaEntity entity = accountRepository.getById(id.getValue());
+        Account domain = accountPersistenceMapper.entityToDomain(entity);
+        return new Loaded<>(domain, updated -> accountPersistenceMapper.syncToEntity(entity, updated));
     }
 
     @Override

@@ -8,13 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface MateApplyRepository extends JpaRepository<MateApplyJpaEntity, Long> {
-    boolean existsByMateIdAndApplierId(Long mateId, Long applierId);
+    boolean existsByMateIdAndApplierIdAndDeletedAtIsNull(Long mateId, Long applierId);
 
-    Optional<MateApplyJpaEntity> findByMateIdAndApplierId(Long mateId, Long applierId);
+    Optional<MateApplyJpaEntity> findByMateIdAndApplierIdAndDeletedAtIsNull(Long mateId, Long applierId);
 
     default MateApplyJpaEntity getByMateAndApplier(Long mateId, Long applierId) {
-        return this.findByMateIdAndApplierId(mateId, applierId)
+        return this.findByMateIdAndApplierIdAndDeletedAtIsNull(mateId, applierId)
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_MATE_REQUEST_DATA));
     }
+
     void deleteAllByApplierId(Long applierId);
 }

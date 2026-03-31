@@ -21,31 +21,35 @@ public class MateApply {
 
     private ApproveStatus approveStatus;
 
+    private String cancelReason;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
     private LocalDateTime deletedAt;
 
-    public static MateApply withId(MateApplyId id, String comeAnswer, Long mateId, Long applierId, ApproveStatus approveStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public static MateApply withId(MateApplyId id, String comeAnswer, Long mateId, Long applierId, ApproveStatus approveStatus, String cancelReason, LocalDateTime createdAt, LocalDateTime updatedAt) {
         return new MateApply(
                 id,
                 comeAnswer,
                 mateId,
                 applierId,
                 approveStatus,
+                cancelReason,
                 createdAt,
                 updatedAt,
                 null);
     }
 
-    public static MateApply withoutId(String comeAnswer, Long mateId, Long applierId, ApproveStatus approveStatus) {
+    public static MateApply withoutId(String comeAnswer, Long mateId, Long applierId, ApproveStatus approveStatus, String cancelReason) {
         return new MateApply(
                 null,
                 comeAnswer,
                 mateId,
                 applierId,
                 approveStatus,
+                cancelReason,
                 null,
                 null,
                 null);
@@ -53,5 +57,10 @@ public class MateApply {
 
     public void changeToApprove() {
         this.approveStatus = ApproveStatus.APPROVE;
+    }
+
+    public void cancel(String cancelReason, LocalDateTime deletedAt) {
+        this.cancelReason = cancelReason;
+        this.deletedAt = deletedAt;
     }
 }

@@ -107,4 +107,23 @@ public class MateJpaEntity extends BaseJpaEntity {
         super.createdAt = createdAt;
         super.updatedAt = updatedAt;
     }
+
+    public void syncFrom(String fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, String gatherType, String permitGender, Integer permitMaxAge, Integer permitMinAge, Integer permitPeopleCnt, String applyQuestion, Integer totalFee, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds) {
+        this.fitCategory = fitCategory;
+        this.title = title;
+        this.introduction = introduction;
+        this.introImageIds = introImageIds;
+        this.mateAt = mateAt;
+        this.fitPlaceName = fitPlaceName;
+        this.fitPlaceAddress = fitPlaceAddress;
+        this.gatherType = gatherType;
+        this.permitGender = permitGender;
+        this.permitMaxAge = permitMaxAge;
+        this.permitMinAge = permitMinAge;
+        this.permitPeopleCnt = permitPeopleCnt;
+        this.applyQuestion = applyQuestion;
+        this.totalFee = totalFee;
+        this.waitingAccountIds = waitingAccountIds;
+        this.approvedAccountIds = approvedAccountIds;
+    }
 }

@@ -14,6 +14,7 @@ import com.fitmate.domain.mate.MateFee;
 import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.common.SliceCommand;
 import com.fitmate.port.in.mate.command.MateListCommand;
+import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
@@ -47,6 +48,14 @@ public class MatePersistenceAdapter implements LoadMatePort {
         MateJpaEntity mateEntity = mateRepository.getById(id.getValue());
         List<MateFeeJpaEntity> mateFeeEntities = mateFeeRepository.findAllByMateId(id.getValue());
         return matePersistenceMapper.entityToDomain(mateEntity, mateFeeEntities);
+    }
+
+    @Override
+    public Loaded<Mate> loadMate(MateId id) {
+        MateJpaEntity entity = mateRepository.getById(id.getValue());
+        List<MateFeeJpaEntity> mateFeeEntities = mateFeeRepository.findAllByMateId(id.getValue());
+        Mate domain = matePersistenceMapper.entityToDomain(entity, mateFeeEntities);
+        return new Loaded<>(domain, updated -> matePersistenceMapper.syncToEntity(entity, updated));
     }
 
     @Override

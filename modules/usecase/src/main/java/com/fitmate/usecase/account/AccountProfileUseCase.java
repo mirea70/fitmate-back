@@ -11,6 +11,7 @@ import com.fitmate.port.in.account.command.AccountModifyCommand;
 import com.fitmate.port.in.account.usecase.AccountProfileUseCasePort;
 import com.fitmate.port.out.account.AccountProfileResponse;
 import com.fitmate.port.out.account.LoadAccountPort;
+import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.file.LoadAttachFilePort;
 import com.fitmate.port.out.follow.FollowDetailResponse;
 import com.fitmate.port.out.follow.LoadFollowPort;
@@ -61,14 +62,15 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
 
     @Override
     public void modify(AccountModifyCommand modifyCommand) {
-        Account account = loadAccountPort.loadAccountEntity(new AccountId(modifyCommand.getAccountId()));
-        checkDuplicated(account.getId().getValue(), modifyCommand);
+        Loaded<Account> loadedAccount = loadAccountPort.loadAccount(new AccountId(modifyCommand.getAccountId()));
+        checkDuplicated(loadedAccount.get().getId().getValue(), modifyCommand);
         Long profileImageId = modifyCommand.getProfileImageId();
         if(profileImageId != null) loadAttachFilePort.checkExistFile(modifyCommand.getProfileImageId());
 
-        account.updateProfileInfo(modifyCommand.getNickName(), modifyCommand.getIntroduction(), modifyCommand.getProfileImageId());
-        account.updatePrivateInfo(modifyCommand.getName(), modifyCommand.getPhone(), modifyCommand.getEmail());
-        loadAccountPort.saveAccountEntity(account);
+        loadedAccount.update(account -> {
+            account.updateProfileInfo(modifyCommand.getNickName(), modifyCommand.getIntroduction(), modifyCommand.getProfileImageId());
+            account.updatePrivateInfo(modifyCommand.getName(), modifyCommand.getPhone(), modifyCommand.getEmail());
+        });
     }
 
     @Override
