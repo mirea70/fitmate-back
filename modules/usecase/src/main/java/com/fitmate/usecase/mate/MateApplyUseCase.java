@@ -123,7 +123,16 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         loadedMate.update(mate -> mate.cancelApply(applierId));
 
         Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
+        if (loadedMateApply.get().getApproveStatus() == ApproveStatus.APPROVE) {
+            removeFromChatRoom(mateId, applierId);
+        }
         loadedMateApply.update(mateApply -> mateApply.cancel(cancelReason, LocalDateTime.now()));
+    }
+
+    private void removeFromChatRoom(Long mateId, Long accountId) {
+        ChatRoom chatRoom = loadChatPort.loadChatRoomByMateId(mateId);
+        chatRoom.removeJoinAccountId(accountId);
+        loadChatPort.saveChatRoom(chatRoom);
     }
 
     private void addToChatRoom(Long mateId, Long accountId) {
