@@ -19,6 +19,7 @@ public interface LoadMatePort {
     Loaded<Mate> loadMate(MateId id);
     SliceResponse<MateSimpleResponse> loadMates(MateListCommand command);
     List<MateSimpleResponse> loadMatesByWriterId(Long writerId);
+    List<MateSimpleResponse> loadMatesByIds(List<Long> mateIds);
     void deleteAllMateByWriter(AccountId id);
     void deleteAllMateFeeByMateId(MateId id);
 }

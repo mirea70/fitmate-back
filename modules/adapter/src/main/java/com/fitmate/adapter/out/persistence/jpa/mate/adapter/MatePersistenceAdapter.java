@@ -65,6 +65,13 @@ public class MatePersistenceAdapter implements LoadMatePort {
     }
 
     @Override
+    public List<MateSimpleResponse> loadMatesByIds(List<Long> mateIds) {
+        if (mateIds == null || mateIds.isEmpty()) return List.of();
+        List<MateSimpleJpaResponse> jpaResponses = mateQueryRepository.readListByIds(mateIds);
+        return matePersistenceMapper.jpaResponsesToResponses(jpaResponses);
+    }
+
+    @Override
     public List<MateSimpleResponse> loadMatesByWriterId(Long writerId) {
         List<MateSimpleJpaResponse> jpaResponses = mateQueryRepository.readListByWriterId(writerId);
         return matePersistenceMapper.jpaResponsesToResponses(jpaResponses);

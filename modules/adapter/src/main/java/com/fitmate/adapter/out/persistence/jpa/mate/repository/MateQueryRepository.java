@@ -17,6 +17,7 @@ import java.util.List;
 import static com.fitmate.adapter.out.persistence.jpa.account.entity.QAccountJpaEntity.accountJpaEntity;
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateApplyJpaEntity.mateApplyJpaEntity;
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateJpaEntity.mateJpaEntity;
+import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateWishJpaEntity.mateWishJpaEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -175,6 +176,53 @@ public class MateQueryRepository {
                 .from(mateJpaEntity)
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
                 .where(mateJpaEntity.writerId.eq(writerId))
+                .orderBy(mateJpaEntity.id.desc())
+                .fetch();
+    }
+
+    public List<MateSimpleJpaResponse> readListByWishAccountId(Long accountId) {
+        return queryFactory
+                .select(new QMateSimpleJpaResponse(
+                        mateJpaEntity.id,
+                        mateJpaEntity.introImageIds,
+                        accountJpaEntity.profileImageId,
+                        accountJpaEntity.nickName,
+                        mateJpaEntity.fitCategory,
+                        mateJpaEntity.title,
+                        mateJpaEntity.fitPlaceAddress,
+                        mateJpaEntity.mateAt,
+                        mateJpaEntity.gatherType,
+                        mateJpaEntity.permitGender,
+                        mateJpaEntity.permitPeopleCnt,
+                        mateJpaEntity.approvedAccountIds
+                ))
+                .from(mateWishJpaEntity)
+                .innerJoin(mateJpaEntity).on(mateWishJpaEntity.mateId.eq(mateJpaEntity.id))
+                .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
+                .where(mateWishJpaEntity.accountId.eq(accountId))
+                .orderBy(mateWishJpaEntity.id.desc())
+                .fetch();
+    }
+
+    public List<MateSimpleJpaResponse> readListByIds(List<Long> mateIds) {
+        return queryFactory
+                .select(new QMateSimpleJpaResponse(
+                        mateJpaEntity.id,
+                        mateJpaEntity.introImageIds,
+                        accountJpaEntity.profileImageId,
+                        accountJpaEntity.nickName,
+                        mateJpaEntity.fitCategory,
+                        mateJpaEntity.title,
+                        mateJpaEntity.fitPlaceAddress,
+                        mateJpaEntity.mateAt,
+                        mateJpaEntity.gatherType,
+                        mateJpaEntity.permitGender,
+                        mateJpaEntity.permitPeopleCnt,
+                        mateJpaEntity.approvedAccountIds
+                ))
+                .from(mateJpaEntity)
+                .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
+                .where(mateJpaEntity.id.in(mateIds))
                 .orderBy(mateJpaEntity.id.desc())
                 .fetch();
     }
