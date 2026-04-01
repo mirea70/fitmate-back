@@ -16,4 +16,5 @@ public interface ChatUseCasePort {
     ChatRoomSimpleResponse createDmChatRoom(ChatRoomCreateDmCommand createDmCommand);
     List<ChatMessageResponse> getMessages(String roomId);
     List<ChatRoomListItemResponse> getMyChatRooms(Long accountId);
+    void leaveChatRoom(String roomId, Long accountId);
 }

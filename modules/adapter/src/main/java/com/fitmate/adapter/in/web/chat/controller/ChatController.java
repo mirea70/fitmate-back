@@ -46,6 +46,14 @@ public class ChatController {
         return ResponseEntity.ok(chatUseCasePort.getMessages(roomId));
     }
 
+    @Operation(summary = "채팅방 나가기", description = "채팅방 나가기 API")
+    @DeleteMapping("/{roomId}/leave")
+    public ResponseEntity<?> leaveChatRoom(@PathVariable String roomId,
+                                           @AuthenticationPrincipal AuthDetails authDetails) {
+        chatUseCasePort.leaveChatRoom(roomId, authDetails.getAccount().getId());
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "나의 채팅방 목록 조회", description = """
             나의 채팅방 목록 조회 API
             

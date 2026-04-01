@@ -97,7 +97,7 @@ public class ChatRoomQueryRepository {
                 .first("createdAt").as("lastMessageTime")
                 .first("roomId").as("roomId")
                 .first("room.name").as("roomName")
-                .first("room.matingId").as("matingId")
+                .first("room.mateId").as("matingId")
                 .first("room.roomType").as("roomType")
                 .first("room.joinAccountIds").as("memberAccountIds")
                 .sum("isUnread").as("unreadCount");

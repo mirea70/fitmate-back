@@ -106,4 +106,17 @@ public class ChatUseCase implements ChatUseCasePort {
     public List<ChatRoomListItemResponse> getMyChatRooms(Long accountId) {
         return loadChatPort.getMyChatRooms(accountId);
     }
+
+    @Override
+    public void leaveChatRoom(String roomId, Long accountId) {
+        ChatRoom chatRoom = loadChatPort.loadChatRoom(roomId);
+        chatRoom.removeJoinAccountId(accountId);
+        loadChatPort.saveChatRoom(chatRoom);
+
+        Account account = loadAccountPort.loadAccountEntity(new AccountId(accountId));
+        String nickName = account.getProfileInfo().getNickName();
+        String leaveMessage = nickName + "님이 채팅방을 나갔습니다.";
+        ChatMessage chatMessage = ChatMessage.withoutId(roomId, leaveMessage, accountId, nickName, MessageType.LEAVE, null);
+        loadChatPort.saveChatMessage(chatMessage);
+    }
 }
