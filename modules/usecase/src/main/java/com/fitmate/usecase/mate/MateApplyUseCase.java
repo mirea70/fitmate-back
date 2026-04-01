@@ -132,7 +132,13 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
     private void removeFromChatRoom(Long mateId, Long accountId) {
         ChatRoom chatRoom = loadChatPort.loadChatRoomByMateId(mateId);
         chatRoom.removeJoinAccountId(accountId);
-        loadChatPort.saveChatRoom(chatRoom);
+        String roomId = loadChatPort.saveChatRoom(chatRoom);
+
+        Account account = loadAccountPort.loadAccountEntity(new AccountId(accountId));
+        String nickName = account.getProfileInfo().getNickName();
+        String leaveMessage = nickName + "님이 채팅방을 나갔습니다.";
+        ChatMessage chatMessage = ChatMessage.withoutId(roomId, leaveMessage, accountId, nickName, MessageType.LEAVE, null);
+        loadChatPort.saveChatMessage(chatMessage);
     }
 
     private void addToChatRoom(Long mateId, Long accountId) {
