@@ -24,7 +24,8 @@ public class ChatRoomQueryRepository {
     public Optional<String> findRoomIdByExactJoinAccountIds(Set<Long> accountIds) {
         Query query = new Query(new Criteria().andOperator(
                 Criteria.where("joinAccountIds").all(accountIds),
-                Criteria.where("joinAccountIds").size(accountIds.size())
+                Criteria.where("joinAccountIds").size(accountIds.size()),
+                Criteria.where("roomType").is("DM")
         ));
         ChatRoomMongoEntity entity = mongoTemplate.findOne(query, ChatRoomMongoEntity.class);
         return Optional.ofNullable(entity).map(ChatRoomMongoEntity::getId);
