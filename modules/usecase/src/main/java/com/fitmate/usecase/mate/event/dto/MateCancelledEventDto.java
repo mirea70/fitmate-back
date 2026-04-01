@@ -1,14 +1,12 @@
 package com.fitmate.usecase.mate.event.dto;
 
-import com.fitmate.domain.mate.enums.ApproveStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MateRequestEventDto {
-    private final String title;
+public class MateCancelledEventDto {
     private final Long mateId;
     private final Long applierId;
-    private final ApproveStatus approveStatus;
+    private final boolean wasApproved;
 }

@@ -10,28 +10,22 @@ import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.in.mate.command.MateApplyCommand;
 import com.fitmate.port.in.mate.command.MateApproveCommand;
 import com.fitmate.port.in.mate.usecase.MateApplyUseCasePort;
-import com.fitmate.domain.account.Account;
-import com.fitmate.domain.account.AccountId;
-import com.fitmate.domain.chat.enums.MessageType;
-import com.fitmate.domain.chat.message.ChatMessage;
-import com.fitmate.domain.chat.room.ChatRoom;
-import com.fitmate.port.out.account.LoadAccountPort;
-import com.fitmate.port.out.chat.LoadChatPort;
 import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
 import com.fitmate.usecase.UseCase;
 import com.fitmate.usecase.mate.event.MateApproveEvent;
-import com.fitmate.usecase.mate.event.dto.MateApproveEventDto;
+import com.fitmate.usecase.mate.event.MateCancelledEvent;
 import com.fitmate.usecase.mate.event.MateRequestEvent;
+import com.fitmate.usecase.mate.event.dto.MateApproveEventDto;
+import com.fitmate.usecase.mate.event.dto.MateCancelledEventDto;
 import com.fitmate.usecase.mate.event.dto.MateRequestEventDto;
 import com.fitmate.usecase.mate.mapper.MateUseCaseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @UseCase
@@ -41,11 +35,8 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
     private final LoadMatePort loadMatePort;
     private final LoadMateRequestPort loadMateRequestPort;
-    private final LoadAccountPort loadAccountPort;
-    private final LoadChatPort loadChatPort;
     private final MateUseCaseMapper mateUseCaseMapper;
     private final ApplicationEventPublisher eventPublisher;
-    private static final String DEFAULT_ENTER_MESSAGE = "님이 채팅방에 참여하였습니다.";
 
     @Override
     @Transactional(readOnly = true)
@@ -68,11 +59,9 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
                 mate.addWaitingAccountId(applierId);
         });
 
-        if(approveStatus == ApproveStatus.APPROVE) {
-            addToChatRoom(mateApplyCommand.getMateId(), applierId);
-        }
-
-        publishMateRequestEvent(loadedMate.get(), applierId);
+        eventPublisher.publishEvent(new MateRequestEvent(
+                new MateRequestEventDto(loadedMate.get().getTitle(), loadedMate.get().getId().getValue(), applierId, approveStatus)
+        ));
     }
 
     private ApproveStatus saveNewMateRequest(MateApplyCommand mateApplyCommand, GatherType gatherType) {
@@ -86,16 +75,6 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         loadMateRequestPort.saveMateRequestEntity(mateApply);
 
         return approveStatus;
-    }
-
-    private void publishMateRequestEvent(Mate mate, Long applierId) {
-        MateRequestEventDto eventDto = new MateRequestEventDto(
-                mate.getTitle(),
-                mate.getId().getValue(),
-                applierId
-        );
-        MateRequestEvent event = new MateRequestEvent(eventDto);
-        eventPublisher.publishEvent(event);
     }
 
     @Override
@@ -112,9 +91,9 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
         loadedMate.update(mate -> mate.approve(applierId));
 
-        addToChatRoom(mateId, applierId);
-
-        publishMateApproveEvent(loadedMate.get(), applierId);
+        eventPublisher.publishEvent(new MateApproveEvent(
+                new MateApproveEventDto(loadedMate.get().getTitle(), mateId, applierId)
+        ));
     }
 
     @Override
@@ -123,43 +102,11 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         loadedMate.update(mate -> mate.cancelApply(applierId));
 
         Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
-        if (loadedMateApply.get().getApproveStatus() == ApproveStatus.APPROVE) {
-            removeFromChatRoom(mateId, applierId);
-        }
+        boolean wasApproved = loadedMateApply.get().getApproveStatus() == ApproveStatus.APPROVE;
         loadedMateApply.update(mateApply -> mateApply.cancel(cancelReason, LocalDateTime.now()));
-    }
 
-    private void removeFromChatRoom(Long mateId, Long accountId) {
-        ChatRoom chatRoom = loadChatPort.loadChatRoomByMateId(mateId);
-        chatRoom.removeJoinAccountId(accountId);
-        String roomId = loadChatPort.saveChatRoom(chatRoom);
-
-        Account account = loadAccountPort.loadAccountEntity(new AccountId(accountId));
-        String nickName = account.getProfileInfo().getNickName();
-        String leaveMessage = nickName + "님이 채팅방을 나갔습니다.";
-        ChatMessage chatMessage = ChatMessage.withoutId(roomId, leaveMessage, accountId, nickName, MessageType.LEAVE, null);
-        loadChatPort.saveChatMessage(chatMessage);
-    }
-
-    private void addToChatRoom(Long mateId, Long accountId) {
-        ChatRoom chatRoom = loadChatPort.loadChatRoomByMateId(mateId);
-        chatRoom.addJoinAccountId(accountId);
-        String roomId = loadChatPort.saveChatRoom(chatRoom);
-
-        Account account = loadAccountPort.loadAccountEntity(new AccountId(accountId));
-        String nickName = account.getProfileInfo().getNickName();
-        String enterMessage = nickName + DEFAULT_ENTER_MESSAGE;
-        ChatMessage chatMessage = ChatMessage.withoutId(roomId, enterMessage, accountId, nickName, MessageType.ENTER, null);
-        loadChatPort.saveChatMessage(chatMessage);
-    }
-
-    private void publishMateApproveEvent(Mate mate, Long applierId) {
-        MateApproveEventDto eventDto = new MateApproveEventDto(
-                mate.getTitle(),
-                mate.getId().getValue(),
-                applierId
-        );
-        MateApproveEvent event = new MateApproveEvent(eventDto);
-        eventPublisher.publishEvent(event);
+        eventPublisher.publishEvent(new MateCancelledEvent(
+                new MateCancelledEventDto(mateId, applierId, wasApproved)
+        ));
     }
 }
