@@ -76,11 +76,14 @@ public class ChatRoomQueryRepository {
                             )
                     ))
                     .append("isUnread", new org.bson.Document("$cond", java.util.Arrays.asList(
-                            new org.bson.Document("$gt", java.util.Arrays.asList(
-                                    "$createdAt",
-                                    new org.bson.Document("$ifNull", java.util.Arrays.asList(
-                                            new org.bson.Document("$arrayElemAt", java.util.Arrays.asList("$readStatus.lastReadAt", 0)),
-                                            new java.util.Date(0)
+                            new org.bson.Document("$and", java.util.Arrays.asList(
+                                    new org.bson.Document("$eq", java.util.Arrays.asList("$messageType", "CHAT")),
+                                    new org.bson.Document("$gt", java.util.Arrays.asList(
+                                            "$createdAt",
+                                            new org.bson.Document("$ifNull", java.util.Arrays.asList(
+                                                    new org.bson.Document("$arrayElemAt", java.util.Arrays.asList("$readStatus.lastReadAt", 0)),
+                                                    new java.util.Date(0)
+                                            ))
                                     ))
                             )),
                             1, 0
