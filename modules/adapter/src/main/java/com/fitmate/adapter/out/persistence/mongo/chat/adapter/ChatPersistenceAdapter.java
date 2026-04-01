@@ -10,6 +10,7 @@ import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatReadStatusR
 import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatRoomQueryRepository;
 import com.fitmate.adapter.out.persistence.mongo.chat.repository.ChatRoomRepository;
 import com.fitmate.domain.chat.message.ChatMessage;
+import com.fitmate.domain.chat.readstatus.ChatReadStatus;
 import com.fitmate.domain.chat.room.ChatRoom;
 import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.out.chat.LoadChatPort;
@@ -77,8 +78,12 @@ public class ChatPersistenceAdapter implements LoadChatPort {
     }
 
     @Override
-    public void updateReadStatus(String roomId, Long accountId) {
-        ChatReadStatusMongoEntity readStatus = new ChatReadStatusMongoEntity(roomId, accountId, new java.util.Date());
-        chatReadStatusRepository.save(readStatus);
+    public void updateReadStatus(ChatReadStatus chatReadStatus) {
+        ChatReadStatusMongoEntity entity = new ChatReadStatusMongoEntity(
+                chatReadStatus.getRoomId(),
+                chatReadStatus.getAccountId(),
+                chatReadStatus.getLastReadAt()
+        );
+        chatReadStatusRepository.save(entity);
     }
 }

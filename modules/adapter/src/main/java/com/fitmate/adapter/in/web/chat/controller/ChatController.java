@@ -40,10 +40,19 @@ public class ChatController {
         return ResponseEntity.ok(chatUseCasePort.createDmChatRoom(chatWebAdapterMapper.requestToCommand(request)));
     }
 
-    @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 내림차순)")
+    @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 오름차순). 조회 시 읽음 처리됩니다.")
     @GetMapping("/{roomId}/messages")
-    public ResponseEntity<List<ChatMessageResponse>> getMessagesByRoomId(@PathVariable String roomId) {
-        return ResponseEntity.ok(chatUseCasePort.getMessages(roomId));
+    public ResponseEntity<List<ChatMessageResponse>> getMessagesByRoomId(@PathVariable String roomId,
+                                                                         @AuthenticationPrincipal AuthDetails authDetails) {
+        return ResponseEntity.ok(chatUseCasePort.getMessages(roomId, authDetails.getAccount().getId()));
+    }
+
+    @Operation(summary = "채팅방 읽음 처리", description = "채팅방 읽음 처리 API. 해당 유저의 lastReadAt을 현재 시각으로 갱신합니다.")
+    @PutMapping("/{roomId}/read")
+    public ResponseEntity<?> readChatRoom(@PathVariable String roomId,
+                                          @AuthenticationPrincipal AuthDetails authDetails) {
+        chatUseCasePort.readChatRoom(roomId, authDetails.getAccount().getId());
+        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "채팅방 나가기", description = "채팅방 나가기 API")

@@ -1,6 +1,7 @@
 package com.fitmate.port.out.chat;
 
 import com.fitmate.domain.chat.message.ChatMessage;
+import com.fitmate.domain.chat.readstatus.ChatReadStatus;
 import com.fitmate.domain.chat.room.ChatRoom;
 import com.fitmate.domain.mate.MateId;
 import com.fitmate.port.out.chat.dto.ChatMessageResponse;
@@ -19,5 +20,5 @@ public interface LoadChatPort {
     Optional<String> findChatRoomId(Set<Long> accountIds);
     List<ChatMessageResponse> getMessagesByRoomId(String roomId);
     List<ChatRoomListItemResponse> getMyChatRooms(Long accountId);
-    void updateReadStatus(String roomId, Long accountId);
+    void updateReadStatus(ChatReadStatus chatReadStatus);
 }

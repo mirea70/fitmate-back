@@ -4,6 +4,7 @@ import com.fitmate.domain.account.Account;
 import com.fitmate.domain.account.AccountId;
 import com.fitmate.domain.chat.enums.MessageType;
 import com.fitmate.domain.chat.message.ChatMessage;
+import com.fitmate.domain.chat.readstatus.ChatReadStatus;
 import com.fitmate.domain.chat.room.ChatRoom;
 import com.fitmate.domain.error.exceptions.DuplicatedException;
 import com.fitmate.domain.error.results.DuplicatedErrorResult;
@@ -45,7 +46,7 @@ public class ChatUseCase implements ChatUseCasePort {
         ChatRoom chatRoom = loadChatPort.loadChatRoom(roomId);
         chatRoom.addJoinAccountId(senderId);
         loadChatPort.saveChatRoom(chatRoom);
-        loadChatPort.updateReadStatus(roomId, senderId);
+        loadChatPort.updateReadStatus(ChatReadStatus.of(roomId, senderId));
     }
 
     @Override
@@ -98,8 +99,13 @@ public class ChatUseCase implements ChatUseCasePort {
     }
 
     @Override
-    public List<ChatMessageResponse> getMessages(String roomId) {
+    public List<ChatMessageResponse> getMessages(String roomId, Long accountId) {
         return loadChatPort.getMessagesByRoomId(roomId);
+    }
+
+    @Override
+    public void readChatRoom(String roomId, Long accountId) {
+        loadChatPort.updateReadStatus(ChatReadStatus.of(roomId, accountId));
     }
 
     @Override
