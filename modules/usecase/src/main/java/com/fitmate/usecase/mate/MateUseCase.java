@@ -1,11 +1,15 @@
 package com.fitmate.usecase.mate;
 
+import com.fitmate.domain.error.exceptions.LimitException;
 import com.fitmate.domain.error.exceptions.NotMatchException;
+import com.fitmate.domain.error.results.LimitErrorResult;
 import com.fitmate.domain.error.results.NotMatchErrorResult;
 import com.fitmate.domain.account.Account;
 import com.fitmate.domain.account.AccountId;
+import com.fitmate.domain.account.enums.Gender;
 import com.fitmate.domain.mate.Mate;
 import com.fitmate.domain.mate.MateId;
+import com.fitmate.domain.mate.enums.PermitGender;
 import com.fitmate.port.in.mate.command.MateCreateCommand;
 import com.fitmate.port.in.mate.command.MateListCommand;
 import com.fitmate.port.in.mate.command.MateModifyCommand;
@@ -15,11 +19,14 @@ import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.file.LoadAttachFilePort;
 import com.fitmate.port.out.mate.LoadMatePort;
+import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
 import com.fitmate.usecase.UseCase;
+import com.fitmate.usecase.mate.event.MateAutoCancelledEvent;
 import com.fitmate.usecase.mate.event.MateModifiedEvent;
 import com.fitmate.usecase.mate.event.MateRegisteredEvent;
+import com.fitmate.usecase.mate.event.dto.MateAutoCancelledEventDto;
 import com.fitmate.usecase.mate.event.dto.MateModifiedEventDto;
 import com.fitmate.usecase.mate.event.dto.MateRegisteredEventDto;
 import com.fitmate.usecase.mate.mapper.MateUseCaseMapper;
@@ -27,6 +34,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +45,7 @@ import java.util.Set;
 public class MateUseCase implements MateUseCasePort {
 
     private final LoadMatePort loadMatePort;
+    private final LoadMateRequestPort loadMateRequestPort;
     private final LoadAccountPort loadAccountPort;
     private final LoadAttachFilePort loadAttachFilePort;
     private final MateUseCaseMapper mateUseCaseMapper;
@@ -74,6 +84,7 @@ public class MateUseCase implements MateUseCasePort {
     public void modifyMate(MateModifyCommand command) {
         Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(command.getMateId()));
         validateModifyCommand(command, loadedMate.get());
+        cancelIneligibleWaitingApplicants(command, loadedMate);
 
         loadedMate.update(mate -> mate.update(
                 command.getFitCategory(),
@@ -111,5 +122,55 @@ public class MateUseCase implements MateUseCasePort {
         Set<Long> introImageIds = command.getIntroImageIds();
         if(introImageIds != null && !introImageIds.isEmpty())
             loadAttachFilePort.checkExistFiles(introImageIds);
+        validateRecruitRuleNotChanged(command, mate);
+    }
+
+    private void validateRecruitRuleNotChanged(MateModifyCommand command, Mate mate) {
+        boolean hasApprovedMembers = mate.getApprovedAccountIds() != null && mate.getApprovedAccountIds().size() > 1;
+
+        if (!hasApprovedMembers) return;
+
+        boolean ruleChanged =
+                (command.getPermitGender() != null && command.getPermitGender() != mate.getPermitGender())
+                || (command.getPermitPeopleCnt() != null && !command.getPermitPeopleCnt().equals(mate.getPermitPeopleCnt()))
+                || (command.getGatherType() != null && command.getGatherType() != mate.getGatherType())
+                || (command.getPermitMaxAge() != null && !command.getPermitMaxAge().equals(mate.getPermitAges().getMax()))
+                || (command.getPermitMinAge() != null && !command.getPermitMinAge().equals(mate.getPermitAges().getMin()));
+
+        if (ruleChanged)
+            throw new LimitException(LimitErrorResult.CANNOT_MODIFY_RECRUIT_RULE);
+    }
+
+    private void cancelIneligibleWaitingApplicants(MateModifyCommand command, Loaded<Mate> loadedMate) {
+        Mate mate = loadedMate.get();
+        PermitGender newGender = command.getPermitGender();
+
+        if (newGender == null || newGender == PermitGender.ALL || newGender == mate.getPermitGender()) return;
+
+        Set<Long> waitingIds = mate.getWaitingAccountIds();
+        if (waitingIds == null || waitingIds.isEmpty()) return;
+
+        List<Long> toCancel = new ArrayList<>();
+        for (Long waitingId : waitingIds) {
+            Account account = loadAccountPort.loadAccountEntity(new AccountId(waitingId));
+            boolean genderMismatch =
+                    (newGender == PermitGender.MALE && account.getGender() == Gender.FEMALE)
+                    || (newGender == PermitGender.FEMALE && account.getGender() == Gender.MALE);
+            if (genderMismatch) {
+                toCancel.add(waitingId);
+            }
+        }
+
+        String cancelReason = "모집 규칙 변경으로 인한 자동 취소";
+        for (Long cancelId : toCancel) {
+            loadedMate.update(m -> m.cancelApply(cancelId));
+            Loaded<com.fitmate.domain.mate.apply.MateApply> loadedApply =
+                    loadMateRequestPort.loadMateApply(command.getMateId(), cancelId);
+            loadedApply.update(apply -> apply.cancel(cancelReason, LocalDateTime.now()));
+
+            eventPublisher.publishEvent(new MateAutoCancelledEvent(
+                    new MateAutoCancelledEventDto(mate.getTitle(), command.getMateId(), mate.getWriterId(), cancelId, cancelReason)
+            ));
+        }
     }
 }
