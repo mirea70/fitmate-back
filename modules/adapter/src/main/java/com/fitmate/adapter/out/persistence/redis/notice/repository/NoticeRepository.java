@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface NoticeRepository extends CrudRepository<NoticeRedisEntity, Long> {
     List<NoticeRedisEntity> findAllByAccountIdOrderByCreatedAtDesc(Long accountId);
+    List<NoticeRedisEntity> findAllByAccountIdAndIsReadFalse(Long accountId);
     void deleteAllByAccountId(Long accountId);
 }

@@ -9,6 +9,7 @@ import lombok.Getter;
 public class MateRequestEventDto {
     private final String title;
     private final Long mateId;
+    private final Long writerId;
     private final Long applierId;
     private final ApproveStatus approveStatus;
 }

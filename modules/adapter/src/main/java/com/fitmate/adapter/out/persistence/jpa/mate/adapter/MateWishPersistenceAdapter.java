@@ -40,6 +40,13 @@ public class MateWishPersistenceAdapter implements LoadMateWishPort {
     }
 
     @Override
+    public List<Long> getWisherAccountIds(Long mateId) {
+        return mateWishRepository.findAllByMateId(mateId).stream()
+                .map(MateWishJpaEntity::getAccountId)
+                .toList();
+    }
+
+    @Override
     public List<MateSimpleResponse> getWishedMates(Long accountId) {
         List<MateSimpleJpaResponse> jpaResponses = mateQueryRepository.readListByWishAccountId(accountId);
         return matePersistenceMapper.jpaResponsesToResponses(jpaResponses);

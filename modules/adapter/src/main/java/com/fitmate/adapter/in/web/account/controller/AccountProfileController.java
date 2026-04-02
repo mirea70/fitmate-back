@@ -70,6 +70,20 @@ public class AccountProfileController {
         return ResponseEntity.ok(responses);
     }
 
+    @Operation(summary = "안읽은 알림 수 조회", description = "안읽은 알림 수를 반환합니다.")
+    @GetMapping("/my/notices/unread/count")
+    public ResponseEntity<java.util.Map<String, Long>> getUnreadNoticeCount(@AuthenticationPrincipal AuthDetails authDetails) {
+        long count = accountProfileUseCasePort.getUnreadNoticeCount(authDetails.getAccount().getId());
+        return ResponseEntity.ok(java.util.Map.of("count", count));
+    }
+
+    @Operation(summary = "알림 전체 읽음 처리", description = "모든 안읽은 알림을 읽음 처리합니다.")
+    @PutMapping("/my/notices/read")
+    public ResponseEntity<?> readAllNotices(@AuthenticationPrincipal AuthDetails authDetails) {
+        accountProfileUseCasePort.readAllNotices(authDetails.getAccount().getId());
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "내 메이트 신청 목록 조회 API", description = "파라미터인 승인상태에 따라 메이트 신청 목록을 조회해온다.")
     @GetMapping("/my/mate/request")
     public ResponseEntity<List<MateRequestSimpleResponse>> getMyMateRequestList(@AuthenticationPrincipal AuthDetails authDetails,

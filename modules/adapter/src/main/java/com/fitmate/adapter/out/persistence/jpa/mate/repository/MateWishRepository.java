@@ -9,4 +9,5 @@ public interface MateWishRepository extends JpaRepository<MateWishJpaEntity, Lon
     boolean existsByAccountIdAndMateId(Long accountId, Long mateId);
     void deleteByAccountIdAndMateId(Long accountId, Long mateId);
     List<MateWishJpaEntity> findAllByAccountIdOrderByCreatedAtDesc(Long accountId);
+    List<MateWishJpaEntity> findAllByMateId(Long mateId);
 }

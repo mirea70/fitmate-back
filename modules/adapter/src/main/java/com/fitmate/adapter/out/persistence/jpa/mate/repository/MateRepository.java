@@ -7,7 +7,12 @@ import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface MateRepository extends JpaRepository<MateJpaEntity, Long> {
+
+    List<MateJpaEntity> findAllByMateAtBetween(LocalDateTime from, LocalDateTime to);
 
     @NotNull
     default MateJpaEntity getById(@NonNull Long id) {

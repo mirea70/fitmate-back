@@ -10,12 +10,25 @@ import java.util.List;
 @Component
 public class NoticePersistenceMapper {
     public NoticeRedisEntity domainToEntity(Notice notice) {
-        return new NoticeRedisEntity(notice.getAccountId(), notice.getContent(),
-                notice.getMateId(), notice.getExpiration());
+        return new NoticeRedisEntity(
+                notice.getAccountId(),
+                notice.getMateId(),
+                notice.getSenderAccountId(),
+                notice.getContent(),
+                notice.getNoticeType().name(),
+                notice.getExpiration()
+        );
     }
 
-    public NoticeResponse entityToResponse(NoticeRedisEntity noticeEntity) {
-        return new NoticeResponse(noticeEntity.getId(), noticeEntity.getMatingId(), noticeEntity.getContent());
+    public NoticeResponse entityToResponse(NoticeRedisEntity entity) {
+        return new NoticeResponse(
+                entity.getId(),
+                entity.getMatingId(),
+                entity.getSenderAccountId(),
+                entity.getContent(),
+                entity.getNoticeType(),
+                entity.getCreatedAt()
+        );
     }
 
     public List<NoticeResponse> entitiesToResponses(List<NoticeRedisEntity> noticeEntities) {

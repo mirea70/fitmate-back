@@ -60,7 +60,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         });
 
         eventPublisher.publishEvent(new MateRequestEvent(
-                new MateRequestEventDto(loadedMate.get().getTitle(), loadedMate.get().getId().getValue(), applierId, approveStatus)
+                new MateRequestEventDto(loadedMate.get().getTitle(), loadedMate.get().getId().getValue(), loadedMate.get().getWriterId(), applierId, approveStatus)
         ));
     }
 
@@ -106,7 +106,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         loadedMateApply.update(mateApply -> mateApply.cancel(cancelReason, LocalDateTime.now()));
 
         eventPublisher.publishEvent(new MateCancelledEvent(
-                new MateCancelledEventDto(mateId, applierId, wasApproved)
+                new MateCancelledEventDto(loadedMate.get().getTitle(), mateId, loadedMate.get().getWriterId(), applierId, cancelReason, wasApproved)
         ));
     }
 }

@@ -13,22 +13,15 @@ public class Notice {
     private static final Long DEFAULT_TTL = 86400 * 30L;
 
     private final Long id;
-
     private final Long accountId;
-
     private final Long mateId;
-
+    private final Long senderAccountId;
     private final String content;
-
+    private final NoticeType noticeType;
     private final LocalDateTime createdAt;
-
     private final Long expiration;
 
-    public static Notice withOutMateId(Long accountId, String content) {
-        return new Notice(null, accountId, null, content, null, DEFAULT_TTL);
-    }
-
-    public static Notice withMateId(Long accountId, Long matingId, String content) {
-        return new Notice(null, accountId, matingId, content, null, DEFAULT_TTL);
+    public static Notice of(Long accountId, Long mateId, Long senderAccountId, String content, NoticeType noticeType) {
+        return new Notice(null, accountId, mateId, senderAccountId, content, noticeType, null, DEFAULT_TTL);
     }
 }

@@ -10,4 +10,5 @@ public interface LoadMateWishPort {
     void saveWish(MateWish mateWish);
     void deleteWish(Long accountId, Long mateId);
     List<MateSimpleResponse> getWishedMates(Long accountId);
+    List<Long> getWisherAccountIds(Long mateId);
 }

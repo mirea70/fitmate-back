@@ -78,6 +78,16 @@ public class MatePersistenceAdapter implements LoadMatePort {
     }
 
     @Override
+    public List<Mate> loadMatesByMateAtBetween(java.time.LocalDateTime from, java.time.LocalDateTime to) {
+        return mateRepository.findAllByMateAtBetween(from, to).stream()
+                .map(entity -> {
+                    List<MateFeeJpaEntity> fees = mateFeeRepository.findAllByMateId(entity.getId());
+                    return matePersistenceMapper.entityToDomain(entity, fees);
+                })
+                .toList();
+    }
+
+    @Override
     public void deleteAllMateByWriter(AccountId id) {
         mateRepository.deleteAllByWriterId(id.getValue());
     }

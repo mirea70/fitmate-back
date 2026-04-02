@@ -1,11 +1,9 @@
 package com.fitmate.usecase.mate.event.listener;
 
-import com.fitmate.domain.account.Account;
+import com.fitmate.domain.mate.enums.ApproveStatus;
 import com.fitmate.domain.notice.Notice;
-import com.fitmate.domain.account.AccountId;
-import com.fitmate.port.out.account.LoadAccountPort;
+import com.fitmate.domain.notice.NoticeType;
 import com.fitmate.port.out.notice.LoadNoticePort;
-import com.fitmate.port.out.sms.LoadSmsPort;
 import com.fitmate.usecase.mate.event.MateRequestEvent;
 import com.fitmate.usecase.mate.event.dto.MateRequestEventDto;
 import lombok.RequiredArgsConstructor;
@@ -21,34 +19,23 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class MateRequestEventListener {
 
     private final LoadNoticePort loadNoticePort;
-    private final LoadSmsPort loadSmsPort;
-    private final LoadAccountPort loadAccountPort;
-    private static final String MATE_REQUEST_MSG = " 모집 글에 메이트 신청이 완료되었습니다.";
+    private static final String MATE_REQUEST_MSG = " 모집 글에 새로운 메이트 신청이 있습니다.";
+    private static final String MATE_APPROVE_MSG = " 모집 글의 메이트 신청이 승인되었습니다.";
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(MateRequestEvent event) {
-        MateRequestEventDto eventDto = event.getEventDto();
-        String content = eventDto.getTitle() + MATE_REQUEST_MSG;
+        MateRequestEventDto dto = event.getEventDto();
 
-        sendNotice(eventDto, content);
-        sendSms(eventDto, content);
-    }
+        String requestContent = dto.getTitle() + MATE_REQUEST_MSG;
+        Notice requestNotice = Notice.of(dto.getWriterId(), dto.getMateId(), dto.getApplierId(), requestContent, NoticeType.MATE_REQUESTED);
+        loadNoticePort.saveNoticeEntity(requestNotice);
 
-    private void sendNotice(MateRequestEventDto eventDto, String content) {
-        Notice notice = Notice.withMateId(
-                eventDto.getApplierId(),
-                eventDto.getMateId(),
-                content
-        );
-        loadNoticePort.saveNoticeEntity(notice);
-    }
-
-    private void sendSms(MateRequestEventDto eventDto, String content) {
-        Account account = loadAccountPort.loadAccountEntity(new AccountId(eventDto.getApplierId()));
-
-        String to = account.getPrivateInfo().getPhone();
-        loadSmsPort.sendMessageOne(to, content);
+        if (dto.getApproveStatus() == ApproveStatus.APPROVE) {
+            String approveContent = dto.getTitle() + MATE_APPROVE_MSG;
+            Notice approveNotice = Notice.of(dto.getApplierId(), dto.getMateId(), null, approveContent, NoticeType.MATE_APPROVED);
+            loadNoticePort.saveNoticeEntity(approveNotice);
+        }
     }
 }

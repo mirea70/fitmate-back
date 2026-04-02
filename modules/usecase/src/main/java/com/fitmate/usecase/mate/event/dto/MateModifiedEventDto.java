@@ -5,11 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MateCancelledEventDto {
+public class MateModifiedEventDto {
     private final String title;
     private final Long mateId;
-    private final Long writerId;
-    private final Long applierId;
-    private final String cancelReason;
-    private final boolean wasApproved;
 }

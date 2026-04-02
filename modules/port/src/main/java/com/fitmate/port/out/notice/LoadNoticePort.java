@@ -8,5 +8,7 @@ import java.util.List;
 public interface LoadNoticePort {
     void saveNoticeEntity(Notice notice);
     List<NoticeResponse> getNoticesByAccountId(Long accountId);
+    long getUnreadCount(Long accountId);
+    void readAllNotices(Long accountId);
     void deleteNoticesByAccountId(AccountId id);
 }

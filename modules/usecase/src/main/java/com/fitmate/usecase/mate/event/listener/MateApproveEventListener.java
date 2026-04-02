@@ -1,11 +1,8 @@
 package com.fitmate.usecase.mate.event.listener;
 
-import com.fitmate.domain.account.Account;
 import com.fitmate.domain.notice.Notice;
-import com.fitmate.domain.account.AccountId;
-import com.fitmate.port.out.account.LoadAccountPort;
+import com.fitmate.domain.notice.NoticeType;
 import com.fitmate.port.out.notice.LoadNoticePort;
-import com.fitmate.port.out.sms.LoadSmsPort;
 import com.fitmate.usecase.mate.event.MateApproveEvent;
 import com.fitmate.usecase.mate.event.dto.MateApproveEventDto;
 import lombok.RequiredArgsConstructor;
@@ -21,34 +18,15 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class MateApproveEventListener {
 
     private final LoadNoticePort loadNoticePort;
-    private final LoadSmsPort loadSmsPort;
-    private final LoadAccountPort loadAccountPort;
-    private static final String MATE_REQUEST_MSG = " 모집 글의 메이트 신청에 대한 승인이 완료되었습니다.";
+    private static final String MATE_APPROVE_MSG = " 모집 글의 메이트 신청이 승인되었습니다.";
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(MateApproveEvent event) {
-        MateApproveEventDto eventDto = event.getEventDto();
-        String content = eventDto.getTitle() + MATE_REQUEST_MSG;
-
-        sendNotice(eventDto, content);
-        sendSms(eventDto, content);
-    }
-
-    private void sendNotice(MateApproveEventDto eventDto, String content) {
-        Notice notice = Notice.withMateId(
-                eventDto.getApplierId(),
-                eventDto.getMateId(),
-                content
-        );
+        MateApproveEventDto dto = event.getEventDto();
+        String content = dto.getTitle() + MATE_APPROVE_MSG;
+        Notice notice = Notice.of(dto.getApplierId(), dto.getMateId(), null, content, NoticeType.MATE_APPROVED);
         loadNoticePort.saveNoticeEntity(notice);
-    }
-
-    private void sendSms(MateApproveEventDto eventDto, String content) {
-        Account account = loadAccountPort.loadAccountEntity(new AccountId(eventDto.getApplierId()));
-
-        String to = account.getPrivateInfo().getPhone();
-        loadSmsPort.sendMessageOne(to, content);
     }
 }

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -42,6 +43,11 @@ public class FollowPersistenceAdapter implements LoadFollowPort {
     @Override
     public void deleteAllFollowByAccountId(AccountId id) {
         followRepository.deleteAllByFromAccountIdOrToAccountId(id.getValue(), id.getValue());
+    }
+
+    @Override
+    public Set<Long> getFollowerIds(Long accountId) {
+        return followQueryRepository.getFollowers(accountId);
     }
 
     @Override

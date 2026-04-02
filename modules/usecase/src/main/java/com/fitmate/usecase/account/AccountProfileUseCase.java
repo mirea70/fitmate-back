@@ -104,9 +104,8 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
         target.addFollower(fromId);
         loadFollowPort.saveFollowEntity(from, target);
 
-        FollowEventDto eventDto = new FollowEventDto(fromId, targetId,target.getProfileInfo().getNickName());
-        FollowEvent event = new FollowEvent(eventDto);
-        eventPublisher.publishEvent(event);
+        FollowEventDto eventDto = new FollowEventDto(fromId, from.getProfileInfo().getNickName(), targetId, target.getProfileInfo().getNickName());
+        eventPublisher.publishEvent(new FollowEvent(eventDto));
     }
 
     private void cancelFollow(Account from, Account target) {
@@ -117,9 +116,8 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
         target.removeFollower(fromId);
         loadFollowPort.deleteFollowEntity(fromId, targetId);
 
-        FollowEventDto eventDto = new FollowEventDto(fromId, targetId,target.getProfileInfo().getNickName());
-        FollowCancelEvent event = new FollowCancelEvent(eventDto);
-        eventPublisher.publishEvent(event);
+        FollowEventDto eventDto = new FollowEventDto(fromId, from.getProfileInfo().getNickName(), targetId, target.getProfileInfo().getNickName());
+        eventPublisher.publishEvent(new FollowCancelEvent(eventDto));
     }
 
     @Override
@@ -138,6 +136,17 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
     @Transactional(readOnly = true)
     public List<NoticeResponse> getNotices(Long accountId) {
         return loadNoticePort.getNoticesByAccountId(accountId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getUnreadNoticeCount(Long accountId) {
+        return loadNoticePort.getUnreadCount(accountId);
+    }
+
+    @Override
+    public void readAllNotices(Long accountId) {
+        loadNoticePort.readAllNotices(accountId);
     }
 
     @Override

@@ -20,6 +20,7 @@ public interface LoadMatePort {
     SliceResponse<MateSimpleResponse> loadMates(MateListCommand command);
     List<MateSimpleResponse> loadMatesByWriterId(Long writerId);
     List<MateSimpleResponse> loadMatesByIds(List<Long> mateIds);
+    List<Mate> loadMatesByMateAtBetween(java.time.LocalDateTime from, java.time.LocalDateTime to);
     void deleteAllMateByWriter(AccountId id);
     void deleteAllMateFeeByMateId(MateId id);
 }

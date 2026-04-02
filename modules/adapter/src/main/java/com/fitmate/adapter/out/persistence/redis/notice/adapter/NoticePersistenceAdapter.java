@@ -34,6 +34,18 @@ public class NoticePersistenceAdapter implements LoadNoticePort {
     }
 
     @Override
+    public long getUnreadCount(Long accountId) {
+        return noticeRepository.findAllByAccountIdAndIsReadFalse(accountId).size();
+    }
+
+    @Override
+    public void readAllNotices(Long accountId) {
+        List<NoticeRedisEntity> unreadNotices = noticeRepository.findAllByAccountIdAndIsReadFalse(accountId);
+        unreadNotices.forEach(NoticeRedisEntity::markAsRead);
+        noticeRepository.saveAll(unreadNotices);
+    }
+
+    @Override
     public void deleteNoticesByAccountId(AccountId id) {
         noticeRepository.deleteAllByAccountId(id.getValue());
     }

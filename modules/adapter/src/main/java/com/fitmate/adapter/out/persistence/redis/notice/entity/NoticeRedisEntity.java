@@ -8,7 +8,6 @@ import org.springframework.data.redis.core.index.Indexed;
 
 import java.time.LocalDateTime;
 
-
 @RedisHash(value = "notice")
 @Getter
 public class NoticeRedisEntity {
@@ -21,17 +20,30 @@ public class NoticeRedisEntity {
 
     private final Long matingId;
 
+    private final Long senderAccountId;
+
     private final String content;
+
+    private final String noticeType;
+
+    @Indexed
+    private boolean isRead = false;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @TimeToLive
     private final Long expiration;
 
-    public NoticeRedisEntity(Long accountId, String content, Long matingId, Long expiration) {
+    public NoticeRedisEntity(Long accountId, Long matingId, Long senderAccountId, String content, String noticeType, Long expiration) {
         this.accountId = accountId;
-        this.content = content;
         this.matingId = matingId;
+        this.senderAccountId = senderAccountId;
+        this.content = content;
+        this.noticeType = noticeType;
         this.expiration = expiration;
+    }
+
+    public void markAsRead() {
+        this.isRead = true;
     }
 }

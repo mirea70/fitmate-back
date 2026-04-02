@@ -18,7 +18,9 @@ import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
 import com.fitmate.usecase.UseCase;
+import com.fitmate.usecase.mate.event.MateModifiedEvent;
 import com.fitmate.usecase.mate.event.MateRegisteredEvent;
+import com.fitmate.usecase.mate.event.dto.MateModifiedEventDto;
 import com.fitmate.usecase.mate.event.dto.MateRegisteredEventDto;
 import com.fitmate.usecase.mate.mapper.MateUseCaseMapper;
 import lombok.RequiredArgsConstructor;
@@ -91,6 +93,10 @@ public class MateUseCase implements MateUseCasePort {
         ));
         loadMatePort.deleteAllMateFeeByMateId(loadedMate.get().getId());
         loadMatePort.saveMateFeeEntities(loadedMate.get().getMateFees(), loadedMate.get().getId());
+
+        eventPublisher.publishEvent(new MateModifiedEvent(
+                new MateModifiedEventDto(loadedMate.get().getTitle(), loadedMate.get().getId().getValue())
+        ));
     }
 
     @Override

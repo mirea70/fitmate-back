@@ -22,5 +22,7 @@ public interface AccountProfileUseCasePort {
     List<FollowDetailResponse> getFollowingList(Long accountId);
     List<FollowDetailResponse> getFollowerList(Long accountId);
     List<NoticeResponse> getNotices(Long accountId);
+    long getUnreadNoticeCount(Long accountId);
+    void readAllNotices(Long accountId);
     List<MateRequestSimpleResponse> getMyMateApplies(Long applierId, ApproveStatus approveStatus);
 }
