@@ -1,8 +1,12 @@
 package com.fitmate.usecase.mate;
 
+import com.fitmate.domain.account.Account;
+import com.fitmate.domain.account.AccountId;
+import com.fitmate.domain.account.enums.Gender;
 import com.fitmate.domain.error.exceptions.NotMatchException;
 import com.fitmate.domain.error.results.NotMatchErrorResult;
 import com.fitmate.domain.mate.Mate;
+import com.fitmate.domain.mate.enums.PermitGender;
 import com.fitmate.domain.mate.apply.MateApply;
 import com.fitmate.domain.mate.enums.ApproveStatus;
 import com.fitmate.domain.mate.enums.GatherType;
@@ -11,6 +15,7 @@ import com.fitmate.port.in.mate.command.MateApplyCommand;
 import com.fitmate.port.in.mate.command.MateApproveCommand;
 import com.fitmate.port.in.mate.usecase.MateApplyUseCasePort;
 import com.fitmate.port.out.common.Loaded;
+import com.fitmate.port.out.account.LoadAccountPort;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
@@ -35,6 +40,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
     private final LoadMatePort loadMatePort;
     private final LoadMateRequestPort loadMateRequestPort;
+    private final LoadAccountPort loadAccountPort;
     private final MateUseCaseMapper mateUseCaseMapper;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -50,6 +56,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         Long applierId = mateApplyCommand.getApplierId();
         if(applierId.equals(loadedMate.get().getWriterId()))
             throw new NotMatchException(NotMatchErrorResult.CANNOT_APPLY_WRITER);
+        validatePermitGender(loadedMate.get(), applierId);
 
         ApproveStatus approveStatus = saveNewMateRequest(mateApplyCommand, loadedMate.get().getGatherType());
         loadedMate.update(mate -> {
@@ -108,5 +115,18 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         eventPublisher.publishEvent(new MateCancelledEvent(
                 new MateCancelledEventDto(loadedMate.get().getTitle(), mateId, loadedMate.get().getWriterId(), applierId, cancelReason, wasApproved)
         ));
+    }
+
+    private void validatePermitGender(Mate mate, Long applierId) {
+        PermitGender permitGender = mate.getPermitGender();
+        if (permitGender == PermitGender.ALL) return;
+
+        Account applier = loadAccountPort.loadAccountEntity(new AccountId(applierId));
+        boolean genderMismatch =
+                (permitGender == PermitGender.MALE && applier.getGender() == Gender.FEMALE)
+                || (permitGender == PermitGender.FEMALE && applier.getGender() == Gender.MALE);
+
+        if (genderMismatch)
+            throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_PERMIT_GENDER);
     }
 }

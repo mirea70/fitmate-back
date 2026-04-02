@@ -10,6 +10,7 @@ public enum NotMatchErrorResult {
     NOT_MATCH_CURRENT_PASSWORD("현재 비밀번호와 다릅니다."),
     NOT_MATCH_WRITER_ID("작성자 본인이 아닙니다."),
     CANNOT_APPLY_WRITER("작성자 본인은 메이트 신청을 할 수 없습니다."),
+    NOT_MATCH_PERMIT_GENDER("모집 성별 조건에 맞지 않아 신청할 수 없습니다."),
     ;
 
     private final String message;
