@@ -3,6 +3,7 @@ package com.fitmate.port.out.account;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -16,6 +17,7 @@ public class AccountProfileResponse {
     private final String name;
     private final String phone;
     private final String email;
+    private final LocalDate birthDate;
     private final String role;
     private final String gender;
     private Set<Long> followings;

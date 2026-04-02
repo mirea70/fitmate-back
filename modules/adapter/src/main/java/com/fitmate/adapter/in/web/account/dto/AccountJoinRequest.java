@@ -6,10 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -56,6 +59,11 @@ public class AccountJoinRequest {
     @Schema(description = "유저 권한 정보 : [ADMIN, USER]", example = "ADMIN")
     @NotNull(message = "권한 입력은 필수입니다.")
     private AccountRole role;
+
+    @Schema(description = "생년월일", example = "1995-03-15")
+    @NotNull(message = "생년월일 입력은 필수입니다.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
 
     @Schema(description = "유저 성별 정보: [MALE, FEMALE]", example = "MALE")
     @NotNull(message = "성별 입력은 필수입니다.")

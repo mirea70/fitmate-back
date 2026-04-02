@@ -56,7 +56,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         Long applierId = mateApplyCommand.getApplierId();
         if(applierId.equals(loadedMate.get().getWriterId()))
             throw new NotMatchException(NotMatchErrorResult.CANNOT_APPLY_WRITER);
-        validatePermitGender(loadedMate.get(), applierId);
+        validatePermitRules(loadedMate.get(), applierId);
 
         ApproveStatus approveStatus = saveNewMateRequest(mateApplyCommand, loadedMate.get().getGatherType());
         loadedMate.update(mate -> {
@@ -117,16 +117,26 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         ));
     }
 
-    private void validatePermitGender(Mate mate, Long applierId) {
-        PermitGender permitGender = mate.getPermitGender();
-        if (permitGender == PermitGender.ALL) return;
-
+    private void validatePermitRules(Mate mate, Long applierId) {
         Account applier = loadAccountPort.loadAccountEntity(new AccountId(applierId));
-        boolean genderMismatch =
-                (permitGender == PermitGender.MALE && applier.getGender() == Gender.FEMALE)
-                || (permitGender == PermitGender.FEMALE && applier.getGender() == Gender.MALE);
 
-        if (genderMismatch)
-            throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_PERMIT_GENDER);
+        // 성별 검증
+        PermitGender permitGender = mate.getPermitGender();
+        if (permitGender != PermitGender.ALL) {
+            boolean genderMismatch =
+                    (permitGender == PermitGender.MALE && applier.getGender() == Gender.FEMALE)
+                    || (permitGender == PermitGender.FEMALE && applier.getGender() == Gender.MALE);
+            if (genderMismatch)
+                throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_PERMIT_GENDER);
+        }
+
+        // 연령 검증
+        int age = applier.getAge();
+        if (age > 0) {
+            int permitMinAge = mate.getPermitAges().getMin();
+            int permitMaxAge = mate.getPermitAges().getMax();
+            if (age < permitMinAge || age > permitMaxAge)
+                throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_PERMIT_AGE);
+        }
     }
 }

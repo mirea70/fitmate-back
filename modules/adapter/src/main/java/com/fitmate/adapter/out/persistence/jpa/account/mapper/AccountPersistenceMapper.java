@@ -13,7 +13,7 @@ public class AccountPersistenceMapper {
         AccountId id = new AccountId(account.getId());
         Password password = new Password(account.getPassword());
         ProfileInfo profileInfo = new ProfileInfo(account.getNickName(), account.getIntroduction(), account.getProfileImageId());
-        PrivateInfo privateInfo = new PrivateInfo(account.getName(), account.getPhone(), account.getEmail());
+        PrivateInfo privateInfo = new PrivateInfo(account.getName(), account.getPhone(), account.getEmail(), account.getBirthDate());
         Gender gender = Gender.valueOf(account.getGender());
         AccountRole role = AccountRole.valueOf(account.getRole());
 
@@ -43,7 +43,8 @@ public class AccountPersistenceMapper {
                 profileInfo.getProfileImageId(),
                 privateInfo.getName(),
                 privateInfo.getPhone(),
-                privateInfo.getEmail()
+                privateInfo.getEmail(),
+                privateInfo.getBirthDate()
         );
     }
 
@@ -63,6 +64,7 @@ public class AccountPersistenceMapper {
                 privateInfo.getName(),
                 privateInfo.getPhone(),
                 privateInfo.getEmail(),
+                privateInfo.getBirthDate(),
                 account.getGender().name(),
                 account.getRole().name(),
                 account.getCreatedAt(),

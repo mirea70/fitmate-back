@@ -143,20 +143,36 @@ public class MateUseCase implements MateUseCasePort {
 
     private void cancelIneligibleWaitingApplicants(MateModifyCommand command, Loaded<Mate> loadedMate) {
         Mate mate = loadedMate.get();
-        PermitGender newGender = command.getPermitGender();
 
-        if (newGender == null || newGender == PermitGender.ALL || newGender == mate.getPermitGender()) return;
+        PermitGender newGender = command.getPermitGender();
+        boolean genderChanged = newGender != null && newGender != PermitGender.ALL && newGender != mate.getPermitGender();
+
+        Integer newMinAge = command.getPermitMinAge();
+        Integer newMaxAge = command.getPermitMaxAge();
+        boolean ageChanged = (newMinAge != null && !newMinAge.equals(mate.getPermitAges().getMin()))
+                || (newMaxAge != null && !newMaxAge.equals(mate.getPermitAges().getMax()));
+
+        if (!genderChanged && !ageChanged) return;
 
         Set<Long> waitingIds = mate.getWaitingAccountIds();
         if (waitingIds == null || waitingIds.isEmpty()) return;
 
+        int effectiveMinAge = newMinAge != null ? newMinAge : mate.getPermitAges().getMin();
+        int effectiveMaxAge = newMaxAge != null ? newMaxAge : mate.getPermitAges().getMax();
+        PermitGender effectiveGender = newGender != null ? newGender : mate.getPermitGender();
+
         List<Long> toCancel = new ArrayList<>();
         for (Long waitingId : waitingIds) {
             Account account = loadAccountPort.loadAccountEntity(new AccountId(waitingId));
-            boolean genderMismatch =
-                    (newGender == PermitGender.MALE && account.getGender() == Gender.FEMALE)
-                    || (newGender == PermitGender.FEMALE && account.getGender() == Gender.MALE);
-            if (genderMismatch) {
+
+            boolean genderMismatch = effectiveGender != PermitGender.ALL
+                    && ((effectiveGender == PermitGender.MALE && account.getGender() == Gender.FEMALE)
+                    || (effectiveGender == PermitGender.FEMALE && account.getGender() == Gender.MALE));
+
+            int age = account.getAge();
+            boolean ageMismatch = age > 0 && (age < effectiveMinAge || age > effectiveMaxAge);
+
+            if (genderMismatch || ageMismatch) {
                 toCancel.add(waitingId);
             }
         }

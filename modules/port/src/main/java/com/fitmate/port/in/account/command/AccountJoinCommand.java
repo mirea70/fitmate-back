@@ -5,6 +5,8 @@ import com.fitmate.domain.account.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 @AllArgsConstructor
 public class AccountJoinCommand implements AccountCheckCommand {
@@ -16,6 +18,7 @@ public class AccountJoinCommand implements AccountCheckCommand {
     private String name;
     private String phone;
     private String email;
+    private LocalDate birthDate;
     private AccountRole role;
     private Gender gender;
 }

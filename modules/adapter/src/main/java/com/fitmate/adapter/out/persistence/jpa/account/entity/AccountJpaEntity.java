@@ -13,6 +13,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,6 +56,9 @@ public class AccountJpaEntity extends BaseJpaEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column
+    private LocalDate birthDate;
+
     @Column(nullable = false)
     private String gender;
 
@@ -71,7 +75,7 @@ public class AccountJpaEntity extends BaseJpaEntity {
     private Set<FollowJpaEntity> followers = new HashSet<>();
 
     @Builder
-    public AccountJpaEntity(Long id, String loginName, String password, String nickName, String introduction, Long profileImageId, String name, String phone, String email, String gender, String role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public AccountJpaEntity(Long id, String loginName, String password, String nickName, String introduction, Long profileImageId, String name, String phone, String email, LocalDate birthDate, String gender, String role, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.loginName = loginName;
         this.password = password;
@@ -81,6 +85,7 @@ public class AccountJpaEntity extends BaseJpaEntity {
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.birthDate = birthDate;
         this.gender = gender;
         this.role = role;
         super.createdAt = createdAt;
@@ -100,6 +105,7 @@ public class AccountJpaEntity extends BaseJpaEntity {
                 .profileImageId(profileInfo.getProfileImageId())
                 .phone(privateInfo.getPhone())
                 .email(privateInfo.getEmail())
+                .birthDate(privateInfo.getBirthDate())
                 .gender(account.getGender().name())
                 .role(account.getRole().name())
                 .createdAt(account.getCreatedAt())
@@ -119,7 +125,7 @@ public class AccountJpaEntity extends BaseJpaEntity {
                 .collect(Collectors.toSet());
     }
 
-    public void syncFrom(String password, String nickName, String introduction, Long profileImageId, String name, String phone, String email) {
+    public void syncFrom(String password, String nickName, String introduction, Long profileImageId, String name, String phone, String email, LocalDate birthDate) {
         this.password = password;
         this.nickName = nickName;
         this.introduction = introduction;
@@ -127,6 +133,7 @@ public class AccountJpaEntity extends BaseJpaEntity {
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.birthDate = birthDate;
     }
 
     public void anonymizeForDelete() {

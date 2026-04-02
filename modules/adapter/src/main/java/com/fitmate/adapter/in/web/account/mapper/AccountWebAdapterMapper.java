@@ -17,6 +17,7 @@ public class AccountWebAdapterMapper {
                 request.getName(),
                 request.getPhone(),
                 request.getEmail(),
+                request.getBirthDate(),
                 request.getRole(),
                 request.getGender()
         );

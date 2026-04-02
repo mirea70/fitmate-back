@@ -65,7 +65,12 @@ public class Account {
         String updatePhone = phone != null ? phone : this.privateInfo.getPhone();
         String updateEmail = email != null ? email : this.privateInfo.getEmail();
 
-        this.privateInfo = new PrivateInfo(updateName, updatePhone, updateEmail);
+        this.privateInfo = new PrivateInfo(updateName, updatePhone, updateEmail, this.privateInfo.getBirthDate());
+    }
+
+    public int getAge() {
+        if (this.privateInfo.getBirthDate() == null) return 0;
+        return java.time.Period.between(this.privateInfo.getBirthDate(), java.time.LocalDate.now()).getYears();
     }
 
     public boolean isFollowing(Long targetId) {
