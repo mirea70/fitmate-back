@@ -97,6 +97,8 @@ public class SecurityConfig {
                 "/api/sms/request/code",
                 "/api/sms/check/code",
                 "/api/auth/refresh",
+                "/api/auth/kakao",
+                "/api/auth/kakao/register",
         };
     }
 }

@@ -68,6 +68,7 @@ public class Account {
         this.privateInfo = new PrivateInfo(updateName, updatePhone, updateEmail, this.privateInfo.getBirthDate());
     }
 
+
     public int getAge() {
         if (this.privateInfo.getBirthDate() == null) return 0;
         return java.time.Period.between(this.privateInfo.getBirthDate(), java.time.LocalDate.now()).getYears();
