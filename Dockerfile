@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk
+FROM eclipse-temurin:17-jdk
 ARG JAR_FILE=modules/adapter/build/libs/*.jar
 COPY ${JAR_FILE} fitmate.jar
 
