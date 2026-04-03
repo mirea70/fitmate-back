@@ -16,8 +16,9 @@ public class MateRequestSimpleResponse {
     private final Integer approvedAccountCnt;
     private final Integer totalFee;
     private final LocalDateTime applyAt;
+    private final boolean closed;
 
-    public MateRequestSimpleResponse(Long mateId, Long thumbnailImageId, String title, LocalDateTime mateAt, FitPlace fitPlace, Integer permitPeopleCnt, Integer approvedAccountCnt, Integer totalFee, LocalDateTime applyAt) {
+    public MateRequestSimpleResponse(Long mateId, Long thumbnailImageId, String title, LocalDateTime mateAt, FitPlace fitPlace, Integer permitPeopleCnt, Integer approvedAccountCnt, Integer totalFee, LocalDateTime applyAt, boolean closed) {
         this.mateId = mateId;
         this.thumbnailImageId = thumbnailImageId;
         this.title = title;
@@ -27,5 +28,6 @@ public class MateRequestSimpleResponse {
         this.approvedAccountCnt = approvedAccountCnt;
         this.totalFee = totalFee;
         this.applyAt = applyAt;
+        this.closed = closed;
     }
 }

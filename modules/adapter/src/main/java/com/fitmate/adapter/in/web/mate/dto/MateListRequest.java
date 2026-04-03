@@ -47,7 +47,10 @@ public class MateListRequest extends SliceRequest {
     @Schema(description = "운동 종목", example = "FITNESS", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private FitCategory fitCategory;
 
-    public MateListRequest(Integer page, Integer size, SortDir sortDir, String sortProperty, String keyword, Integer dayOfWeek, LocalDateTime startMateAt, LocalDateTime endMateAt, List<String> fitPlaceRegions, Integer permitMaxAge, Integer permitMinAge, Integer startLimitPeopleCnt, Integer endLimitPeopleCnt, FitCategory fitCategory) {
+    @Schema(description = "마감 포함 여부", example = "false", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private Boolean includeClosed;
+
+    public MateListRequest(Integer page, Integer size, SortDir sortDir, String sortProperty, String keyword, Integer dayOfWeek, LocalDateTime startMateAt, LocalDateTime endMateAt, List<String> fitPlaceRegions, Integer permitMaxAge, Integer permitMinAge, Integer startLimitPeopleCnt, Integer endLimitPeopleCnt, FitCategory fitCategory, Boolean includeClosed) {
         super(page, size, sortDir, sortProperty);
         this.keyword = keyword;
         this.dayOfWeek = dayOfWeek;
@@ -59,5 +62,6 @@ public class MateListRequest extends SliceRequest {
         this.startLimitPeopleCnt = startLimitPeopleCnt;
         this.endLimitPeopleCnt = endLimitPeopleCnt;
         this.fitCategory = fitCategory;
+        this.includeClosed = includeClosed;
     }
 }

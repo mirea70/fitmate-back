@@ -243,7 +243,8 @@ public class MatePersistenceMapper {
                 jpaResponse.getPermitPeopleCnt(),
                 jpaResponse.getApprovedAccountCnt(),
                 jpaResponse.getTotalFee(),
-                jpaResponse.getApplyAt()
+                jpaResponse.getApplyAt(),
+                jpaResponse.isClosed()
         );
     }
 

@@ -81,7 +81,8 @@ public class MateWebAdapterMapper {
                 request.getPermitMinAge(),
                 request.getStartLimitPeopleCnt(),
                 request.getEndLimitPeopleCnt(),
-                request.getFitCategory()
+                request.getFitCategory(),
+                request.getIncludeClosed()
         );
     }
 }

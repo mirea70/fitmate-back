@@ -20,13 +20,16 @@ import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.file.LoadAttachFilePort;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
+import com.fitmate.port.out.mate.LoadMateWishPort;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
 import com.fitmate.usecase.UseCase;
 import com.fitmate.usecase.mate.event.MateAutoCancelledEvent;
+import com.fitmate.usecase.mate.event.MateClosedEvent;
 import com.fitmate.usecase.mate.event.MateModifiedEvent;
 import com.fitmate.usecase.mate.event.MateRegisteredEvent;
 import com.fitmate.usecase.mate.event.dto.MateAutoCancelledEventDto;
+import com.fitmate.usecase.mate.event.dto.MateClosedEventDto;
 import com.fitmate.usecase.mate.event.dto.MateModifiedEventDto;
 import com.fitmate.usecase.mate.event.dto.MateRegisteredEventDto;
 import com.fitmate.usecase.mate.mapper.MateUseCaseMapper;
@@ -50,6 +53,7 @@ public class MateUseCase implements MateUseCasePort {
     private final LoadMateRequestPort loadMateRequestPort;
     private final LoadAccountPort loadAccountPort;
     private final LoadAttachFilePort loadAttachFilePort;
+    private final LoadMateWishPort loadMateWishPort;
     private final MateUseCaseMapper mateUseCaseMapper;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -120,7 +124,17 @@ public class MateUseCase implements MateUseCasePort {
             throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);
 
         cancelWaitingApplicantsOnClose(mateId, mate);
+        notifyWishersOnClose(mateId, mate);
         loadedMate.update(Mate::close);
+    }
+
+    private void notifyWishersOnClose(Long mateId, Mate mate) {
+        List<Long> wisherIds = loadMateWishPort.getWisherAccountIds(mateId);
+        if (wisherIds == null || wisherIds.isEmpty()) return;
+
+        eventPublisher.publishEvent(new MateClosedEvent(
+                new MateClosedEventDto(mate.getTitle(), mateId, mate.getWriterId(), wisherIds)
+        ));
     }
 
     private void cancelWaitingApplicantsOnClose(Long mateId, Mate mate) {

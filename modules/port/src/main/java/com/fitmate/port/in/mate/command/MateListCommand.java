@@ -19,8 +19,9 @@ public class MateListCommand extends SliceCommand {
     private final Integer startLimitPeopleCnt;
     private final Integer endLimitPeopleCnt;
     private final FitCategory fitCategory;
+    private final Boolean includeClosed;
 
-    public MateListCommand(Integer page, Integer size, SortDir sortDir, String sortProperty, String keyword, Integer dayOfWeek, LocalDateTime startMateAt, LocalDateTime endMateAt, List<String> fitPlaceRegions, Integer permitMaxAge, Integer permitMinAge, Integer startLimitPeopleCnt, Integer endLimitPeopleCnt, FitCategory fitCategory) {
+    public MateListCommand(Integer page, Integer size, SortDir sortDir, String sortProperty, String keyword, Integer dayOfWeek, LocalDateTime startMateAt, LocalDateTime endMateAt, List<String> fitPlaceRegions, Integer permitMaxAge, Integer permitMinAge, Integer startLimitPeopleCnt, Integer endLimitPeopleCnt, FitCategory fitCategory, Boolean includeClosed) {
         super(page, size, sortDir, sortProperty);
         this.keyword = keyword;
         this.dayOfWeek = dayOfWeek;
@@ -32,5 +33,6 @@ public class MateListCommand extends SliceCommand {
         this.startLimitPeopleCnt = startLimitPeopleCnt;
         this.endLimitPeopleCnt = endLimitPeopleCnt;
         this.fitCategory = fitCategory;
+        this.includeClosed = includeClosed;
     }
 }

@@ -18,9 +18,10 @@ public class MateApplySimpleJpaResponse {
     private final Integer approvedAccountCnt;
     private final Integer totalFee;
     private final LocalDateTime applyAt;
+    private final boolean closed;
 
     @QueryProjection
-    public MateApplySimpleJpaResponse(Long mateId, Set<Long> introImageIds, String title, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, Integer permitPeopleCnt, Set<Long> approvedAccountIds, Integer totalFee, LocalDateTime applyAt) {
+    public MateApplySimpleJpaResponse(Long mateId, Set<Long> introImageIds, String title, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, Integer permitPeopleCnt, Set<Long> approvedAccountIds, Integer totalFee, LocalDateTime applyAt, LocalDateTime closedAt) {
         this.mateId = mateId;
         this.thumbnailImageId = getThumbnailFileId(introImageIds);
         this.title = title;
@@ -31,6 +32,7 @@ public class MateApplySimpleJpaResponse {
         this.approvedAccountCnt = getApprovedAccountCnt(approvedAccountIds);
         this.totalFee = totalFee;
         this.applyAt = applyAt;
+        this.closed = closedAt != null;
     }
 
     private Long getThumbnailFileId(Set<Long> introImageIds) {

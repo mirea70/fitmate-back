@@ -62,8 +62,12 @@ public class MateQueryRepository {
         booleanBuilder.and(inPermitAges(command.getPermitMinAge(), command.getPermitMaxAge()));
         booleanBuilder.and(inPermitPerson(command.getStartLimitPeopleCnt(), command.getEndLimitPeopleCnt()));
         booleanBuilder.and(eqFitCategory(command.getFitCategory()));
-
         booleanBuilder.and(filterByKeyword(command.getKeyword()));
+
+        if (command.getIncludeClosed() == null || !command.getIncludeClosed()) {
+            booleanBuilder.and(mateJpaEntity.closedAt.isNull());
+        }
+
         return booleanBuilder;
     }
 
@@ -202,7 +206,8 @@ public class MateQueryRepository {
                 .from(mateWishJpaEntity)
                 .innerJoin(mateJpaEntity).on(mateWishJpaEntity.mateId.eq(mateJpaEntity.id))
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
-                .where(mateWishJpaEntity.accountId.eq(accountId))
+                .where(mateWishJpaEntity.accountId.eq(accountId)
+                        .and(mateJpaEntity.closedAt.isNull()))
                 .orderBy(mateWishJpaEntity.id.desc())
                 .fetch();
     }
@@ -255,14 +260,16 @@ public class MateQueryRepository {
                         mateJpaEntity.permitPeopleCnt,
                         mateJpaEntity.approvedAccountIds,
                         mateJpaEntity.totalFee,
-                        mateApplyJpaEntity.createdAt))
+                        mateApplyJpaEntity.createdAt,
+                        mateJpaEntity.closedAt))
                 .from(mateJpaEntity)
                 .innerJoin(mateApplyJpaEntity).on(
                         mateJpaEntity.id.eq(mateApplyJpaEntity.mateId)
                                 .and(mateApplyJpaEntity.applierId.eq(applierId))
                                 .and(mateApplyJpaEntity.deletedAt.isNull())
                 )
-                .where(mateJpaEntity.id.in(mateIds))
+                .where(mateJpaEntity.id.in(mateIds)
+                        .and(mateJpaEntity.closedAt.isNull()))
                 .orderBy(mateApplyJpaEntity.createdAt.desc())
                 .fetch();
     }
