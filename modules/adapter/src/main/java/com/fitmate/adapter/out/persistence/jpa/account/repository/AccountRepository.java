@@ -37,4 +37,6 @@ public interface AccountRepository extends JpaRepository<AccountJpaEntity, Long>
     boolean existsByPhone(String phone);
 
     boolean existsByNickName(String nickName);
+
+    Optional<AccountJpaEntity> findByPhone(String phone);
 }

@@ -99,6 +99,7 @@ public class SecurityConfig {
                 "/api/auth/refresh",
                 "/api/auth/kakao",
                 "/api/auth/kakao/register",
+                "/api/account/recovery/**",
         };
     }
 }

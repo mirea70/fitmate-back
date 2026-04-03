@@ -136,6 +136,10 @@ public class AccountJpaEntity extends BaseJpaEntity {
         this.birthDate = birthDate;
     }
 
+    public void syncPassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
     public void anonymizeForDelete() {
         String suffix = "_DEL_" + System.currentTimeMillis();
         this.loginName = this.loginName + suffix;
