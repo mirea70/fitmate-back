@@ -12,8 +12,10 @@ import com.fitmate.domain.error.results.FileErrorResult;
 import com.fitmate.domain.error.results.NotFoundErrorResult;
 import com.fitmate.port.out.file.LoadAttachFilePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
@@ -36,9 +38,12 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
     private final String fileDefaultDir = rootPath + "/files";
     private final String profileImageDir = "/profile/";
 
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private DataSize maxFileSize;
 
     public FileResponse uploadFile(MultipartFile multipartFile) throws IOException {
         if(multipartFile == null) return null;
+        validateFileSize(multipartFile);
 
         String storeFileName = getStoreFileName(multipartFile);
         File file = new File(getFullPath(storeFileName));
@@ -74,6 +79,11 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
     private void validateFileName(String rawFileName) {
         boolean isMatched = Pattern.matches("^[a-zA-Zㄱ-힣0-9]*$", rawFileName);
         if(!isMatched) throw new FileRequestException(FileErrorResult.NOT_MATCHING_NAME_RULE);
+    }
+
+    private void validateFileSize(MultipartFile multipartFile) {
+        if(multipartFile.getSize() > maxFileSize.toBytes())
+            throw new FileRequestException(FileErrorResult.TOO_LARGE_SIZE);
     }
 
     private void validateFileExtension(String requestExtension) {
