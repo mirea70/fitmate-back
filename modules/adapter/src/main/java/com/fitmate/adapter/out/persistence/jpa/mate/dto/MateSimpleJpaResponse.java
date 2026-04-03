@@ -20,9 +20,10 @@ public class MateSimpleJpaResponse {
     private final String permitGender;
     private final Integer permitPeopleCnt;
     private final int approvedAccountCnt;
+    private final boolean closed;
 
     @QueryProjection
-    public MateSimpleJpaResponse(Long id, Set<Long> introImageIds, Long writerImageId, String writerNickName, String fitCategory, String title, String fitPlaceAddress, LocalDateTime mateAt, String gatherType, String permitGender, Integer permitPeopleCnt, Set<Long> approvedAccountIds) {
+    public MateSimpleJpaResponse(Long id, Set<Long> introImageIds, Long writerImageId, String writerNickName, String fitCategory, String title, String fitPlaceAddress, LocalDateTime mateAt, String gatherType, String permitGender, Integer permitPeopleCnt, Set<Long> approvedAccountIds, LocalDateTime closedAt) {
         this.id = id;
         this.thumbnailImageId = getThumbnailFileId(introImageIds);
         this.writerImageId = writerImageId;
@@ -35,6 +36,7 @@ public class MateSimpleJpaResponse {
         this.permitGender = permitGender;
         this.permitPeopleCnt = permitPeopleCnt;
         this.approvedAccountCnt = approvedAccountIds.size();
+        this.closed = closedAt != null;
     }
 
     private Long getThumbnailFileId(Set<Long> introImageIds) {

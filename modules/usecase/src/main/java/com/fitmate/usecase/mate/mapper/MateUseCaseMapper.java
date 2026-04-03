@@ -72,7 +72,8 @@ public class MateUseCaseMapper {
                 mate.getMateFees(),
                 mate.getApplyQuestion(),
                 mate.getWaitingAccountIds(),
-                mate.getApprovedAccountIds()
+                mate.getApprovedAccountIds(),
+                mate.isClosed()
         );
     }
 

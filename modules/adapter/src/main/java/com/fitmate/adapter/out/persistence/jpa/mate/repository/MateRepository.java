@@ -21,4 +21,6 @@ public interface MateRepository extends JpaRepository<MateJpaEntity, Long> {
     }
 
     void deleteAllByWriterId(Long writerId);
+
+    List<MateJpaEntity> findAllByMateAtBeforeAndClosedAtIsNull(LocalDateTime before);
 }

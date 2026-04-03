@@ -25,10 +25,7 @@ public class MateAutoCancelledEventListener {
     public void onApplicationEvent(MateAutoCancelledEvent event) {
         MateAutoCancelledEventDto dto = event.getEventDto();
 
-        String content = dto.getTitle() + " 모집 규칙이 변경되어 신청이 자동 취소되었습니다.";
-        if (dto.getCancelReason() != null && !dto.getCancelReason().isBlank()) {
-            content += " (사유 : " + dto.getCancelReason() + ")";
-        }
+        String content = dto.getTitle() + " 모임의 " + dto.getCancelReason() + "되었습니다.";
 
         Notice notice = Notice.of(dto.getApplierId(), dto.getMateId(), dto.getWriterId(), content, NoticeType.MATE_CANCELLED);
         loadNoticePort.saveNoticeEntity(notice);

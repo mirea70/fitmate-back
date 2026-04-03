@@ -88,6 +88,17 @@ public class MatePersistenceAdapter implements LoadMatePort {
     }
 
     @Override
+    public List<Loaded<Mate>> loadUnclosedMatesBeforeMateAt(java.time.LocalDateTime before) {
+        return mateRepository.findAllByMateAtBeforeAndClosedAtIsNull(before).stream()
+                .map(entity -> {
+                    List<MateFeeJpaEntity> fees = mateFeeRepository.findAllByMateId(entity.getId());
+                    Mate domain = matePersistenceMapper.entityToDomain(entity, fees);
+                    return new Loaded<>(domain, updated -> matePersistenceMapper.syncToEntity(entity, updated));
+                })
+                .toList();
+    }
+
+    @Override
     public void deleteAllMateByWriter(AccountId id) {
         mateRepository.deleteAllByWriterId(id.getValue());
     }

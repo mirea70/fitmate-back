@@ -88,4 +88,12 @@ public class MateController {
         mateUseCasePort.modifyMate(mateWebAdapterMapper.requestToCommand(mateId, modifyRequest, authDetails.getAccount().getId()));
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "메이트 글 마감", description = "모집 마감 처리 API")
+    @PatchMapping(path = "/{mateId}/close")
+    public ResponseEntity<?> close(@PathVariable Long mateId,
+                                   @AuthenticationPrincipal AuthDetails authDetails) {
+        mateUseCasePort.closeMate(mateId, authDetails.getAccount().getId());
+        return ResponseEntity.ok().build();
+    }
 }

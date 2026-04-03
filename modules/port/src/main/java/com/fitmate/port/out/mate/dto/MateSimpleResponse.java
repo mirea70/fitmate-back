@@ -23,4 +23,5 @@ public class MateSimpleResponse {
     private PermitGender permitGender;
     private Integer permitPeopleCnt;
     private int approvedAccountCnt;
+    private boolean closed;
 }

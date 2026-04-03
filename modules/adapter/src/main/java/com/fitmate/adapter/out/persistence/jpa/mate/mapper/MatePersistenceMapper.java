@@ -51,6 +51,7 @@ public class MatePersistenceMapper {
                 mate.getTotalFee(),
                 mate.getWaitingAccountIds(),
                 mate.getApprovedAccountIds(),
+                mate.getClosedAt(),
                 mate.getCreatedAt(),
                 mate.getUpdatedAt()
         );
@@ -109,6 +110,7 @@ public class MatePersistenceMapper {
                 mateEntity.getApplyQuestion(),
                 mateEntity.getWaitingAccountIds(),
                 mateEntity.getApprovedAccountIds(),
+                mateEntity.getClosedAt(),
                 mateEntity.getCreatedAt(),
                 mateEntity.getUpdatedAt()
         );
@@ -158,7 +160,8 @@ public class MatePersistenceMapper {
                 domain.getApplyQuestion(),
                 domain.getTotalFee(),
                 domain.getWaitingAccountIds(),
-                domain.getApprovedAccountIds()
+                domain.getApprovedAccountIds(),
+                domain.getClosedAt()
         );
     }
 
@@ -179,7 +182,8 @@ public class MatePersistenceMapper {
                 GatherType.valueOf(jpaResponse.getGatherType()),
                 PermitGender.valueOf(jpaResponse.getPermitGender()),
                 jpaResponse.getPermitPeopleCnt(),
-                jpaResponse.getApprovedAccountCnt()
+                jpaResponse.getApprovedAccountCnt(),
+                jpaResponse.isClosed()
         );
     }
 

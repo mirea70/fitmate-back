@@ -56,13 +56,15 @@ public class Mate {
 
     private Set<Long> approvedAccountIds;
 
+    private LocalDateTime closedAt;
+
     private LocalDateTime deletedAt;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    public static Mate withId(MateId id, FitCategory fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, FitPlace fitPlace, GatherType gatherType, PermitGender permitGender, PermitAges permitAges, Integer permitPeopleCnt, Long writerId, List<MateFee> mateFees, String applyQuestion, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public static Mate withId(MateId id, FitCategory fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, FitPlace fitPlace, GatherType gatherType, PermitGender permitGender, PermitAges permitAges, Integer permitPeopleCnt, Long writerId, List<MateFee> mateFees, String applyQuestion, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds, LocalDateTime closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
 
         Integer totalFee = mateFees.stream().map(MateFee::getFee).mapToInt(i -> i).sum();
         return new Mate(
@@ -83,9 +85,10 @@ public class Mate {
                 applyQuestion,
                 waitingAccountIds,
                 approvedAccountIds,
+                closedAt,
+                null,
                 createdAt,
-                updatedAt,
-                null
+                updatedAt
         );
     }
 
@@ -110,6 +113,7 @@ public class Mate {
                 applyQuestion,
                 waitingAccountIds,
                 approvedAccountIds,
+                null,
                 null,
                 null,
                 null
@@ -198,5 +202,23 @@ public class Mate {
             this.waitingAccountIds.remove(accountId);
         if(this.approvedAccountIds != null)
             this.approvedAccountIds.remove(accountId);
+    }
+
+    public boolean isClosed() {
+        return this.closedAt != null;
+    }
+
+    public void close() {
+        if (this.closedAt != null) return;
+        this.closedAt = LocalDateTime.now();
+    }
+
+    public boolean isFull() {
+        int approvedCount = this.approvedAccountIds != null ? this.approvedAccountIds.size() : 0;
+        return approvedCount >= this.permitPeopleCnt;
+    }
+
+    public boolean isPastMateAt() {
+        return this.mateAt != null && this.mateAt.isBefore(LocalDateTime.now());
     }
 }

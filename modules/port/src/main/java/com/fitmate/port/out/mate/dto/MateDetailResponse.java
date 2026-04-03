@@ -35,4 +35,5 @@ public class MateDetailResponse {
     private String applyQuestion;
     private Set<Long> waitingAccountIds;
     private Set<Long> approvedAccountIds;
+    private boolean closed;
 }

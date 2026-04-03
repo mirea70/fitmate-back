@@ -14,5 +14,6 @@ public interface MateUseCasePort {
     MateDetailResponse findMate(Long mateId);
     SliceResponse<MateSimpleResponse> findAllMate(MateListCommand command);
     void modifyMate(MateModifyCommand command);
+    void closeMate(Long mateId, Long writerId);
     List<MateSimpleResponse> findMyMates(Long writerId);
 }

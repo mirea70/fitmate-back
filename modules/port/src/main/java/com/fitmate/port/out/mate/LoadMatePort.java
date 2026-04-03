@@ -21,6 +21,7 @@ public interface LoadMatePort {
     List<MateSimpleResponse> loadMatesByWriterId(Long writerId);
     List<MateSimpleResponse> loadMatesByIds(List<Long> mateIds);
     List<Mate> loadMatesByMateAtBetween(java.time.LocalDateTime from, java.time.LocalDateTime to);
+    List<Loaded<Mate>> loadUnclosedMatesBeforeMateAt(java.time.LocalDateTime before);
     void deleteAllMateByWriter(AccountId id);
     void deleteAllMateFeeByMateId(MateId id);
 }

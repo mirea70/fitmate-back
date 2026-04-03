@@ -36,7 +36,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @UseCase
@@ -111,6 +113,34 @@ public class MateUseCase implements MateUseCasePort {
     }
 
     @Override
+    public void closeMate(Long mateId, Long writerId) {
+        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(mateId));
+        Mate mate = loadedMate.get();
+        if (!mate.getWriterId().equals(writerId))
+            throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);
+
+        cancelWaitingApplicantsOnClose(mateId, mate);
+        loadedMate.update(Mate::close);
+    }
+
+    private void cancelWaitingApplicantsOnClose(Long mateId, Mate mate) {
+        Set<Long> waitingIds = mate.getWaitingAccountIds();
+        if (waitingIds == null || waitingIds.isEmpty()) return;
+
+        String cancelReason = "모집이 마감되어 신청이 자동 취소";
+        for (Long waitingId : new ArrayList<>(waitingIds)) {
+            mate.cancelApply(waitingId);
+            Loaded<com.fitmate.domain.mate.apply.MateApply> loadedApply =
+                    loadMateRequestPort.loadMateApply(mateId, waitingId);
+            loadedApply.update(apply -> apply.cancel(cancelReason, LocalDateTime.now()));
+
+            eventPublisher.publishEvent(new MateAutoCancelledEvent(
+                    new MateAutoCancelledEventDto(mate.getTitle(), mateId, mate.getWriterId(), waitingId, cancelReason)
+            ));
+        }
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<MateSimpleResponse> findMyMates(Long writerId) {
         return loadMatePort.loadMatesByWriterId(writerId);
@@ -161,24 +191,30 @@ public class MateUseCase implements MateUseCasePort {
         int effectiveMaxAge = newMaxAge != null ? newMaxAge : mate.getPermitAges().getMax();
         PermitGender effectiveGender = newGender != null ? newGender : mate.getPermitGender();
 
-        List<Long> toCancel = new ArrayList<>();
+        Map<Long, String> toCancelWithReason = new HashMap<>();
         for (Long waitingId : waitingIds) {
             Account account = loadAccountPort.loadAccountEntity(new AccountId(waitingId));
+            List<String> reasons = new ArrayList<>();
 
             boolean genderMismatch = effectiveGender != PermitGender.ALL
                     && ((effectiveGender == PermitGender.MALE && account.getGender() == Gender.FEMALE)
                     || (effectiveGender == PermitGender.FEMALE && account.getGender() == Gender.MALE));
+            if (genderMismatch) reasons.add("허용 성별 변경");
 
             int age = account.getAge();
             boolean ageMismatch = age > 0 && (age < effectiveMinAge || age > effectiveMaxAge);
+            if (ageMismatch) reasons.add("허용 연령대 변경");
 
-            if (genderMismatch || ageMismatch) {
-                toCancel.add(waitingId);
+            if (!reasons.isEmpty()) {
+                toCancelWithReason.put(waitingId, String.join(", ", reasons));
             }
         }
 
-        String cancelReason = "모집 규칙 변경으로 인한 자동 취소";
-        for (Long cancelId : toCancel) {
+        for (var entry : toCancelWithReason.entrySet()) {
+            Long cancelId = entry.getKey();
+            String reason = entry.getValue();
+            String cancelReason = reason + "으로 인해 신청이 자동 취소";
+
             loadedMate.update(m -> m.cancelApply(cancelId));
             Loaded<com.fitmate.domain.mate.apply.MateApply> loadedApply =
                     loadMateRequestPort.loadMateApply(command.getMateId(), cancelId);

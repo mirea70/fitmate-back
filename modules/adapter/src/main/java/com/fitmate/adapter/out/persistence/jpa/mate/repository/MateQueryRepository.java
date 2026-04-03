@@ -39,7 +39,8 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds
+                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
@@ -171,7 +172,8 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds
+                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
@@ -194,7 +196,8 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds
+                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.closedAt
                 ))
                 .from(mateWishJpaEntity)
                 .innerJoin(mateJpaEntity).on(mateWishJpaEntity.mateId.eq(mateJpaEntity.id))
@@ -218,7 +221,8 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds
+                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))

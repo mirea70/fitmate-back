@@ -3,7 +3,9 @@ package com.fitmate.usecase.mate;
 import com.fitmate.domain.account.Account;
 import com.fitmate.domain.account.AccountId;
 import com.fitmate.domain.account.enums.Gender;
+import com.fitmate.domain.error.exceptions.LimitException;
 import com.fitmate.domain.error.exceptions.NotMatchException;
+import com.fitmate.domain.error.results.LimitErrorResult;
 import com.fitmate.domain.error.results.NotMatchErrorResult;
 import com.fitmate.domain.mate.Mate;
 import com.fitmate.domain.mate.enums.PermitGender;
@@ -57,6 +59,9 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         if(applierId.equals(loadedMate.get().getWriterId()))
             throw new NotMatchException(NotMatchErrorResult.CANNOT_APPLY_WRITER);
         validatePermitRules(loadedMate.get(), applierId);
+
+        if (loadedMate.get().isClosed())
+            throw new LimitException(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
 
         ApproveStatus approveStatus = saveNewMateRequest(mateApplyCommand, loadedMate.get().getGatherType());
         loadedMate.update(mate -> {
