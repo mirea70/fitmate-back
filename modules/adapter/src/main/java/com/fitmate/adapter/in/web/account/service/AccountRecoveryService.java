@@ -29,14 +29,13 @@ public class AccountRecoveryService {
         return Map.of("loginName", masked);
     }
 
-    public void checkPhoneExists(String phone) {
-        if (!accountRepository.existsByPhone(phone)) {
-            throw new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA);
-        }
+    public void checkAccountExists(String loginName, String phone) {
+        accountRepository.findByLoginNameAndPhone(loginName, phone)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
     }
 
-    public void resetPassword(String phone, String newPassword) {
-        AccountJpaEntity account = accountRepository.findByPhone(phone)
+    public void resetPassword(String loginName, String phone, String newPassword) {
+        AccountJpaEntity account = accountRepository.findByLoginNameAndPhone(loginName, phone)
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_ACCOUNT_DATA));
 
         account.syncPassword(passwordEncoder.encode(newPassword));
