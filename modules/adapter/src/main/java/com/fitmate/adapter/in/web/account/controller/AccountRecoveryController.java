@@ -25,17 +25,10 @@ public class AccountRecoveryController {
         return ResponseEntity.ok(accountRecoveryService.findLoginName(body.get("phone")));
     }
 
-    @Operation(summary = "비밀번호 재설정 - 인증번호 요청", description = "전화번호로 SMS 인증번호 발송")
-    @PostMapping("/request-code")
-    public ResponseEntity<?> requestCode(@RequestBody Map<String, String> body) {
-        accountRecoveryService.requestRecoveryCode(body.get("phone"));
-        return ResponseEntity.ok().build();
-    }
-
-    @Operation(summary = "비밀번호 재설정 - 인증번호 확인", description = "SMS 인증번호 검증")
-    @PostMapping("/verify-code")
-    public ResponseEntity<?> verifyCode(@RequestBody Map<String, String> body) {
-        accountRecoveryService.verifyRecoveryCode(body.get("phone"), body.get("code"));
+    @Operation(summary = "비밀번호 재설정 - 전화번호 확인", description = "전화번호로 가입된 계정 존재 여부 확인")
+    @PostMapping("/check-phone")
+    public ResponseEntity<?> checkPhone(@RequestBody Map<String, String> body) {
+        accountRecoveryService.checkPhoneExists(body.get("phone"));
         return ResponseEntity.ok().build();
     }
 

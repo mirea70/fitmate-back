@@ -2,6 +2,7 @@ package com.fitmate.adapter.out.persistence.sms.util;
 
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class SmsUtil {
         messageObj.setTo(to);
         messageObj.setText(content);
 
-//        return messageService.sendOne(new SingleMessageSendingRequest(messageObj));
-        return null;
+        return messageService.sendOne(new SingleMessageSendingRequest(messageObj));
+//        return null;
     }
 }
