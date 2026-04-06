@@ -45,6 +45,7 @@ public class MateQueryRepository {
                 .from(mateJpaEntity)
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
                 .where(filter(command))
+                .orderBy(mateJpaEntity.id.desc())
                 .offset(command.getPage())
                 .limit(command.getSize() + 1)
                 .fetch();
