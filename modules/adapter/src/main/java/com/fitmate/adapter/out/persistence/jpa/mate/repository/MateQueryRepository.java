@@ -262,7 +262,9 @@ public class MateQueryRepository {
                         mateJpaEntity.approvedAccountIds,
                         mateJpaEntity.totalFee,
                         mateApplyJpaEntity.createdAt,
-                        mateJpaEntity.closedAt))
+                        mateJpaEntity.closedAt,
+                        mateJpaEntity.fitCategory,
+                        mateApplyJpaEntity.approveStatus))
                 .from(mateJpaEntity)
                 .innerJoin(mateApplyJpaEntity).on(
                         mateJpaEntity.id.eq(mateApplyJpaEntity.mateId)

@@ -244,7 +244,9 @@ public class MatePersistenceMapper {
                 jpaResponse.getApprovedAccountCnt(),
                 jpaResponse.getTotalFee(),
                 jpaResponse.getApplyAt(),
-                jpaResponse.isClosed()
+                jpaResponse.isClosed(),
+                FitCategory.valueOf(jpaResponse.getFitCategory()),
+                ApproveStatus.valueOf(jpaResponse.getApproveStatus())
         );
     }
 
