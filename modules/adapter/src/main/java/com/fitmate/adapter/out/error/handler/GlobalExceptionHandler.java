@@ -72,6 +72,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ErrorResponse("CONFLICT", "다른 사용자의 요청과 충돌했습니다. 다시 시도해주세요."));
     }
 
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(final org.springframework.dao.DataIntegrityViolationException exception) {
+        log.warn("데이터 무결성 위반 (중복 요청): ", exception);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse("DUPLICATE", "이미 처리된 요청입니다."));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(final Exception exception) {
         log.warn("Unknown Exception occur: ", exception);

@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "follow")
+@Table(name = "follow", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"from_account_id", "to_account_id"})
+})
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = {"fromAccountId", "toAccountId"})
