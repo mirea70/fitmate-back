@@ -1,7 +1,7 @@
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 COPY . .
-RUN chmod +x ./gradlew && ./gradlew clean test bootJar
+RUN chmod +x ./gradlew && ./gradlew clean test :adapter:bootJar
 
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
