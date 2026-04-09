@@ -64,12 +64,9 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
             throw new LimitException(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
 
         ApproveStatus approveStatus = saveNewMateRequest(mateApplyCommand, loadedMate.get().getGatherType());
-        loadedMate.update(mate -> {
-            if(approveStatus == ApproveStatus.APPROVE)
-                mate.addApprovedAccountId(applierId);
-            else
-                mate.addWaitingAccountId(applierId);
-        });
+        if (approveStatus == ApproveStatus.APPROVE) {
+            loadedMate.update(Mate::incrementApprovedCount);
+        }
 
         eventPublisher.publishEvent(new MateRequestEvent(
                 new MateRequestEventDto(loadedMate.get().getTitle(), loadedMate.get().getId().getValue(), loadedMate.get().getWriterId(), applierId, approveStatus)
@@ -101,7 +98,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
         loadedMateApply.update(MateApply::changeToApprove);
 
-        loadedMate.update(mate -> mate.approve(applierId));
+        loadedMate.update(Mate::incrementApprovedCount);
 
         eventPublisher.publishEvent(new MateApproveEvent(
                 new MateApproveEventDto(loadedMate.get().getTitle(), mateId, applierId)
@@ -111,11 +108,14 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
     @Override
     public void cancelMateApply(Long mateId, Long applierId, String cancelReason) {
         Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(mateId));
-        loadedMate.update(mate -> mate.cancelApply(applierId));
 
         Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
         boolean wasApproved = loadedMateApply.get().getApproveStatus() == ApproveStatus.APPROVE;
         loadedMateApply.update(mateApply -> mateApply.cancel(cancelReason, LocalDateTime.now()));
+
+        if (wasApproved) {
+            loadedMate.update(Mate::decrementApprovedCount);
+        }
 
         eventPublisher.publishEvent(new MateCancelledEvent(
                 new MateCancelledEventDto(loadedMate.get().getTitle(), mateId, loadedMate.get().getWriterId(), applierId, cancelReason, wasApproved)

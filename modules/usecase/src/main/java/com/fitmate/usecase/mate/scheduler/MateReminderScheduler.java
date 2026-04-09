@@ -4,6 +4,7 @@ import com.fitmate.domain.mate.Mate;
 import com.fitmate.domain.notice.Notice;
 import com.fitmate.domain.notice.NoticeType;
 import com.fitmate.port.out.mate.LoadMatePort;
+import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.notice.LoadNoticePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,6 +21,7 @@ import java.util.Set;
 public class MateReminderScheduler {
 
     private final LoadMatePort loadMatePort;
+    private final LoadMateRequestPort loadMateRequestPort;
     private final LoadNoticePort loadNoticePort;
     private static final String REMINDER_MSG = " 모임이 내일 예정되어 있습니다.";
 
@@ -33,8 +35,9 @@ public class MateReminderScheduler {
 
         for (Mate mate : mates) {
             String content = mate.getTitle() + REMINDER_MSG;
-            Set<Long> approvedAccountIds = mate.getApprovedAccountIds();
-            if (approvedAccountIds == null) continue;
+            Set<Long> approvedAccountIds = loadMateRequestPort.getApprovedAccountIds(mate.getId().getValue());
+            approvedAccountIds.add(mate.getWriterId()); // 작성자 포함
+            if (approvedAccountIds.isEmpty()) continue;
 
             for (Long accountId : approvedAccountIds) {
                 Notice notice = Notice.of(accountId, mate.getId().getValue(), null, content, NoticeType.MATE_REMINDER);

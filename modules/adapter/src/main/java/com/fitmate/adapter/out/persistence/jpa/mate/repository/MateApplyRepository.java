@@ -5,6 +5,7 @@ import com.fitmate.domain.error.exceptions.NotFoundException;
 import com.fitmate.domain.error.results.NotFoundErrorResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MateApplyRepository extends JpaRepository<MateApplyJpaEntity, Long> {
@@ -18,4 +19,6 @@ public interface MateApplyRepository extends JpaRepository<MateApplyJpaEntity, L
     }
 
     void deleteAllByApplierId(Long applierId);
+
+    List<MateApplyJpaEntity> findAllByMateIdAndApproveStatusAndDeletedAtIsNull(Long mateId, String approveStatus);
 }

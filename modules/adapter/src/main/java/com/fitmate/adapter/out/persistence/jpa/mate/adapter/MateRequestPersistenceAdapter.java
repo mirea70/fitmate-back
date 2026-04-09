@@ -21,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -74,6 +76,21 @@ public class MateRequestPersistenceAdapter implements LoadMateRequestPort {
     @Override
     public void deleteAllMateRequestByApplier(AccountId id) {
         mateApplyRepository.deleteAllByApplierId(id.getValue());
+    }
 
+    @Override
+    public Set<Long> getWaitingAccountIds(Long mateId) {
+        return mateApplyRepository.findAllByMateIdAndApproveStatusAndDeletedAtIsNull(mateId, ApproveStatus.WAIT.name())
+                .stream()
+                .map(MateApplyJpaEntity::getApplierId)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Long> getApprovedAccountIds(Long mateId) {
+        return mateApplyRepository.findAllByMateIdAndApproveStatusAndDeletedAtIsNull(mateId, ApproveStatus.APPROVE.name())
+                .stream()
+                .map(MateApplyJpaEntity::getApplierId)
+                .collect(Collectors.toSet());
     }
 }

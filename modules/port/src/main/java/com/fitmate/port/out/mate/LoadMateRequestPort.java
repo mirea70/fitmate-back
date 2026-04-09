@@ -8,6 +8,7 @@ import com.fitmate.port.out.mate.dto.MateQuestionResponse;
 import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
 
 import java.util.List;
+import java.util.Set;
 
 public interface LoadMateRequestPort {
     MateQuestionResponse loadMateQuestion(Long mateId);
@@ -17,4 +18,6 @@ public interface LoadMateRequestPort {
     Loaded<MateApply> loadMateApply(Long mateId, Long applierId);
     List<MateRequestSimpleResponse> loadMateApplies(Long applierId, ApproveStatus approveStatus);
     void deleteAllMateRequestByApplier(AccountId id);
+    Set<Long> getWaitingAccountIds(Long mateId);
+    Set<Long> getApprovedAccountIds(Long mateId);
 }

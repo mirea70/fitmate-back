@@ -1,11 +1,7 @@
 package com.fitmate.domain.mate;
 
-import com.fitmate.domain.error.exceptions.DuplicatedException;
 import com.fitmate.domain.error.exceptions.LimitException;
-import com.fitmate.domain.error.exceptions.NotMatchException;
-import com.fitmate.domain.error.results.DuplicatedErrorResult;
 import com.fitmate.domain.error.results.LimitErrorResult;
-import com.fitmate.domain.error.results.NotMatchErrorResult;
 import com.fitmate.domain.mate.enums.FitCategory;
 import com.fitmate.domain.mate.enums.GatherType;
 import com.fitmate.domain.mate.enums.PermitGender;
@@ -14,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -52,9 +47,7 @@ public class Mate {
 
     private String applyQuestion;
 
-    private Set<Long> waitingAccountIds;
-
-    private Set<Long> approvedAccountIds;
+    private int approvedCount;
 
     private LocalDateTime closedAt;
 
@@ -64,7 +57,7 @@ public class Mate {
 
     private LocalDateTime updatedAt;
 
-    public static Mate withId(MateId id, FitCategory fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, FitPlace fitPlace, GatherType gatherType, PermitGender permitGender, PermitAges permitAges, Integer permitPeopleCnt, Long writerId, List<MateFee> mateFees, String applyQuestion, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds, LocalDateTime closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public static Mate withId(MateId id, FitCategory fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, FitPlace fitPlace, GatherType gatherType, PermitGender permitGender, PermitAges permitAges, Integer permitPeopleCnt, Long writerId, List<MateFee> mateFees, String applyQuestion, int approvedCount, LocalDateTime closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
 
         Integer totalFee = mateFees.stream().map(MateFee::getFee).mapToInt(i -> i).sum();
         return new Mate(
@@ -83,8 +76,7 @@ public class Mate {
                 totalFee,
                 mateFees,
                 applyQuestion,
-                waitingAccountIds,
-                approvedAccountIds,
+                approvedCount,
                 closedAt,
                 null,
                 createdAt,
@@ -92,7 +84,7 @@ public class Mate {
         );
     }
 
-    public static Mate withoutId(FitCategory fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, FitPlace fitPlace, GatherType gatherType, PermitGender permitGender, PermitAges permitAges, Integer permitPeopleCnt, Long writerId, List<MateFee> mateFees, String applyQuestion, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds) {
+    public static Mate withoutId(FitCategory fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, FitPlace fitPlace, GatherType gatherType, PermitGender permitGender, PermitAges permitAges, Integer permitPeopleCnt, Long writerId, List<MateFee> mateFees, String applyQuestion) {
 
         Integer totalFee = mateFees.stream().map(MateFee::getFee).mapToInt(i -> i).sum();
         return new Mate(
@@ -111,8 +103,7 @@ public class Mate {
                 totalFee,
                 mateFees,
                 applyQuestion,
-                waitingAccountIds,
-                approvedAccountIds,
+                0, // 승인자 카운트 (작성자 미포함, 표시 시 +1)
                 null,
                 null,
                 null,
@@ -142,66 +133,19 @@ public class Mate {
         this.introImageIds = introImages;
     }
 
-    public void addWaitingAccountId(Long accountId) {
-        if(accountId == null) return;
-        if(this.waitingAccountIds == null) this.waitingAccountIds = new HashSet<>();
-
-        this.waitingAccountIds.add(accountId);
-    }
-
-    public void addApprovedAccountId(Long accountId) {
-        if(accountId == null) return;
-        if(this.approvedAccountIds == null) this.approvedAccountIds = new HashSet<>();
-
-        this.approvedAccountIds.add(accountId);
-    }
-
-    public void approve(Long accountId) {
-        if(this.approvedAccountIds == null) this.approvedAccountIds = new HashSet<>();
-        checkForApprove(accountId);
-
-        if(this.waitingAccountIds != null && !this.waitingAccountIds.isEmpty())
-            this.waitingAccountIds.remove(accountId);
-        this.approvedAccountIds.add(accountId);
-    }
-
-    public void autoApproveWriter() {
-        if(this.approvedAccountIds == null) this.approvedAccountIds = new HashSet<>();
-        this.approvedAccountIds.add(this.writerId);
-    }
-
-    private void checkForApprove(Long accountId) {
-        if(accountId == null)
-            throw new IllegalArgumentException("accountId 값이 존재해야 합니다.");
-        checkDuplicateApprove(accountId);
-        checkExistWaiting(accountId);
-        checkIsOverApprove();
-    }
-
-    private void checkDuplicateApprove(Long accountId) {
-        if(this.approvedAccountIds == null || this.approvedAccountIds.isEmpty())
-            return;
-        if(this.approvedAccountIds.contains(accountId))
-            throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_MATE_APPLIER);
-    }
-
-    private void checkExistWaiting(Long accountId) {
-        if(this.waitingAccountIds == null || this.waitingAccountIds.isEmpty())
-            return;
-        if(!this.waitingAccountIds.contains(accountId))
-            throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WAIT_ACCOUNT_LIST);
-    }
-
-    private void checkIsOverApprove() {
-        if(this.approvedAccountIds.size() + 1 > this.permitPeopleCnt)
+    public void checkCapacity() {
+        if (isFull())
             throw new LimitException(LimitErrorResult.OVER_MATE_PEOPLE_LIMIT);
     }
 
-    public void cancelApply(Long accountId) {
-        if(this.waitingAccountIds != null)
-            this.waitingAccountIds.remove(accountId);
-        if(this.approvedAccountIds != null)
-            this.approvedAccountIds.remove(accountId);
+    public void incrementApprovedCount() {
+        checkCapacity();
+        this.approvedCount++;
+    }
+
+    public void decrementApprovedCount() {
+        if (this.approvedCount > 0)
+            this.approvedCount--;
     }
 
     public boolean isClosed() {
@@ -214,8 +158,7 @@ public class Mate {
     }
 
     public boolean isFull() {
-        int approvedCount = this.approvedAccountIds != null ? this.approvedAccountIds.size() : 0;
-        return approvedCount >= this.permitPeopleCnt;
+        return (this.approvedCount + 1) >= this.permitPeopleCnt; // +1은 작성자
     }
 
     public boolean isPastMateAt() {

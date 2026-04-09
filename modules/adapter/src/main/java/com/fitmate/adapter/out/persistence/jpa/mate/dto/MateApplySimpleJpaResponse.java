@@ -23,7 +23,7 @@ public class MateApplySimpleJpaResponse {
     private final String approveStatus;
 
     @QueryProjection
-    public MateApplySimpleJpaResponse(Long mateId, Set<Long> introImageIds, String title, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, Integer permitPeopleCnt, Set<Long> approvedAccountIds, Integer totalFee, LocalDateTime applyAt, LocalDateTime closedAt, String fitCategory, String approveStatus) {
+    public MateApplySimpleJpaResponse(Long mateId, Set<Long> introImageIds, String title, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, Integer permitPeopleCnt, int approvedCount, Integer totalFee, LocalDateTime applyAt, LocalDateTime closedAt, String fitCategory, String approveStatus) {
         this.mateId = mateId;
         this.thumbnailImageId = getThumbnailFileId(introImageIds);
         this.title = title;
@@ -31,7 +31,7 @@ public class MateApplySimpleJpaResponse {
         this.fitPlaceName = fitPlaceName;
         this.fitPlaceAddress = fitPlaceAddress;
         this.permitPeopleCnt = permitPeopleCnt;
-        this.approvedAccountCnt = getApprovedAccountCnt(approvedAccountIds);
+        this.approvedAccountCnt = approvedCount;
         this.totalFee = totalFee;
         this.applyAt = applyAt;
         this.closed = closedAt != null;
@@ -46,12 +46,5 @@ public class MateApplySimpleJpaResponse {
             min = Math.min(min, introImageId);
         }
         return min;
-    }
-
-    private Integer getApprovedAccountCnt(Set<Long> approvedAccountIds) {
-        if(approvedAccountIds == null || approvedAccountIds.isEmpty())
-            return null;
-        else
-            return approvedAccountIds.size();
     }
 }

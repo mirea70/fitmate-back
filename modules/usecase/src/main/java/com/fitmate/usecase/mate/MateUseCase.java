@@ -63,7 +63,6 @@ public class MateUseCase implements MateUseCasePort {
         if(introImageIds != null && !introImageIds.isEmpty())
             loadAttachFilePort.checkExistFiles(introImageIds);
         Mate mate = mateUseCaseMapper.commandToDomain(mateCreateCommand);
-        mate.autoApproveWriter();
         Long mateEntityId = loadMatePort.saveMateEntity(mate);
         loadMatePort.saveMateFeeEntities(mate.getMateFees(), new MateId(mateEntityId));
 
@@ -77,7 +76,10 @@ public class MateUseCase implements MateUseCasePort {
     public MateDetailResponse findMate(Long id) {
         Mate mate = loadMatePort.loadMateEntity(new MateId(id));
         Account writer = loadAccountPort.loadAccountEntity(new AccountId(mate.getWriterId()));
-        return mateUseCaseMapper.domainToDetailResponse(mate, writer);
+        Set<Long> waitingAccountIds = loadMateRequestPort.getWaitingAccountIds(id);
+        Set<Long> approvedAccountIds = loadMateRequestPort.getApprovedAccountIds(id);
+        approvedAccountIds.add(mate.getWriterId()); // 작성자는 MateApply 없이 자동 승인
+        return mateUseCaseMapper.domainToDetailResponse(mate, writer, waitingAccountIds, approvedAccountIds);
     }
 
     @Override
@@ -138,12 +140,11 @@ public class MateUseCase implements MateUseCasePort {
     }
 
     private void cancelWaitingApplicantsOnClose(Long mateId, Mate mate) {
-        Set<Long> waitingIds = mate.getWaitingAccountIds();
+        Set<Long> waitingIds = loadMateRequestPort.getWaitingAccountIds(mateId);
         if (waitingIds == null || waitingIds.isEmpty()) return;
 
         String cancelReason = "모집이 마감되어 신청이 자동 취소";
         for (Long waitingId : new ArrayList<>(waitingIds)) {
-            mate.cancelApply(waitingId);
             Loaded<com.fitmate.domain.mate.apply.MateApply> loadedApply =
                     loadMateRequestPort.loadMateApply(mateId, waitingId);
             loadedApply.update(apply -> apply.cancel(cancelReason, LocalDateTime.now()));
@@ -170,7 +171,7 @@ public class MateUseCase implements MateUseCasePort {
     }
 
     private void validateRecruitRuleNotChanged(MateModifyCommand command, Mate mate) {
-        boolean hasApprovedMembers = mate.getApprovedAccountIds() != null && mate.getApprovedAccountIds().size() > 1;
+        boolean hasApprovedMembers = mate.getApprovedCount() > 1;
 
         if (!hasApprovedMembers) return;
 
@@ -198,7 +199,7 @@ public class MateUseCase implements MateUseCasePort {
 
         if (!genderChanged && !ageChanged) return;
 
-        Set<Long> waitingIds = mate.getWaitingAccountIds();
+        Set<Long> waitingIds = loadMateRequestPort.getWaitingAccountIds(command.getMateId());
         if (waitingIds == null || waitingIds.isEmpty()) return;
 
         int effectiveMinAge = newMinAge != null ? newMinAge : mate.getPermitAges().getMin();
@@ -229,7 +230,6 @@ public class MateUseCase implements MateUseCasePort {
             String reason = entry.getValue();
             String cancelReason = reason + "으로 인해 신청이 자동 취소";
 
-            loadedMate.update(m -> m.cancelApply(cancelId));
             Loaded<com.fitmate.domain.mate.apply.MateApply> loadedApply =
                     loadMateRequestPort.loadMateApply(command.getMateId(), cancelId);
             loadedApply.update(apply -> apply.cancel(cancelReason, LocalDateTime.now()));

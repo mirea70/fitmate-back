@@ -8,6 +8,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateApplyJpaE
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateJpaEntity.mateJpaEntity;
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateWishJpaEntity.mateWishJpaEntity;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class MateQueryRepository {
@@ -26,7 +28,7 @@ public class MateQueryRepository {
 
     public List<MateSimpleJpaResponse> readList(MateListCommand command) {
 
-        return queryFactory
+        List<MateSimpleJpaResponse> result = queryFactory
                 .select(new QMateSimpleJpaResponse(
                         mateJpaEntity.id,
                         mateJpaEntity.introImageIds,
@@ -39,7 +41,7 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.approvedCount,
                         mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
@@ -49,6 +51,8 @@ public class MateQueryRepository {
                 .offset(command.getPage())
                 .limit(command.getSize() + 1)
                 .fetch();
+
+        return result;
     }
 
 //    private BooleanExpression afterLastMatingId(Long lastMatingId) {
@@ -177,7 +181,7 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.approvedCount,
                         mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
@@ -201,7 +205,7 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.approvedCount,
                         mateJpaEntity.closedAt
                 ))
                 .from(mateWishJpaEntity)
@@ -227,7 +231,7 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.approvedCount,
                         mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
@@ -259,7 +263,7 @@ public class MateQueryRepository {
                         mateJpaEntity.fitPlaceName,
                         mateJpaEntity.fitPlaceAddress,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedAccountIds,
+                        mateJpaEntity.approvedCount,
                         mateJpaEntity.totalFee,
                         mateApplyJpaEntity.createdAt,
                         mateJpaEntity.closedAt,

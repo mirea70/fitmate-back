@@ -12,6 +12,8 @@ import com.fitmate.port.in.mate.command.MateCreateCommand;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class MateUseCaseMapper {
     public Mate commandToDomain(MateCreateCommand createCommand) {
@@ -39,13 +41,11 @@ public class MateUseCaseMapper {
                 createCommand.getPermitPeopleCnt(),
                 createCommand.getWriterId(),
                 createCommand.getMateFees(),
-                createCommand.getApplyQuestion(),
-                null,
-                null
+                createCommand.getApplyQuestion()
         );
     }
 
-    public MateDetailResponse domainToDetailResponse(Mate mate, Account writer) {
+    public MateDetailResponse domainToDetailResponse(Mate mate, Account writer, Set<Long> waitingAccountIds, Set<Long> approvedAccountIds) {
 
         FitPlace fitPlace = mate.getFitPlace();
         PermitAges permitAges = mate.getPermitAges();
@@ -71,8 +71,8 @@ public class MateUseCaseMapper {
                 mate.getTotalFee(),
                 mate.getMateFees(),
                 mate.getApplyQuestion(),
-                mate.getWaitingAccountIds(),
-                mate.getApprovedAccountIds(),
+                waitingAccountIds,
+                approvedAccountIds,
                 mate.isClosed()
         );
     }
