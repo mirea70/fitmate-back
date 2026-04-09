@@ -11,6 +11,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 
 @Configuration
 @EnableRedisRepositories(basePackages = "com.fitmate.adapter.out.persistence.redis")
+@org.springframework.context.annotation.Profile("!test")
 public class RedisConfig {
 
     @Value("${redis.host}")

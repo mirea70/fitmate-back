@@ -16,6 +16,7 @@ import java.util.List;
 @PersistenceAdapter
 @RequiredArgsConstructor
 @Transactional
+@org.springframework.context.annotation.Profile("!test")
 public class NoticePersistenceAdapter implements LoadNoticePort {
 
     private final NoticeRepository noticeRepository;

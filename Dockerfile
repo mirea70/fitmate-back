@@ -1,5 +1,10 @@
+FROM eclipse-temurin:17-jdk AS build
+WORKDIR /app
+COPY . .
+RUN chmod +x ./gradlew && ./gradlew clean test bootJar
+
 FROM eclipse-temurin:17-jdk
-ARG JAR_FILE=modules/adapter/build/libs/*.jar
-COPY ${JAR_FILE} fitmate.jar
+WORKDIR /app
+COPY --from=build /app/modules/adapter/build/libs/*.jar fitmate.jar
 
 ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prd", "-Dspring.config.location=./resources/ymls/", "fitmate.jar"]

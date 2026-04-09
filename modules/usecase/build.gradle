@@ -9,6 +9,8 @@ dependencies {
     implementation 'org.springframework:spring-tx:5.3.12'
     implementation 'org.springframework.security:spring-security-crypto:5.7.0'
     implementation 'org.apache.commons:commons-lang3:3.8.1'
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {

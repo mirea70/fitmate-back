@@ -18,6 +18,7 @@ import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
+@org.springframework.context.annotation.Profile("!test")
 public class ChatRoomQueryRepository {
     private final MongoTemplate mongoTemplate;
 

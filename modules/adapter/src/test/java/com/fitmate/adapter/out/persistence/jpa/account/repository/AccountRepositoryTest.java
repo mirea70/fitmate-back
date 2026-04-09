@@ -1,116 +1,132 @@
 package com.fitmate.adapter.out.persistence.jpa.account.repository;
 
-import com.fitmate.adapter.out.persistence.config.QueryDslConfig;
+import com.fitmate.adapter.out.persistence.jpa.BaseRepositoryTest;
 import com.fitmate.adapter.out.persistence.jpa.account.entity.AccountJpaEntity;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDateTime;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@ActiveProfiles("test")
-@Import(QueryDslConfig.class)
-class AccountRepositoryTest {
+@DisplayName("AccountRepository 테스트")
+class AccountRepositoryTest extends BaseRepositoryTest {
 
     @Autowired
     private AccountRepository accountRepository;
 
+    private AccountJpaEntity savedAccount;
+
+    @BeforeEach
+    void setUp() {
+        savedAccount = accountRepository.saveAndFlush(createAccountEntity("test"));
+    }
+
+    // @DataJpaTest의 @Transactional이 각 테스트 후 자동 롤백
+
     @Nested
-    @DisplayName("checkDuplicated 함수 테스트")
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    @DisplayName("checkDuplicated")
     class CheckDuplicatedTest {
 
-        static Long alreadyId;
-        static String alreadyNickName = "alreadyNickName";
-        static String alreadyName = "aName";
-        static String alreadyEmail = "alreadyEmail";
-        static String alreadyPhone = "01011111111";
-
-        @BeforeAll
-        void setUp() {
-            alreadyId = saveAccount(
-                    alreadyNickName,
-                    alreadyName,
-                    alreadyEmail,
-                    alreadyPhone
-            );
+        @Test
+        @DisplayName("닉네임이 중복이면 true")
+        void duplicateNickName() {
+            boolean result = accountRepository.checkDuplicated(savedAccount.getId() + 1,
+                    savedAccount.getNickName(), "other", "other@t.com", "01000000000");
+            assertThat(result).isTrue();
         }
 
-        @DisplayName("주요 회원 정보들 중, 자신을 제외하고 하나라도 중복된 것이 있는지 체크한다.")
-        @ParameterizedTest
-        @MethodSource("provideAccountInfoForCheckDuplicated")
-        void checkDuplicated(String nickName, String name, String email, String phone, boolean expected) {
-            // when
-            boolean result1 = accountRepository.checkDuplicated(alreadyId + 1, nickName, name, email, phone);
-            boolean result2 = accountRepository.checkDuplicated(alreadyId, nickName, name, email, phone);
-            // then
-            assertThat(result1).isEqualTo(expected);
-            assertThat(result2).isEqualTo(false);
+        @Test
+        @DisplayName("이름이 중복이면 true")
+        void duplicateName() {
+            boolean result = accountRepository.checkDuplicated(savedAccount.getId() + 1,
+                    "other", savedAccount.getName(), "other@t.com", "01000000000");
+            assertThat(result).isTrue();
         }
 
-        private static Stream<Arguments> provideAccountInfoForCheckDuplicated() {
-            return Stream.of(
-                    Arguments.of(alreadyNickName, "name", "email", "01012345678", true),
-                    Arguments.of("nickName", alreadyName, "email", "01012345678", true),
-                    Arguments.of("nickName", "name", alreadyEmail, "01012345678", true),
-                    Arguments.of("nickName", "name", "email", alreadyPhone, true),
-                    Arguments.of("nickName", "name", "email", "01012345678", false)
-            );
+        @Test
+        @DisplayName("이메일이 중복이면 true")
+        void duplicateEmail() {
+            boolean result = accountRepository.checkDuplicated(savedAccount.getId() + 1,
+                    "other", "other", savedAccount.getEmail(), "01000000000");
+            assertThat(result).isTrue();
         }
 
-        private Long saveAccount(String nickName, String name, String email, String phone) {
-            return accountRepository.save(
-                    AccountJpaEntity.builder()
-                            .loginName("loginName")
-                            .password("@Aa111111")
-                            .nickName(nickName)
-                            .introduction("intro")
-                            .name(name)
-                            .email(email)
-                            .phone(phone)
-                            .gender("MALE")
-                            .role("ROLE_USER")
-                            .createdAt(LocalDateTime.now())
-                            .updatedAt(LocalDateTime.now())
-                            .build()
-            ).getId();
+        @Test
+        @DisplayName("전화번호가 중복이면 true")
+        void duplicatePhone() {
+            boolean result = accountRepository.checkDuplicated(savedAccount.getId() + 1,
+                    "other", "other", "other@t.com", savedAccount.getPhone());
+            assertThat(result).isTrue();
+        }
+
+        @Test
+        @DisplayName("아무것도 중복 아니면 false")
+        void noDuplicate() {
+            boolean result = accountRepository.checkDuplicated(savedAccount.getId() + 1,
+                    "other", "other", "other@t.com", "01000000000");
+            assertThat(result).isFalse();
+        }
+
+        @Test
+        @DisplayName("본인 ID로 체크하면 항상 false")
+        void selfCheckAlwaysFalse() {
+            boolean result = accountRepository.checkDuplicated(savedAccount.getId(),
+                    savedAccount.getNickName(), savedAccount.getName(), savedAccount.getEmail(), savedAccount.getPhone());
+            assertThat(result).isFalse();
         }
     }
 
     @Test
+    @DisplayName("getById — 저장된 계정을 ID로 조회")
     void getById() {
+        AccountJpaEntity found = accountRepository.getById(savedAccount.getId());
+        assertThat(found.getLoginName()).isEqualTo(savedAccount.getLoginName());
     }
 
     @Test
-    void getByEmail() {
-    }
-
-    @Test
-    void findByEmail() {
-    }
-
-    @Test
+    @DisplayName("getByLoginName — 로그인명으로 조회")
     void getByLoginName() {
+        AccountJpaEntity found = accountRepository.getByLoginName(savedAccount.getLoginName());
+        assertThat(found.getId()).isEqualTo(savedAccount.getId());
     }
 
     @Test
-    void findByLoginName() {
+    @DisplayName("getByEmail — 이메일로 조회")
+    void getByEmail() {
+        AccountJpaEntity found = accountRepository.getByEmail(savedAccount.getEmail());
+        assertThat(found.getId()).isEqualTo(savedAccount.getId());
     }
 
     @Test
-    void existsByLoginName() {
+    @DisplayName("existsByLoginName — 존재하면 true")
+    void existsByLoginName_true() {
+        assertThat(accountRepository.existsByLoginName(savedAccount.getLoginName())).isTrue();
     }
 
     @Test
-    void existsByPhone() {
+    @DisplayName("existsByLoginName — 없으면 false")
+    void existsByLoginName_false() {
+        assertThat(accountRepository.existsByLoginName("nonexistent")).isFalse();
+    }
+
+    @Test
+    @DisplayName("existsByPhone — 존재하면 true")
+    void existsByPhone_true() {
+        assertThat(accountRepository.existsByPhone(savedAccount.getPhone())).isTrue();
+    }
+
+    @Test
+    @DisplayName("existsByPhone — 없으면 false")
+    void existsByPhone_false() {
+        assertThat(accountRepository.existsByPhone("01099999999")).isFalse();
+    }
+
+    @Test
+    @DisplayName("findByPhone — 존재하면 Optional에 담겨 반환")
+    void findByPhone() {
+        Optional<AccountJpaEntity> found = accountRepository.findByPhone(savedAccount.getPhone());
+        assertThat(found).isPresent();
+        assertThat(found.get().getId()).isEqualTo(savedAccount.getId());
     }
 }

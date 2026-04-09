@@ -24,6 +24,7 @@ import java.util.Set;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
+@org.springframework.context.annotation.Profile("!test")
 public class ChatPersistenceAdapter implements LoadChatPort {
 
     private final ChatRoomRepository chatRoomRepository;

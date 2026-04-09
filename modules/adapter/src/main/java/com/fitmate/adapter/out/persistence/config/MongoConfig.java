@@ -7,5 +7,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoAuditing
 @EnableMongoRepositories(basePackages = "com.fitmate.adapter.out.persistence.mongo")
+@org.springframework.context.annotation.Profile("!test")
 public class MongoConfig {
 }
