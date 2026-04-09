@@ -9,6 +9,7 @@ import com.fitmate.usecase.account.event.dto.AccountDeleteEventDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class AccountDeleteEventListener {
 
 
     @EventListener
+    @Transactional
     public void onApplicationEvent(AccountDeleteEvent event) {
         AccountDeleteEventDto eventDto = event.getEventDto();
         AccountId id = new AccountId(eventDto.getAccountId());
