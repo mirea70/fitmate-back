@@ -12,7 +12,6 @@ import com.fitmate.domain.account.AccountId;
 import com.fitmate.domain.mate.Mate;
 import com.fitmate.domain.mate.MateFee;
 import com.fitmate.domain.mate.MateId;
-import com.fitmate.port.in.common.SliceCommand;
 import com.fitmate.port.in.mate.command.MateListCommand;
 import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.common.SliceResponse;
@@ -20,6 +19,7 @@ import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.dto.MateSimpleResponse;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @PersistenceAdapter
@@ -78,7 +78,7 @@ public class MatePersistenceAdapter implements LoadMatePort {
     }
 
     @Override
-    public List<Mate> loadMatesByMateAtBetween(java.time.LocalDateTime from, java.time.LocalDateTime to) {
+    public List<Mate> loadMatesByMateAtBetween(LocalDateTime from, LocalDateTime to) {
         return mateRepository.findAllByMateAtBetween(from, to).stream()
                 .map(entity -> {
                     List<MateFeeJpaEntity> fees = mateFeeRepository.findAllByMateId(entity.getId());
@@ -88,7 +88,7 @@ public class MatePersistenceAdapter implements LoadMatePort {
     }
 
     @Override
-    public List<Loaded<Mate>> loadUnclosedMatesBeforeMateAt(java.time.LocalDateTime before) {
+    public List<Loaded<Mate>> loadUnclosedMatesBeforeMateAt(LocalDateTime before) {
         return mateRepository.findAllByMateAtBeforeAndClosedAtIsNull(before).stream()
                 .map(entity -> {
                     List<MateFeeJpaEntity> fees = mateFeeRepository.findAllByMateId(entity.getId());

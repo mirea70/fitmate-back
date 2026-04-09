@@ -6,7 +6,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,7 +73,7 @@ public class Account {
 
     public int getAge() {
         if (this.privateInfo.getBirthDate() == null) return 0;
-        return java.time.Period.between(this.privateInfo.getBirthDate(), java.time.LocalDate.now()).getYears();
+        return Period.between(this.privateInfo.getBirthDate(), LocalDate.now()).getYears();
     }
 
     public boolean isFollowing(Long targetId) {
