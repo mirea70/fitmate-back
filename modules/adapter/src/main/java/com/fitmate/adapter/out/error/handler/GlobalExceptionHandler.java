@@ -65,6 +65,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(new ErrorResponse("Invalid Argument", exception.getMessage()));
     }
 
+    @ExceptionHandler(org.springframework.orm.ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<ErrorResponse> handleOptimisticLockException(final org.springframework.orm.ObjectOptimisticLockingFailureException exception) {
+        log.warn("낙관적 락 충돌 (재시도 초과): ", exception);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse("CONFLICT", "다른 사용자의 요청과 충돌했습니다. 다시 시도해주세요."));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(final Exception exception) {
         log.warn("Unknown Exception occur: ", exception);

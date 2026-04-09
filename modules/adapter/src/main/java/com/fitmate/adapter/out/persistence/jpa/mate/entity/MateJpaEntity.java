@@ -80,6 +80,11 @@ public class MateJpaEntity extends BaseJpaEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Version
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private Long version = 0L;
+
     @Column
     @Convert(converter = SetConverter.class)
     private Set<Long> waitingAccountIds = new HashSet<>();

@@ -5,6 +5,7 @@ import com.fitmate.adapter.in.web.mate.dto.MateApplyRequest;
 import com.fitmate.adapter.in.web.mate.dto.MateApproveRequest;
 import com.fitmate.adapter.in.web.mate.dto.MateCancelRequest;
 import com.fitmate.adapter.in.web.mate.mapper.MateWebAdapterMapper;
+import com.fitmate.adapter.in.web.mate.proxy.MateApplyRetryProxy;
 import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.port.in.mate.usecase.MateApplyUseCasePort;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
@@ -26,6 +27,7 @@ import javax.validation.Valid;
 public class MateRequestController {
 
     private final MateApplyUseCasePort mateApplyUseCasePort;
+    private final MateApplyRetryProxy mateApplyRetryProxy;
     private final MateWebAdapterMapper mateWebAdapterMapper;
 
 
@@ -41,7 +43,7 @@ public class MateRequestController {
     public ResponseEntity<?> applyMate(@PathVariable Long mateId,
                                        @Valid @RequestBody MateApplyRequest applyRequest,
                                        @AuthenticationPrincipal AuthDetails authDetails) {
-        mateApplyUseCasePort.applyMate(mateWebAdapterMapper.requestToCommand(
+        mateApplyRetryProxy.applyMate(mateWebAdapterMapper.requestToCommand(
                 applyRequest, mateId, authDetails.getAccount().getId()));
         return ResponseEntity.ok().build();
     }
@@ -60,7 +62,7 @@ public class MateRequestController {
     public ResponseEntity<?> approveMate(@PathVariable Long mateId,
                                          @Valid @RequestBody MateApproveRequest approveRequest,
                                          @AuthenticationPrincipal AuthDetails authDetails) {
-        mateApplyUseCasePort.approveMate(
+        mateApplyRetryProxy.approveMate(
                 mateWebAdapterMapper.requestToCommand(approveRequest, mateId, authDetails.getAccount().getId()));
 
         return ResponseEntity.ok().build();
