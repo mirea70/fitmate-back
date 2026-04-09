@@ -68,6 +68,10 @@ public class AccountJpaEntity extends BaseJpaEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Version
+    @Column(nullable = false)
+    private Long version = 0L;
+
     @OneToMany(mappedBy = "fromAccount", fetch = FetchType.LAZY)
     private Set<FollowJpaEntity> followings = new HashSet<>();
 

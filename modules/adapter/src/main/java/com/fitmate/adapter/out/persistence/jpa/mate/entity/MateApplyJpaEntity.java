@@ -36,6 +36,10 @@ public class MateApplyJpaEntity extends BaseJpaEntity {
     @Column
     private LocalDateTime deletedAt;
 
+    @Version
+    @Column(nullable = false)
+    private Long version = 0L;
+
     public MateApplyJpaEntity(Long id, String comeAnswer, Long mateId, String approveStatus, Long applierId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.comeAnswer = comeAnswer;
