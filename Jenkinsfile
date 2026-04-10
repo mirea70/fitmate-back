@@ -16,8 +16,8 @@ pipeline {
             steps {
                 script {
                     sh "chmod +x gradlew"
-                    echo 'mate-service Build...'
-                    sh "./gradlew :adapter:clean :adapter:build -Pprofile=prd -x test"
+                    echo 'mate-service Test & Build...'
+                    sh "./gradlew clean test :adapter:build -Pprofile=prd"
                 }
             }
         }
