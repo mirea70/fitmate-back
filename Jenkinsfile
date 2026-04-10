@@ -61,7 +61,7 @@ pipeline {
                                                         excludes: '',
                                                         execCommand:
                                                                 '''docker rmi -f mirea720/fitmate:mate
-                                                                    ~/fitmate/deploy.sh
+                                                                    /home/dev/backend/fitmate/deploy.sh
                                                                     docker rmi -f $(docker images -f "dangling=true" -q)
                                                                 ''',
                                                         execTimeout: 120000,
@@ -69,7 +69,7 @@ pipeline {
                                                         makeEmptyDirs: false,
                                                         noDefaultExcludes: false,
                                                         patternSeparator: '[, ]+',
-                                                        remoteDirectory: './fitmate/',
+                                                        remoteDirectory: '/home/dev/backend/fitmate',
                                                         remoteDirectorySDF: false,
                                                 )
                                         ]
