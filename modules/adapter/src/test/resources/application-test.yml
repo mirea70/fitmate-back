@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 15MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+jwt:
+  secretKey: testSecretKey
+
+kakao:
+  restApiKey: testKey
+  userInfoUrl: https://kapi.kakao.com/v2/user/me
+
+coolsms:
+  api:
+    key: testKey
+    secret: testSecret
+  url: https://api.coolsms.co.kr
+  from:
+    num: "01000000000"
+
+redis:
+  port: 0
+  host: localhost
+  refresh:
+    expiration: 86400
+  notice:
+    expiration: 86400
+  validate:
+    expiration: 60
