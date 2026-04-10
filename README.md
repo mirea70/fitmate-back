@@ -19,7 +19,7 @@
 | **실시간 통신** | STOMP (WebSocket + SockJS) |
 | **배포** | Docker, Jenkins, Nginx |
 | **클라우드** | AWS, OCI, Cloudflare |
-| **API 문서** | [Swagger UI](https://www.fitmate.site/swagger-ui/index.html) |
+| **API 문서** | [Swagger UI](https://www.fitmate.store/swagger-ui/index.html) |
 | **ERD** | [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ) |
 
 <br/>
