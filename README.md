@@ -10,17 +10,17 @@
 
 ## 기술 스택
 
-| 구분 | 기술 |
-|------|------|
-| **Framework** | Spring Boot 2.7.11 |
-| **Language** | Java 17 |
-| **Database** | Oracle, Redis, MongoDB |
-| **인증** | JWT, Kakao OAuth, Firebase Phone Auth |
-| **실시간 통신** | STOMP (WebSocket + SockJS) |
-| **배포** | Docker, Jenkins, Nginx |
-| **클라우드** | AWS, OCI, Cloudflare |
-| **API 문서** | [Swagger UI](https://www.fitmate.store/swagger-ui/index.html) |
-| **ERD** | [ERD Cloud](https://www.erdcloud.com/d/r9JFJmrqtqDoWyJPJ) |
+| 구분 | 기술                                                                    |
+|------|-----------------------------------------------------------------------|
+| **Framework** | Spring Boot 2.7.11                                                    |
+| **Language** | Java 17                                                               |
+| **Database** | Oracle, Redis, MongoDB                                                |
+| **인증** | JWT, Kakao OAuth, Firebase Phone Auth                                 |
+| **실시간 통신** | STOMP (WebSocket + SockJS)                                            |
+| **배포** | Docker, Jenkins, Nginx                                                |
+| **클라우드** | AWS, OCI, Cloudflare                                                  |
+| **API 문서** | [Swagger UI](https://www.fitmate.store/swagger-ui/index.html)         |
+| **ERD** | [DB Diagram](https://dbdiagram.io/d/fitmate-69d9c10b0f7c9ef2c0cecbaf) |
 
 <br/>
 
