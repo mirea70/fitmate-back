@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.fitmate.adapter.out.persistence.jpa.account.entity.QAccountJpaEntity.accountJpaEntity;
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateApplyJpaEntity.mateApplyJpaEntity;
+import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateApprovedCountJpaEntity.mateApprovedCountJpaEntity;
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateJpaEntity.mateJpaEntity;
 import static com.fitmate.adapter.out.persistence.jpa.mate.entity.QMateWishJpaEntity.mateWishJpaEntity;
 
@@ -41,11 +42,12 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedCount,
+                        mateApprovedCountJpaEntity.approvedCount,
                         mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
+                .leftJoin(mateApprovedCountJpaEntity).on(mateJpaEntity.id.eq(mateApprovedCountJpaEntity.mateId))
                 .where(filter(command))
                 .orderBy(mateJpaEntity.updatedAt.desc())
                 .offset(command.getPage())
@@ -181,11 +183,12 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedCount,
+                        mateApprovedCountJpaEntity.approvedCount,
                         mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
+                .leftJoin(mateApprovedCountJpaEntity).on(mateJpaEntity.id.eq(mateApprovedCountJpaEntity.mateId))
                 .where(mateJpaEntity.writerId.eq(writerId))
                 .orderBy(mateJpaEntity.id.desc())
                 .fetch();
@@ -205,12 +208,13 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedCount,
+                        mateApprovedCountJpaEntity.approvedCount,
                         mateJpaEntity.closedAt
                 ))
                 .from(mateWishJpaEntity)
                 .innerJoin(mateJpaEntity).on(mateWishJpaEntity.mateId.eq(mateJpaEntity.id))
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
+                .leftJoin(mateApprovedCountJpaEntity).on(mateJpaEntity.id.eq(mateApprovedCountJpaEntity.mateId))
                 .where(mateWishJpaEntity.accountId.eq(accountId)
                         .and(mateJpaEntity.closedAt.isNull()))
                 .orderBy(mateWishJpaEntity.id.desc())
@@ -231,11 +235,12 @@ public class MateQueryRepository {
                         mateJpaEntity.gatherType,
                         mateJpaEntity.permitGender,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedCount,
+                        mateApprovedCountJpaEntity.approvedCount,
                         mateJpaEntity.closedAt
                 ))
                 .from(mateJpaEntity)
                 .innerJoin(accountJpaEntity).on(mateJpaEntity.writerId.eq(accountJpaEntity.id))
+                .leftJoin(mateApprovedCountJpaEntity).on(mateJpaEntity.id.eq(mateApprovedCountJpaEntity.mateId))
                 .where(mateJpaEntity.id.in(mateIds))
                 .orderBy(mateJpaEntity.id.desc())
                 .fetch();
@@ -263,7 +268,7 @@ public class MateQueryRepository {
                         mateJpaEntity.fitPlaceName,
                         mateJpaEntity.fitPlaceAddress,
                         mateJpaEntity.permitPeopleCnt,
-                        mateJpaEntity.approvedCount,
+                        mateApprovedCountJpaEntity.approvedCount,
                         mateJpaEntity.totalFee,
                         mateApplyJpaEntity.createdAt,
                         mateJpaEntity.closedAt,
@@ -275,6 +280,7 @@ public class MateQueryRepository {
                                 .and(mateApplyJpaEntity.applierId.eq(applierId))
                                 .and(mateApplyJpaEntity.deletedAt.isNull())
                 )
+                .leftJoin(mateApprovedCountJpaEntity).on(mateJpaEntity.id.eq(mateApprovedCountJpaEntity.mateId))
                 .where(mateJpaEntity.id.in(mateIds)
                         .and(mateJpaEntity.closedAt.isNull()))
                 .orderBy(mateApplyJpaEntity.createdAt.desc())

@@ -47,7 +47,7 @@ class MateRepositoryTest extends BaseRepositoryTest {
                 LocalDateTime.now().plusDays(3),
                 "험블짐", "서울시 용산구", "AGREE", "ALL",
                 50, 15, 5, writerId,
-                "어떤 운동?", 10000, 0, null,
+                "어떤 운동?", 10000, null,
                 LocalDateTime.now(), LocalDateTime.now()
         ));
         em.flush();

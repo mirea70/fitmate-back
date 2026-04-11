@@ -49,7 +49,6 @@ public class MatePersistenceMapper {
                 mate.getWriterId(),
                 mate.getApplyQuestion(),
                 mate.getTotalFee(),
-                mate.getApprovedCount(),
                 mate.getClosedAt(),
                 mate.getCreatedAt(),
                 mate.getUpdatedAt()
@@ -72,7 +71,7 @@ public class MatePersistenceMapper {
                 .toList();
     }
 
-    public Mate entityToDomain(MateJpaEntity mateEntity, List<MateFeeJpaEntity> mateFeeEntities) {
+    public Mate entityToDomain(MateJpaEntity mateEntity, List<MateFeeJpaEntity> mateFeeEntities, int approvedCount) {
 
         FitPlace fitPlace = new FitPlace(
                 mateEntity.getFitPlaceName(),
@@ -107,7 +106,7 @@ public class MatePersistenceMapper {
                 mateEntity.getWriterId(),
                 mateFees,
                 mateEntity.getApplyQuestion(),
-                mateEntity.getApprovedCount(),
+                approvedCount,
                 mateEntity.getClosedAt(),
                 mateEntity.getCreatedAt(),
                 mateEntity.getUpdatedAt()
@@ -157,7 +156,6 @@ public class MatePersistenceMapper {
                 domain.getPermitPeopleCnt(),
                 domain.getApplyQuestion(),
                 domain.getTotalFee(),
-                domain.getApprovedCount(),
                 domain.getClosedAt()
         );
     }

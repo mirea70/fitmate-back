@@ -151,7 +151,7 @@ class MateApplyUseCaseTest {
         }
 
         @Test
-        @DisplayName("FAST 모집이면 즉시 APPROVE + approvedCount 증가")
+        @DisplayName("FAST 모집이면 즉시 APPROVE + incrementApprovedCount 호출")
         void fastGatherAutoApproves() {
             Mate mate = createMate(GatherType.FAST, 0, 5, PermitGender.ALL);
             Loaded<Mate> loadedMate = new Loaded<>(mate, m -> {});
@@ -166,11 +166,11 @@ class MateApplyUseCaseTest {
             MateApplyCommand command = new MateApplyCommand(MATE_ID, APPLIER_ID, "답변");
             mateApplyUseCase.applyMate(command);
 
-            org.assertj.core.api.Assertions.assertThat(mate.getApprovedCount()).isEqualTo(1);
+            then(loadMatePort).should().incrementApprovedCount(any(MateId.class));
         }
 
         @Test
-        @DisplayName("AGREE 모집이면 WAIT 상태로 저장, approvedCount 변동 없음")
+        @DisplayName("AGREE 모집이면 WAIT 상태로 저장, incrementApprovedCount 호출 안됨")
         void agreeGatherWaits() {
             Mate mate = createMate(GatherType.AGREE, 0, 5, PermitGender.ALL);
             Loaded<Mate> loadedMate = new Loaded<>(mate, m -> {});
@@ -185,7 +185,7 @@ class MateApplyUseCaseTest {
             MateApplyCommand command = new MateApplyCommand(MATE_ID, APPLIER_ID, "답변");
             mateApplyUseCase.applyMate(command);
 
-            org.assertj.core.api.Assertions.assertThat(mate.getApprovedCount()).isEqualTo(0);
+            then(loadMatePort).should(never()).incrementApprovedCount(any(MateId.class));
         }
     }
 
@@ -207,7 +207,7 @@ class MateApplyUseCaseTest {
         }
 
         @Test
-        @DisplayName("정상 승인 — MateApply APPROVE + Mate approvedCount 증가")
+        @DisplayName("정상 승인 — MateApply APPROVE + incrementApprovedCount 호출")
         void approveSuccess() {
             Mate mate = createMate(GatherType.AGREE, 0, 5, PermitGender.ALL);
             Loaded<Mate> loadedMate = new Loaded<>(mate, m -> {});
@@ -224,7 +224,7 @@ class MateApplyUseCaseTest {
             mateApplyUseCase.approveMate(command);
 
             org.assertj.core.api.Assertions.assertThat(apply.getApproveStatus()).isEqualTo(ApproveStatus.APPROVE);
-            org.assertj.core.api.Assertions.assertThat(mate.getApprovedCount()).isEqualTo(1);
+            then(loadMatePort).should().incrementApprovedCount(any(MateId.class));
         }
     }
 
@@ -233,7 +233,7 @@ class MateApplyUseCaseTest {
     class CancelMateApply {
 
         @Test
-        @DisplayName("승인 상태 취소 시 approvedCount 감소")
+        @DisplayName("승인 상태 취소 시 decrementApprovedCount 호출")
         void cancelApproved() {
             Mate mate = createMate(GatherType.FAST, 1, 5, PermitGender.ALL);
             Loaded<Mate> loadedMate = new Loaded<>(mate, m -> {});
@@ -248,12 +248,12 @@ class MateApplyUseCaseTest {
 
             mateApplyUseCase.cancelMateApply(MATE_ID, APPLIER_ID, "개인 사정");
 
-            org.assertj.core.api.Assertions.assertThat(mate.getApprovedCount()).isEqualTo(0);
+            then(loadMatePort).should().decrementApprovedCount(any(MateId.class));
             org.assertj.core.api.Assertions.assertThat(apply.getCancelReason()).isEqualTo("개인 사정");
         }
 
         @Test
-        @DisplayName("대기 상태 취소 시 approvedCount 변동 없음")
+        @DisplayName("대기 상태 취소 시 decrementApprovedCount 호출 안됨")
         void cancelWaiting() {
             Mate mate = createMate(GatherType.AGREE, 0, 5, PermitGender.ALL);
             Loaded<Mate> loadedMate = new Loaded<>(mate, m -> {});
@@ -268,7 +268,7 @@ class MateApplyUseCaseTest {
 
             mateApplyUseCase.cancelMateApply(MATE_ID, APPLIER_ID, "변심");
 
-            org.assertj.core.api.Assertions.assertThat(mate.getApprovedCount()).isEqualTo(0);
+            then(loadMatePort).should(never()).decrementApprovedCount(any(MateId.class));
         }
     }
 }

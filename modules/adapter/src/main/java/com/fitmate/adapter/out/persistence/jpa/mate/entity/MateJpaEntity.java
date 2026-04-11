@@ -74,10 +74,6 @@ public class MateJpaEntity extends BaseJpaEntity {
     @Column(nullable = false)
     private Integer totalFee;
 
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private int approvedCount;
-
     @Column(name = "closed_at")
     private LocalDateTime closedAt;
 
@@ -89,7 +85,7 @@ public class MateJpaEntity extends BaseJpaEntity {
     @ColumnDefault("0")
     private Long version = 0L;
 
-    public MateJpaEntity(Long id, String fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, String gatherType, String permitGender, Integer permitMaxAge, Integer permitMinAge, Integer permitPeopleCnt, Long writerId, String applyQuestion, Integer totalFee, int approvedCount, LocalDateTime closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public MateJpaEntity(Long id, String fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, String gatherType, String permitGender, Integer permitMaxAge, Integer permitMinAge, Integer permitPeopleCnt, Long writerId, String applyQuestion, Integer totalFee, LocalDateTime closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.fitCategory = fitCategory;
         this.title = title;
@@ -106,13 +102,12 @@ public class MateJpaEntity extends BaseJpaEntity {
         this.writerId = writerId;
         this.applyQuestion = applyQuestion;
         this.totalFee = totalFee;
-        this.approvedCount = approvedCount;
         this.closedAt = closedAt;
         super.createdAt = createdAt;
         super.updatedAt = updatedAt;
     }
 
-    public void syncFrom(String fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, String gatherType, String permitGender, Integer permitMaxAge, Integer permitMinAge, Integer permitPeopleCnt, String applyQuestion, Integer totalFee, int approvedCount, LocalDateTime closedAt) {
+    public void syncFrom(String fitCategory, String title, String introduction, Set<Long> introImageIds, LocalDateTime mateAt, String fitPlaceName, String fitPlaceAddress, String gatherType, String permitGender, Integer permitMaxAge, Integer permitMinAge, Integer permitPeopleCnt, String applyQuestion, Integer totalFee, LocalDateTime closedAt) {
         this.fitCategory = fitCategory;
         this.title = title;
         this.introduction = introduction;
@@ -127,7 +122,6 @@ public class MateJpaEntity extends BaseJpaEntity {
         this.permitPeopleCnt = permitPeopleCnt;
         this.applyQuestion = applyQuestion;
         this.totalFee = totalFee;
-        this.approvedCount = approvedCount;
         this.closedAt = closedAt;
     }
 }

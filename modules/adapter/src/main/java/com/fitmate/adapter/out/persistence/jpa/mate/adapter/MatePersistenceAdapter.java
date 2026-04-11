@@ -2,9 +2,11 @@ package com.fitmate.adapter.out.persistence.jpa.mate.adapter;
 
 import com.fitmate.adapter.PersistenceAdapter;
 import com.fitmate.adapter.out.persistence.jpa.mate.dto.MateSimpleJpaResponse;
+import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateApprovedCountJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateFeeJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.mate.entity.MateJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.mate.mapper.MatePersistenceMapper;
+import com.fitmate.adapter.out.persistence.jpa.mate.repository.MateApprovedCountRepository;
 import com.fitmate.adapter.out.persistence.jpa.mate.repository.MateFeeRepository;
 import com.fitmate.adapter.out.persistence.jpa.mate.repository.MateQueryRepository;
 import com.fitmate.adapter.out.persistence.jpa.mate.repository.MateRepository;
@@ -30,11 +32,14 @@ public class MatePersistenceAdapter implements LoadMatePort {
     private final MateRepository mateRepository;
     private final MateFeeRepository mateFeeRepository;
     private final MateQueryRepository mateQueryRepository;
+    private final MateApprovedCountRepository mateApprovedCountRepository;
 
     @Override
     public Long saveMateEntity(Mate mate) {
         MateJpaEntity mateEntity = matePersistenceMapper.domainToEntity(mate);
-        return mateRepository.save(mateEntity).getId();
+        Long mateId = mateRepository.save(mateEntity).getId();
+        mateApprovedCountRepository.save(new MateApprovedCountJpaEntity(mateId));
+        return mateId;
     }
 
     @Override
@@ -47,14 +52,16 @@ public class MatePersistenceAdapter implements LoadMatePort {
     public Mate loadMateEntity(MateId id) {
         MateJpaEntity mateEntity = mateRepository.getById(id.getValue());
         List<MateFeeJpaEntity> mateFeeEntities = mateFeeRepository.findAllByMateId(id.getValue());
-        return matePersistenceMapper.entityToDomain(mateEntity, mateFeeEntities);
+        int approvedCount = getApprovedCount(id.getValue());
+        return matePersistenceMapper.entityToDomain(mateEntity, mateFeeEntities, approvedCount);
     }
 
     @Override
     public Loaded<Mate> loadMate(MateId id) {
         MateJpaEntity entity = mateRepository.getById(id.getValue());
         List<MateFeeJpaEntity> mateFeeEntities = mateFeeRepository.findAllByMateId(id.getValue());
-        Mate domain = matePersistenceMapper.entityToDomain(entity, mateFeeEntities);
+        int approvedCount = getApprovedCount(id.getValue());
+        Mate domain = matePersistenceMapper.entityToDomain(entity, mateFeeEntities, approvedCount);
         return new Loaded<>(domain, updated -> matePersistenceMapper.syncToEntity(entity, updated));
     }
 
@@ -78,11 +85,24 @@ public class MatePersistenceAdapter implements LoadMatePort {
     }
 
     @Override
+    public void incrementApprovedCount(MateId id) {
+        MateApprovedCountJpaEntity countEntity = mateApprovedCountRepository.getById(id.getValue());
+        countEntity.increment();
+    }
+
+    @Override
+    public void decrementApprovedCount(MateId id) {
+        MateApprovedCountJpaEntity countEntity = mateApprovedCountRepository.getById(id.getValue());
+        countEntity.decrement();
+    }
+
+    @Override
     public List<Mate> loadMatesByMateAtBetween(LocalDateTime from, LocalDateTime to) {
         return mateRepository.findAllByMateAtBetween(from, to).stream()
                 .map(entity -> {
                     List<MateFeeJpaEntity> fees = mateFeeRepository.findAllByMateId(entity.getId());
-                    return matePersistenceMapper.entityToDomain(entity, fees);
+                    int approvedCount = getApprovedCount(entity.getId());
+                    return matePersistenceMapper.entityToDomain(entity, fees, approvedCount);
                 })
                 .toList();
     }
@@ -92,7 +112,8 @@ public class MatePersistenceAdapter implements LoadMatePort {
         return mateRepository.findAllByMateAtBeforeAndClosedAtIsNull(before).stream()
                 .map(entity -> {
                     List<MateFeeJpaEntity> fees = mateFeeRepository.findAllByMateId(entity.getId());
-                    Mate domain = matePersistenceMapper.entityToDomain(entity, fees);
+                    int approvedCount = getApprovedCount(entity.getId());
+                    Mate domain = matePersistenceMapper.entityToDomain(entity, fees, approvedCount);
                     return new Loaded<>(domain, updated -> matePersistenceMapper.syncToEntity(entity, updated));
                 })
                 .toList();
@@ -106,5 +127,11 @@ public class MatePersistenceAdapter implements LoadMatePort {
     @Override
     public void deleteAllMateFeeByMateId(MateId id) {
         mateFeeRepository.deleteAllByMateId(id.getValue());
+    }
+
+    private int getApprovedCount(Long mateId) {
+        return mateApprovedCountRepository.findById(mateId)
+                .map(MateApprovedCountJpaEntity::getApprovedCount)
+                .orElse(0);
     }
 }

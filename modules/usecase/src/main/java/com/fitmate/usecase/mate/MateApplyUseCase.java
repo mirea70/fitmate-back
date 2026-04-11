@@ -65,7 +65,8 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
         ApproveStatus approveStatus = saveNewMateRequest(mateApplyCommand, loadedMate.get().getGatherType());
         if (approveStatus == ApproveStatus.APPROVE) {
-            loadedMate.update(Mate::incrementApprovedCount);
+            loadedMate.get().checkCapacity();
+            loadMatePort.incrementApprovedCount(new MateId(mateApplyCommand.getMateId()));
         }
 
         eventPublisher.publishEvent(new MateRequestEvent(
@@ -98,7 +99,8 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
         loadedMateApply.update(MateApply::changeToApprove);
 
-        loadedMate.update(Mate::incrementApprovedCount);
+        loadedMate.get().checkCapacity();
+        loadMatePort.incrementApprovedCount(new MateId(mateId));
 
         eventPublisher.publishEvent(new MateApproveEvent(
                 new MateApproveEventDto(loadedMate.get().getTitle(), mateId, applierId)
@@ -114,7 +116,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         loadedMateApply.update(mateApply -> mateApply.cancel(cancelReason, LocalDateTime.now()));
 
         if (wasApproved) {
-            loadedMate.update(Mate::decrementApprovedCount);
+            loadMatePort.decrementApprovedCount(new MateId(mateId));
         }
 
         eventPublisher.publishEvent(new MateCancelledEvent(
