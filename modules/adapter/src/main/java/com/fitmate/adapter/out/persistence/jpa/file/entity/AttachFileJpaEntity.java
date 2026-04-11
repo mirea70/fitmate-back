@@ -19,9 +19,15 @@ public class AttachFileJpaEntity {
     private String uploadFileName;
     @Column(nullable = false)
     private String storeFileName;
+    @Column
+    private String thumbnailStoreFileName;
 
     public AttachFileJpaEntity(String uploadFileName, String storeFileName) {
         this.uploadFileName = uploadFileName;
         this.storeFileName = storeFileName;
+    }
+
+    public void setThumbnailStoreFileName(String thumbnailStoreFileName) {
+        this.thumbnailStoreFileName = thumbnailStoreFileName;
     }
 }

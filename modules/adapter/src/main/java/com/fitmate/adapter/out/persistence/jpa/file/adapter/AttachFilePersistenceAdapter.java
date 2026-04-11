@@ -19,6 +19,9 @@ import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
+import net.coobird.thumbnailator.Thumbnails;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -29,6 +32,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+@Slf4j
 @PersistenceAdapter
 @RequiredArgsConstructor
 @Transactional
@@ -37,6 +41,9 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
     private final String rootPath = System.getProperty("user.home");
     private final String fileDefaultDir = rootPath + "/files";
     private final String profileImageDir = "/profile/";
+    private final String thumbnailDir = "/thumbnail/";
+    private static final int THUMBNAIL_WIDTH = 200;
+    private static final int THUMBNAIL_HEIGHT = 200;
 
     @Value("${spring.servlet.multipart.max-file-size}")
     private DataSize maxFileSize;
@@ -51,7 +58,8 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
             file.getParentFile().mkdirs();
         multipartFile.transferTo(file);
 
-        return saveToRepository(multipartFile.getOriginalFilename(), storeFileName);
+        String thumbnailStoreFileName = generateThumbnail(file, storeFileName);
+        return saveToRepository(multipartFile.getOriginalFilename(), storeFileName, thumbnailStoreFileName);
     }
 
     public List<FileResponse> uploadFiles(List<MultipartFile> multipartFiles) throws IOException {
@@ -97,12 +105,37 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
         return uploadFileName.substring(dotIndex + 1);
     }
 
-    private String getFullPath(String uploadFileName) {
-        return fileDefaultDir + profileImageDir + uploadFileName;
+    private String getFullPath(String fileName) {
+        return fileDefaultDir + profileImageDir + fileName;
     }
 
-    private FileResponse saveToRepository(String uploadFileName, String storeFileName) {
+    private String getThumbnailFullPath(String fileName) {
+        return fileDefaultDir + thumbnailDir + fileName;
+    }
+
+    private String generateThumbnail(File originalFile, String storeFileName) {
+        try {
+            String thumbnailStoreFileName = "thumb_" + storeFileName;
+            File thumbnailFile = new File(getThumbnailFullPath(thumbnailStoreFileName));
+            if (!thumbnailFile.getParentFile().exists())
+                thumbnailFile.getParentFile().mkdirs();
+
+            Thumbnails.of(originalFile)
+                    .size(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT)
+                    .toFile(thumbnailFile);
+
+            return thumbnailStoreFileName;
+        } catch (IOException e) {
+            log.warn("썸네일 생성 실패: {}", storeFileName, e);
+            return null;
+        }
+    }
+
+    private FileResponse saveToRepository(String uploadFileName, String storeFileName, String thumbnailStoreFileName) {
         AttachFileJpaEntity newFile = new AttachFileJpaEntity(uploadFileName, storeFileName);
+        if (thumbnailStoreFileName != null) {
+            newFile.setThumbnailStoreFileName(thumbnailStoreFileName);
+        }
         AttachFileJpaEntity savedFile = attachFileRepository.save(newFile);
 
         return new FileResponse(savedFile.getId(), savedFile.getUploadFileName());
@@ -112,6 +145,22 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
         AttachFileJpaEntity attachFile = attachFileRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
         return this.downloadFile(attachFile.getStoreFileName());
+    }
+
+    public FileDownloadDto downloadThumbnailById(Long id) throws MalformedURLException {
+        AttachFileJpaEntity attachFile = attachFileRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
+
+        String thumbnailName = attachFile.getThumbnailStoreFileName();
+        if (thumbnailName == null) {
+            return this.downloadFile(attachFile.getStoreFileName());
+        }
+
+        String uploadFileName = getUploadNameByStoreName(attachFile.getStoreFileName());
+        UrlResource urlResource = new UrlResource("file:" + getThumbnailFullPath(thumbnailName));
+        String contentDisposition = getContentDisposition(uploadFileName);
+
+        return new FileDownloadDto(urlResource, contentDisposition);
     }
 
     public FileDownloadDto downloadFile(String storeFileName) throws MalformedURLException {
@@ -144,6 +193,7 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
         File file = new File(getFullPath(attachFile.getStoreFileName()));
         if(file.exists()) {
             if(file.delete()) {
+                deleteThumbnailFile(attachFile.getThumbnailStoreFileName());
                 attachFileRepository.delete(attachFile);
             }
             else {
@@ -151,6 +201,14 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
             }
         } else {
             throw new NotFoundException(NotFoundErrorResult.NOT_EXIST_FILE_PATH);
+        }
+    }
+
+    private void deleteThumbnailFile(String thumbnailStoreFileName) {
+        if (thumbnailStoreFileName == null) return;
+        File thumbnailFile = new File(getThumbnailFullPath(thumbnailStoreFileName));
+        if (thumbnailFile.exists()) {
+            thumbnailFile.delete();
         }
     }
 

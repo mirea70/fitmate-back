@@ -33,10 +33,20 @@ public class FileController {
            return ResponseEntity.ok(responses);
     }
 
-    @Operation(summary = "파일 다운로드", description = "파일 다운로드 API")
+    @Operation(summary = "파일 다운로드", description = "원본 파일 다운로드 API")
     @GetMapping(path = "/{fileId}")
     public ResponseEntity<UrlResource> download(@PathVariable Long fileId) throws MalformedURLException {
         FileDownloadDto downloadDto = attachFilePersistenceAdapter.downloadById(fileId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, downloadDto.getContentDisposition())
+                .body(downloadDto.getUrlResource());
+    }
+
+    @Operation(summary = "썸네일 다운로드", description = "썸네일 이미지 다운로드 API (목록 조회용)")
+    @GetMapping(path = "/{fileId}/thumbnail")
+    public ResponseEntity<UrlResource> downloadThumbnail(@PathVariable Long fileId) throws MalformedURLException {
+        FileDownloadDto downloadDto = attachFilePersistenceAdapter.downloadThumbnailById(fileId);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, downloadDto.getContentDisposition())

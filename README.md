@@ -83,6 +83,7 @@ java -jar adapter-0.0.1-SNAPSHOT.jar
 - Nginx에서 `/stomp` 경로에 대해 WebSocket Upgrade 헤더를 전달하도록 별도 설정하였습니다.
 - 캐싱 데이터 및 알림은 Redis에서 관리되며, 채팅 데이터는 MongoDB에서 관리됩니다.
 - 나머지 데이터는 Oracle DB에서 관리됩니다.
+- 현재는 비용 문제로 애플리케이션 실행 서버는 AWS -> 물리 서버로 이동된 상태입니다.
 
 <br/>
 

@@ -34,6 +34,8 @@ dependencies {
     implementation 'org.springframework:spring-aspects'
     // sms
     implementation 'net.nurigo:sdk:4.3.0'
+    // image thumbnail
+    implementation 'net.coobird:thumbnailator:0.4.20'
     // test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
