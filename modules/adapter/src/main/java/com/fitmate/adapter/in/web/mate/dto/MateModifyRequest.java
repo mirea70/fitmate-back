@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,7 @@ public class MateModifyRequest {
     private FitCategory fitCategory;
 
     @Schema(description = "글 제목", example = "운동 메이트 구합니다.")
+    @Size(min = 5, max = 50, message = "제목은 5~50자로 입력해야 합니다.")
     private String title;
 
     @Schema(description = "소개글", example = "같이 운동하실 분")
@@ -62,5 +64,6 @@ public class MateModifyRequest {
     private List<MateFee> mateFees;
 
     @Schema(description = "메이트 신청시 답변받을 질문", example = "어떤 운동 스타일을 좋아하시나요?")
+    @Size(min = 5, max = 50, message = "신청질문은 5~50자로 입력해야 합니다.")
     private String applyQuestion;
 }
