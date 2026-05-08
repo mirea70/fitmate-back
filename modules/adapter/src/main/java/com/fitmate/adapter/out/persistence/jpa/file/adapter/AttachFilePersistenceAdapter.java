@@ -157,7 +157,7 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
         }
 
         String uploadFileName = getUploadNameByStoreName(attachFile.getStoreFileName());
-        UrlResource urlResource = new UrlResource("file:" + getThumbnailFullPath(thumbnailName));
+        UrlResource urlResource = new UrlResource(new File(getThumbnailFullPath(thumbnailName)).toURI());
         String contentDisposition = getContentDisposition(uploadFileName);
 
         return new FileDownloadDto(urlResource, contentDisposition);
@@ -165,7 +165,7 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
 
     public FileDownloadDto downloadFile(String storeFileName) throws MalformedURLException {
         String uploadFileName = getUploadNameByStoreName(storeFileName);
-        UrlResource urlResource = new UrlResource("file:" + getFullPath(storeFileName));
+        UrlResource urlResource = new UrlResource(new File(getFullPath(storeFileName)).toURI());
         String contentDisposition = getContentDisposition(uploadFileName);
 
         return new FileDownloadDto(urlResource, contentDisposition);
