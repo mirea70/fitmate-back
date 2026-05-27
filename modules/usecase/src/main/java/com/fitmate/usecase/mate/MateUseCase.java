@@ -18,6 +18,7 @@ import com.fitmate.port.out.account.LoadAccountPort;
 import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.file.LoadAttachFilePort;
+import com.fitmate.port.out.job.LoadJobQueuePort;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.LoadMateWishPort;
@@ -53,6 +54,7 @@ public class MateUseCase implements MateUseCasePort {
     private final LoadMateRequestPort loadMateRequestPort;
     private final LoadAccountPort loadAccountPort;
     private final LoadAttachFilePort loadAttachFilePort;
+    private final LoadJobQueuePort loadJobQueuePort;
     private final LoadMateWishPort loadMateWishPort;
     private final MateUseCaseMapper mateUseCaseMapper;
     private final ApplicationEventPublisher eventPublisher;
@@ -62,6 +64,8 @@ public class MateUseCase implements MateUseCasePort {
         Set<Long> introImageIds = mateCreateCommand.getIntroImageIds();
         if(introImageIds != null && !introImageIds.isEmpty())
             loadAttachFilePort.checkExistFiles(introImageIds);
+
+        loadJobQueuePort.enqueueImageResizingJobs(introImageIds);
         Mate mate = mateUseCaseMapper.commandToDomain(mateCreateCommand);
         Long mateEntityId = loadMatePort.saveMateEntity(mate);
         loadMatePort.saveMateFeeEntities(mate.getMateFees(), new MateId(mateEntityId));
@@ -112,6 +116,7 @@ public class MateUseCase implements MateUseCasePort {
         ));
         loadMatePort.deleteAllMateFeeByMateId(loadedMate.get().getId());
         loadMatePort.saveMateFeeEntities(loadedMate.get().getMateFees(), loadedMate.get().getId());
+        loadJobQueuePort.enqueueImageResizingJobs(command.getIntroImageIds());
 
         eventPublisher.publishEvent(new MateModifiedEvent(
                 new MateModifiedEventDto(loadedMate.get().getTitle(), loadedMate.get().getId().getValue())
