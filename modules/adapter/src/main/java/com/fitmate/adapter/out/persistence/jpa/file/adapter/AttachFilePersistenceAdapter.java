@@ -58,7 +58,8 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
             file.getParentFile().mkdirs();
         multipartFile.transferTo(file);
 
-        return saveToRepository(multipartFile.getOriginalFilename(), storeFileName);
+        String thumbnailStoreFileName = generateThumbnail(file, storeFileName);
+        return saveToRepository(multipartFile.getOriginalFilename(), storeFileName, thumbnailStoreFileName);
     }
 
     public List<FileResponse> uploadFiles(List<MultipartFile> multipartFiles) throws IOException {
@@ -130,19 +131,11 @@ public class AttachFilePersistenceAdapter implements LoadAttachFilePort {
         }
     }
 
-    public void createThumbnail(Long attachFileId) throws IOException {
-        AttachFileJpaEntity attachFile = attachFileRepository.findById(attachFileId)
-                .orElseThrow(() -> new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
-        File originalFile = new File(getFullPath(attachFile.getStoreFileName()));
-        String thumbnailStoreFileName = generateThumbnail(originalFile, attachFile.getStoreFileName());
-        if (thumbnailStoreFileName == null) {
-            throw new IOException("Failed to create thumbnail: " + attachFile.getStoreFileName());
-        }
-        attachFile.setThumbnailStoreFileName(thumbnailStoreFileName);
-    }
-
-    private FileResponse saveToRepository(String uploadFileName, String storeFileName) {
+    private FileResponse saveToRepository(String uploadFileName, String storeFileName, String thumbnailStoreFileName) {
         AttachFileJpaEntity newFile = new AttachFileJpaEntity(uploadFileName, storeFileName);
+        if (thumbnailStoreFileName != null) {
+            newFile.setThumbnailStoreFileName(thumbnailStoreFileName);
+        }
         AttachFileJpaEntity savedFile = attachFileRepository.save(newFile);
 
         return new FileResponse(savedFile.getId(), savedFile.getUploadFileName());

@@ -18,7 +18,6 @@ import com.fitmate.domain.mate.enums.PermitGender;
 import com.fitmate.port.out.account.LoadAccountPort;
 import com.fitmate.port.out.common.Loaded;
 import com.fitmate.port.out.file.LoadAttachFilePort;
-import com.fitmate.port.out.job.LoadJobQueuePort;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.LoadMateWishPort;
@@ -57,7 +56,6 @@ class MateUseCaseTest {
     @Mock private LoadMateRequestPort loadMateRequestPort;
     @Mock private LoadAccountPort loadAccountPort;
     @Mock private LoadAttachFilePort loadAttachFilePort;
-    @Mock private LoadJobQueuePort loadJobQueuePort;
     @Mock private LoadMateWishPort loadMateWishPort;
     @Mock private MateUseCaseMapper mateUseCaseMapper;
     @Mock private ApplicationEventPublisher eventPublisher;

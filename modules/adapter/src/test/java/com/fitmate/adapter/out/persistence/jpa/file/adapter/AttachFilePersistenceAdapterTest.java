@@ -98,9 +98,13 @@ class AttachFilePersistenceAdapterTest {
 
             // 썸네일 파일 존재 확인
             File thumbnailDir = new File(testDir + "/thumbnail/");
-            assertThat(thumbnailDir.exists()).isFalse();
+            assertThat(thumbnailDir.listFiles()).isNotEmpty();
 
             // 썸네일이 원본보다 작은지 확인
+            File originalFile = profileDir.listFiles()[0];
+            File thumbnailFile = thumbnailDir.listFiles()[0];
+            assertThat(thumbnailFile.length()).isLessThan(originalFile.length());
+
             // 저장 시 thumbnailStoreFileName이 포함되었는지 확인
             then(attachFileRepository).should().save(any(AttachFileJpaEntity.class));
         }
