@@ -51,7 +51,7 @@ public class ChatController {
     }
 
     @Operation(summary = "채팅방 읽음 처리", description = "채팅방 읽음 처리 API. 해당 유저의 lastReadAt을 현재 시각으로 갱신합니다.")
-    @PutMapping("/{roomId}/read")
+    @PutMapping("/{roomId}/read-status")
     public ResponseEntity<?> readChatRoom(@PathVariable String roomId,
                                           @AuthenticationPrincipal AuthDetails authDetails) {
         chatUseCasePort.readChatRoom(roomId, authDetails.getAccount().getId());
@@ -59,11 +59,11 @@ public class ChatController {
     }
 
     @Operation(summary = "채팅방 나가기", description = "채팅방 나가기 API")
-    @DeleteMapping("/{roomId}/leave")
+    @DeleteMapping("/{roomId}/membership")
     public ResponseEntity<?> leaveChatRoom(@PathVariable String roomId,
                                            @AuthenticationPrincipal AuthDetails authDetails) {
         chatUseCasePort.leaveChatRoom(roomId, authDetails.getAccount().getId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "나의 채팅방 목록 조회", description = """

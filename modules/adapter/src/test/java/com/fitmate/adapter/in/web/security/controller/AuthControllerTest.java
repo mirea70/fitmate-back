@@ -31,7 +31,7 @@ class AuthControllerTest extends BaseControllerTest {
     private KakaoAuthService kakaoAuthService;
 
     @Nested
-    @DisplayName("POST /api/auth/kakao/register")
+    @DisplayName("POST /api/auth/kakao/account")
     class KakaoRegister {
 
         @Test
@@ -49,7 +49,7 @@ class AuthControllerTest extends BaseControllerTest {
             given(kakaoAuthService.kakaoRegister(any()))
                     .willReturn(new KakaoTokenResponse("access-token", "refresh-token"));
 
-            mockMvc.perform(post("/api/auth/kakao/register")
+            mockMvc.perform(post("/api/auth/kakao/account")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isCreated())

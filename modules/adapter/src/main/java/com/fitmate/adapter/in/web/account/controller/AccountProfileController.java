@@ -42,7 +42,7 @@ public class AccountProfileController {
     }
 
     @Operation(summary = "타 회원 팔로우 API", description = "대상이 팔로우 상태가 아니면 팔로우, 이미 팔로우 상태면 팔로우 취소한다.")
-    @PutMapping("/follow")
+    @PutMapping("/following")
     public ResponseEntity<?> followOrCancel(@AuthenticationPrincipal AuthDetails authDetails,
                                             @RequestParam Long targetAccountId) {
         accountProfileUseCasePort.followOrCancel(authDetails.getAccount().getId(), targetAccountId);
@@ -78,7 +78,7 @@ public class AccountProfileController {
     }
 
     @Operation(summary = "알림 전체 읽음 처리", description = "모든 안읽은 알림을 읽음 처리합니다.")
-    @PutMapping("/my/notices/read")
+    @PutMapping("/my/notices/read-status")
     public ResponseEntity<?> readAllNotices(@AuthenticationPrincipal AuthDetails authDetails) {
         accountProfileUseCasePort.readAllNotices(authDetails.getAccount().getId());
         return ResponseEntity.ok().build();

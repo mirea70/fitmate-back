@@ -20,20 +20,20 @@ public class AccountRecoveryController {
     private final AccountRecoveryService accountRecoveryService;
 
     @Operation(summary = "아이디 찾기", description = "전화번호로 로그인 ID 조회 (마스킹 처리)")
-    @PostMapping("/find-id")
+    @PostMapping("/login-name")
     public ResponseEntity<Map<String, String>> findLoginName(@RequestBody Map<String, String> body) {
         return ResponseEntity.ok(accountRecoveryService.findLoginName(body.get("phone")));
     }
 
     @Operation(summary = "비밀번호 재설정 - 계정 확인", description = "아이디와 전화번호로 계정 존재 여부 확인")
-    @PostMapping("/check-account")
+    @PostMapping("/account-existence")
     public ResponseEntity<?> checkAccount(@RequestBody Map<String, String> body) {
         accountRecoveryService.checkAccountExists(body.get("loginName"), body.get("phone"));
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "비밀번호 재설정 - 새 비밀번호 설정", description = "인증 완료 후 새 비밀번호 설정")
-    @PostMapping("/reset-password")
+    @PostMapping("/password")
     public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> body) {
         accountRecoveryService.resetPassword(body.get("loginName"), body.get("phone"), body.get("newPassword"));
         return ResponseEntity.ok().build();

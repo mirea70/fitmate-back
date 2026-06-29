@@ -25,14 +25,14 @@ public class SmsController {
             
             **-> 현재 실제 문자 요청은 요금 부담으로 인해 차단해놓았습니다.**
             """)
-    @PostMapping("/request/code")
+    @PostMapping("/codes")
     public ResponseEntity<?> requestValidateCode(@Valid @RequestBody SmsCodeRequest request) {
         smsUseCasePort.requestValidateCode(request.getPhone());
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "인증번호 체크", description = "인증번호 체크 API : 토큰 필요 X")
-    @GetMapping("/check/code")
+    @GetMapping("/codes/verification")
     public ResponseEntity<?> checkValidateCode(@Parameter(description = "휴대전화번호")
                                                @RequestParam String phone,
                                                @Parameter(description = "사용자 입력값 (인증번호)")

@@ -91,7 +91,7 @@ public class MateController {
     }
 
     @Operation(summary = "메이트 글 마감", description = "모집 마감 처리 API")
-    @PatchMapping(path = "/{mateId}/close")
+    @PatchMapping(path = "/{mateId}/status")
     public ResponseEntity<?> close(@PathVariable Long mateId,
                                    @AuthenticationPrincipal AuthDetails authDetails) {
         mateUseCasePort.closeMate(mateId, authDetails.getAccount().getId());

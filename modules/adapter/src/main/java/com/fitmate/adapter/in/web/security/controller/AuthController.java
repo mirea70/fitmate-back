@@ -41,7 +41,7 @@ public class AuthController {
                             schema = @Schema(type = "string"))
             }
     )
-    @PostMapping("/refresh")
+    @PostMapping("/tokens")
     public ResponseEntity<?> refresh(@RequestHeader("refresh") String refreshToken,
                                      HttpServletResponse response) {
         authService.refresh(refreshToken, response);
@@ -59,7 +59,7 @@ public class AuthController {
     }
 
     @Operation(summary = "카카오 회원가입", description = "카카오 토큰 + 프로필 정보로 계정 생성 후 JWT 토큰 발급")
-    @PostMapping("/kakao/register")
+    @PostMapping("/kakao/account")
     public ResponseEntity<KakaoTokenResponse> kakaoRegister(@Valid @RequestBody KakaoRegisterRequest request) {
         return ResponseEntity.created(URI.create("/api/account")).body(kakaoAuthService.kakaoRegister(request));
     }

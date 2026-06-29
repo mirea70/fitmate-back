@@ -39,7 +39,7 @@ public class MateRequestController {
     }
 
     @Operation(summary = "메이트 신청", description = "메이트 신청 API(결제기능 연동 전)")
-    @PutMapping(path = "/apply")
+    @PutMapping(path = "/application")
     public ResponseEntity<?> applyMate(@PathVariable Long mateId,
                                        @Valid @RequestBody MateApplyRequest applyRequest,
                                        @AuthenticationPrincipal AuthDetails authDetails) {
@@ -49,16 +49,16 @@ public class MateRequestController {
     }
 
     @Operation(summary = "메이트 신청 취소", description = "메이트 신청 취소 API")
-    @DeleteMapping("/cancel")
+    @DeleteMapping("/application")
     public ResponseEntity<?> cancelMateApply(@PathVariable Long mateId,
                                              @RequestBody MateCancelRequest cancelRequest,
                                              @AuthenticationPrincipal AuthDetails authDetails) {
         mateApplyUseCasePort.cancelMateApply(mateId, authDetails.getAccount().getId(), cancelRequest.getCancelReason());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "메이트 신청 승인", description = "메이트 신청 승인 API")
-    @PutMapping("/approve")
+    @PutMapping("/approval")
     public ResponseEntity<?> approveMate(@PathVariable Long mateId,
                                          @Valid @RequestBody MateApproveRequest approveRequest,
                                          @AuthenticationPrincipal AuthDetails authDetails) {

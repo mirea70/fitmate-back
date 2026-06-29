@@ -91,14 +91,14 @@ public class SecurityConfig {
 
     private String[] excludeApi() {
         return new String[]{
-                "/api/account/join",
-                "/api/account/check/phone",
-                "/api/account/check/loginName",
-                "/api/sms/request/code",
-                "/api/sms/check/code",
-                "/api/auth/refresh",
+                "/api/account/registrations",
+                "/api/account/phones/availability",
+                "/api/account/login-names/availability",
+                "/api/sms/codes",
+                "/api/sms/codes/verification",
+                "/api/auth/tokens",
                 "/api/auth/kakao",
-                "/api/auth/kakao/register",
+                "/api/auth/kakao/account",
                 "/api/account/recovery/**",
         };
     }

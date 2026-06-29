@@ -4,6 +4,7 @@ import com.fitmate.adapter.in.web.BaseControllerTest;
 import com.fitmate.adapter.in.web.chat.dto.ChatRoomCreateDmRequest;
 import com.fitmate.adapter.in.web.chat.dto.ChatRoomCreateGroupRequest;
 import com.fitmate.adapter.in.web.chat.mapper.ChatWebAdapterMapper;
+import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.port.in.chat.usecase.ChatUseCasePort;
 import com.fitmate.port.out.chat.dto.ChatRoomSimpleResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +35,25 @@ class ChatControllerTest extends BaseControllerTest {
 
     @MockBean
     private ChatWebAdapterMapper chatWebAdapterMapper;
+
+    @Nested
+    @DisplayName("DELETE /api/chat/{roomId}/membership")
+    class LeaveChatRoom {
+
+        @Test
+        @DisplayName("채팅방 나가기 — 204 No Content")
+        void leaveChatRoomSuccess() {
+            ChatController controller = new ChatController(chatUseCasePort, chatWebAdapterMapper);
+
+            ResponseEntity<?> response = controller.leaveChatRoom(
+                    "room-1",
+                    new AuthDetails(createTestAccountEntity())
+            );
+
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+            assertThat(response.getBody()).isNull();
+        }
+    }
 
     @Nested
     @DisplayName("POST /api/chat/room/group")
