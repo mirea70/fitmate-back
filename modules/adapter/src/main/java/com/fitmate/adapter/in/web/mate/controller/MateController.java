@@ -68,8 +68,8 @@ public class MateController {
     }
 
     @Operation(summary = "메이트 글 목록 조회", description = "메이팅 글 목록 조회 API : 무한 스크롤")
-    @PostMapping("/list")
-    public ResponseEntity<SliceResponse<MateSimpleResponse>> findList(@RequestBody MateListRequest request) {
+    @GetMapping
+    public ResponseEntity<SliceResponse<MateSimpleResponse>> findList(@ParameterObject MateListRequest request) {
         SliceResponse<MateSimpleResponse> responses = mateUseCasePort.findAllMate(mateWebAdapterMapper.requestToCommand(request));
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responses);

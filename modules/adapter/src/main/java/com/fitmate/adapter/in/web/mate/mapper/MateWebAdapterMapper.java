@@ -68,21 +68,21 @@ public class MateWebAdapterMapper {
 
     public MateListCommand requestToCommand(MateListRequest request) {
         return new MateListCommand(
-                request.getPage(),
-                request.getSize(),
-                SliceCommand.SortDir.valueOf(request.getSortDir().name()),
-                request.getSortProperty(),
-                request.getKeyword(),
-                request.getDayOfWeek(),
-                request.getStartMateAt(),
-                request.getEndMateAt(),
-                request.getFitPlaceRegions(),
-                request.getPermitMaxAge(),
-                request.getPermitMinAge(),
-                request.getStartLimitPeopleCnt(),
-                request.getEndLimitPeopleCnt(),
-                request.getFitCategory(),
-                request.getIncludeClosed()
+                request.page(),
+                request.size(),
+                SliceCommand.SortDir.valueOf(request.sortDir().name()),
+                request.sortProperty(),
+                request.keyword(),
+                request.dayOfWeek(),
+                request.startMateAt(),
+                request.endMateAt(),
+                request.fitPlaceRegions(),
+                request.permitMaxAge(),
+                request.permitMinAge(),
+                request.startLimitPeopleCnt(),
+                request.endLimitPeopleCnt(),
+                request.fitCategory(),
+                request.includeClosed()
         );
     }
 }

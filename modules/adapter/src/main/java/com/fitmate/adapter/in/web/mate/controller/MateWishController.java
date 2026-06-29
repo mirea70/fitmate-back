@@ -32,7 +32,7 @@ public class MateWishController {
     }
 
     @Operation(summary = "나의 찜 목록 조회", description = "로그인한 사용자의 메이트 찜 목록 조회 API")
-    @GetMapping("/wishes/my")
+    @GetMapping("/wishes")
     public ResponseEntity<List<MateSimpleResponse>> getMyWishMates(@AuthenticationPrincipal AuthDetails authDetails) {
         List<MateSimpleResponse> responses = mateWishUseCasePort.getMyWishMates(authDetails.getAccount().getId());
         return ResponseEntity.ok(responses);

@@ -2,6 +2,7 @@ package com.fitmate.adapter.in.web.mate.controller;
 
 import com.fitmate.adapter.in.web.BaseControllerTest;
 import com.fitmate.adapter.in.web.mate.dto.MateCreateRequest;
+import com.fitmate.adapter.in.web.mate.dto.MateListRequest;
 import com.fitmate.adapter.in.web.mate.mapper.MateWebAdapterMapper;
 import com.fitmate.adapter.in.web.security.dto.AuthDetails;
 import com.fitmate.adapter.out.persistence.jpa.file.adapter.AttachFilePersistenceAdapter;
@@ -9,12 +10,14 @@ import com.fitmate.domain.mate.enums.FitCategory;
 import com.fitmate.domain.mate.enums.GatherType;
 import com.fitmate.domain.mate.enums.PermitGender;
 import com.fitmate.port.in.mate.command.MateCreateCommand;
+import com.fitmate.port.in.mate.command.MateListCommand;
 import com.fitmate.port.in.mate.usecase.MateUseCasePort;
 import com.fitmate.port.out.common.SliceResponse;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,6 +33,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -126,31 +130,45 @@ class MateControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /api/mates/list")
+    @DisplayName("GET /api/mates")
     class FindList {
 
         @Test
         @DisplayName("메이트 목록 조회 — 200 OK + 페이징 응답 구조 검증")
         void findListSuccess() throws Exception {
             SliceResponse response = new SliceResponse(List.of(), 0, 10, true, true);
+            MateListCommand command = new MateListCommand(
+                    0, 10, com.fitmate.port.in.common.SliceCommand.SortDir.DESC, "createdAt",
+                    "x", null, null, null, null, null, null, null, null, null, false
+            );
+            given(mateWebAdapterMapper.requestToCommand(any(MateListRequest.class))).willReturn(command);
             given(mateUseCasePort.findAllMate(any())).willReturn(response);
 
-            String requestBody = """
-                    {
-                        "page": 0,
-                        "size": 10,
-                        "sortDir": "DESC",
-                        "sortProperty": "createdAt"
-                    }
-                    """;
-
-            mockMvc.perform(post("/api/mates/list")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(requestBody))
+            mockMvc.perform(get("/api/mates")
+                            .param("page", "0")
+                            .param("size", "10")
+                            .param("sortDir", "DESC")
+                            .param("sortProperty", "createdAt")
+                            .param("keyword", "x")
+                            .param("startMateAt", "2024-03-11T14:00:00")
+                            .param("endMateAt", "2024-04-11T14:00:00")
+                            .param("fitPlaceRegions", "서울 강남구")
+                            .param("includeClosed", "false"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.currentPage").value(0))
                     .andExpect(jsonPath("$.size").value(10))
                     .andExpect(jsonPath("$.first").value(true));
+
+            ArgumentCaptor<MateListRequest> requestCaptor = ArgumentCaptor.forClass(MateListRequest.class);
+            then(mateWebAdapterMapper).should().requestToCommand(requestCaptor.capture());
+            MateListRequest request = requestCaptor.getValue();
+            assertThat(request.page()).isEqualTo(0);
+            assertThat(request.size()).isEqualTo(10);
+            assertThat(request.keyword()).isEqualTo("x");
+            assertThat(request.startMateAt()).isEqualTo(LocalDateTime.of(2024, 3, 11, 14, 0));
+            assertThat(request.endMateAt()).isEqualTo(LocalDateTime.of(2024, 4, 11, 14, 0));
+            assertThat(request.fitPlaceRegions()).containsExactly("서울 강남구");
+            assertThat(request.includeClosed()).isFalse();
         }
     }
 }

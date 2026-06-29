@@ -71,7 +71,7 @@ public class ChatController {
             
             **[참고]** 채팅이 1회이상 이루어진 채팅방만 조회됩니다. 채팅 기능 사용방법은 GitHub 저장소를 확인해주세요.
             """)
-    @GetMapping("/my")
+    @GetMapping
     public ResponseEntity<List<ChatRoomListItemResponse>> getMyChatRooms(@AuthenticationPrincipal AuthDetails authDetails) {
         return ResponseEntity.ok(chatUseCasePort.getMyChatRooms(authDetails.getAccount().getId()));
     }

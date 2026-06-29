@@ -50,42 +50,42 @@ public class AccountProfileController {
     }
 
     @Operation(summary = "나의 팔로잉 목록 조회", description = "나의 팔로잉 목록 조회 API")
-    @GetMapping("/my/followings")
+    @GetMapping("/me/followings")
     public ResponseEntity<List<FollowDetailResponse>> getFollowingList(@AuthenticationPrincipal AuthDetails authDetails) {
         List<FollowDetailResponse> responses = accountProfileUseCasePort.getFollowingList(authDetails.getAccount().getId());
         return ResponseEntity.ok(responses);
     }
 
     @Operation(summary = "나의 팔로워 목록 조회", description = "나의 팔로워 목록 조회 API")
-    @GetMapping("/my/followers")
+    @GetMapping("/me/followers")
     public ResponseEntity<List<FollowDetailResponse>> getFollowerList(@AuthenticationPrincipal AuthDetails authDetails) {
         List<FollowDetailResponse> responses = accountProfileUseCasePort.getFollowerList(authDetails.getAccount().getId());
         return ResponseEntity.ok(responses);
     }
 
     @Operation(summary = "내 알림 목록 조회 API", description = "알림 목록 조회 API")
-    @GetMapping("/my/notices")
+    @GetMapping("/me/notices")
     public ResponseEntity<List<NoticeResponse>> getMyNoticeList(@AuthenticationPrincipal AuthDetails authDetails) {
         List<NoticeResponse> responses = accountProfileUseCasePort.getNotices(authDetails.getAccount().getId());
         return ResponseEntity.ok(responses);
     }
 
     @Operation(summary = "안읽은 알림 수 조회", description = "안읽은 알림 수를 반환합니다.")
-    @GetMapping("/my/notices/unread/count")
+    @GetMapping("/me/notices/unread/count")
     public ResponseEntity<java.util.Map<String, Long>> getUnreadNoticeCount(@AuthenticationPrincipal AuthDetails authDetails) {
         long count = accountProfileUseCasePort.getUnreadNoticeCount(authDetails.getAccount().getId());
         return ResponseEntity.ok(java.util.Map.of("count", count));
     }
 
     @Operation(summary = "알림 전체 읽음 처리", description = "모든 안읽은 알림을 읽음 처리합니다.")
-    @PutMapping("/my/notices/read-status")
+    @PutMapping("/me/notices/read-status")
     public ResponseEntity<?> readAllNotices(@AuthenticationPrincipal AuthDetails authDetails) {
         accountProfileUseCasePort.readAllNotices(authDetails.getAccount().getId());
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "내 메이트 신청 목록 조회 API", description = "파라미터인 승인상태에 따라 메이트 신청 목록을 조회해온다.")
-    @GetMapping("/my/mates/requests")
+    @GetMapping("/me/mates/requests")
     public ResponseEntity<List<MateRequestSimpleResponse>> getMyMateRequestList(@AuthenticationPrincipal AuthDetails authDetails,
                                                                                 @Parameter(description = "메이트 신청 목록 조회 시, 승인 상태 조건")
                                                                         @RequestParam ApproveStatus approveStatus) {
@@ -94,7 +94,7 @@ public class AccountProfileController {
     }
 
     @Operation(summary = "내가 작성한 메이트 목록 조회", description = "로그인한 사용자가 작성한 메이트 글 목록 조회 API")
-    @GetMapping("/my/mates/list")
+    @GetMapping("/me/mates")
     public ResponseEntity<List<MateSimpleResponse>> findMyMates(@AuthenticationPrincipal AuthDetails authDetails) {
         List<MateSimpleResponse> responses = mateUseCasePort.findMyMates(authDetails.getAccount().getId());
         return ResponseEntity.ok(responses);

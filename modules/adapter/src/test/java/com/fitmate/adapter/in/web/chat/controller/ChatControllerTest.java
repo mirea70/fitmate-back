@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -35,6 +37,24 @@ class ChatControllerTest extends BaseControllerTest {
 
     @MockBean
     private ChatWebAdapterMapper chatWebAdapterMapper;
+
+    @Nested
+    @DisplayName("GET /api/chat-rooms")
+    class GetMyChatRooms {
+
+        @Test
+        @DisplayName("나의 채팅방 목록 조회 — 200 OK")
+        void getMyChatRoomsSuccess() throws Exception {
+            AuthDetails authDetails = new AuthDetails(createTestAccountEntity());
+            given(chatUseCasePort.getMyChatRooms(TEST_ACCOUNT_ID)).willReturn(List.of());
+            ChatController controller = new ChatController(chatUseCasePort, chatWebAdapterMapper);
+
+            ResponseEntity<List<?>> response = (ResponseEntity<List<?>>) (ResponseEntity<?>) controller.getMyChatRooms(authDetails);
+
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(response.getBody()).isEmpty();
+        }
+    }
 
     @Nested
     @DisplayName("DELETE /api/chat-rooms/{roomId}/membership")
