@@ -43,7 +43,7 @@ class AccountControllerTest extends BaseControllerTest {
     class JoinTest {
 
         @Test
-        @DisplayName("정상 회원가입 — 200 OK")
+        @DisplayName("정상 회원가입 — 201 Created")
         void joinSuccess() throws Exception {
             AccountJoinRequest request = new AccountJoinRequest(
                     "abc2", "!Qqweras33!!", "홍시", "안녕하세요",
@@ -56,7 +56,7 @@ class AccountControllerTest extends BaseControllerTest {
             mockMvc.perform(post("/api/account/join")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isCreated());
         }
 
         @Test

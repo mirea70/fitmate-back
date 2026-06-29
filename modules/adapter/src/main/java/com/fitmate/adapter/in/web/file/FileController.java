@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.List;
 
 @Tag(name = "99. File", description = "파일 관리 API")
@@ -30,7 +31,10 @@ public class FileController {
     public ResponseEntity<List<FileResponse>> uploads(@Parameter(description = "업로드할 파일(여러개 가능)")
                                                     @RequestPart(required = false) List<MultipartFile> multipartFiles) throws Exception {
            List<FileResponse> responses = attachFilePersistenceAdapter.uploadFiles(multipartFiles);
-           return ResponseEntity.ok(responses);
+           URI location = responses == null || responses.isEmpty()
+                   ? URI.create("/api/file")
+                   : URI.create("/api/file/" + responses.get(0).getAttachFileId());
+           return ResponseEntity.created(location).body(responses);
     }
 
     @Operation(summary = "파일 다운로드", description = "원본 파일 다운로드 API")

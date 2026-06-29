@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,7 +56,7 @@ public class MateController {
         if(fileResponses != null)
             introImageIds = fileResponses.stream().map(FileResponse::getAttachFileId).collect(Collectors.toSet());
         mateUseCasePort.registerMate(mateWebAdapterMapper.requestToCommand(createRequest, authDetails.getAccount().getId(), introImageIds));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(URI.create("/api/mate")).build();
     }
 
     @Operation(summary = "메이트 글 단일조회", description = "메이트 글 단일조회 API")

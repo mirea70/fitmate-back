@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Map;
 
 @WebAdapter
@@ -60,6 +61,6 @@ public class AuthController {
     @Operation(summary = "카카오 회원가입", description = "카카오 토큰 + 프로필 정보로 계정 생성 후 JWT 토큰 발급")
     @PostMapping("/kakao/register")
     public ResponseEntity<KakaoTokenResponse> kakaoRegister(@Valid @RequestBody KakaoRegisterRequest request) {
-        return ResponseEntity.ok(kakaoAuthService.kakaoRegister(request));
+        return ResponseEntity.created(URI.create("/api/account")).body(kakaoAuthService.kakaoRegister(request));
     }
 }

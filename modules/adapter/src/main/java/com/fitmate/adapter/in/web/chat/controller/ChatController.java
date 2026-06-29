@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @WebAdapter
@@ -31,13 +32,15 @@ public class ChatController {
     @Operation(summary = "그룹 채팅방 생성", description = "그룹 채팅방 생성 API")
     @PostMapping("/room/group")
     public ResponseEntity<ChatRoomSimpleResponse> createGroupChatRoom(@Valid @RequestBody ChatRoomCreateGroupRequest request) {
-        return ResponseEntity.ok(chatUseCasePort.createGroupChatRoom(chatWebAdapterMapper.requestToCommand(request)));
+        ChatRoomSimpleResponse response = chatUseCasePort.createGroupChatRoom(chatWebAdapterMapper.requestToCommand(request));
+        return ResponseEntity.created(URI.create("/api/chat/rooms/" + response.getRoomId())).body(response);
     }
 
     @Operation(summary = "DM 채팅방 생성", description = "DM 채팅방 생성 API")
     @PostMapping("/room/dm")
     public ResponseEntity<ChatRoomSimpleResponse> createDmChatRoom(@Valid @RequestBody ChatRoomCreateDmRequest request) {
-        return ResponseEntity.ok(chatUseCasePort.createDmChatRoom(chatWebAdapterMapper.requestToCommand(request)));
+        ChatRoomSimpleResponse response = chatUseCasePort.createDmChatRoom(chatWebAdapterMapper.requestToCommand(request));
+        return ResponseEntity.created(URI.create("/api/chat/rooms/" + response.getRoomId())).body(response);
     }
 
     @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 오름차순). 조회 시 읽음 처리됩니다.")

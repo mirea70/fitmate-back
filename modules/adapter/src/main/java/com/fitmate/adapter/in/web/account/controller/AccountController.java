@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
+import java.net.URI;
 
 @WebAdapter
 @RestController
@@ -32,7 +33,7 @@ public class AccountController {
     @PostMapping(path = "/join", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> join(@Valid @RequestBody AccountJoinRequest joinRequest) throws Exception {
         accountProfileUseCasePort.join(accountWebAdapterMapper.requestToCommand(joinRequest));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.created(URI.create("/api/account")).build();
     }
 
     @Operation(summary = "로그인 ID 중복체크", description = "회원가입 시, 로그인 ID 중복 체크 API : 토큰 필요 X")
