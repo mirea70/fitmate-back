@@ -1,6 +1,8 @@
 HELP.md
+AGENTS.md
 .gradle
-.claude/
+.agents/
+.codex/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/

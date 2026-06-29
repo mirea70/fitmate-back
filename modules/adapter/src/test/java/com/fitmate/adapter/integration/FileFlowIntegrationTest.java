@@ -11,11 +11,14 @@ import com.fitmate.adapter.out.persistence.jpa.job.entity.JobQueueJpaEntity;
 import com.fitmate.adapter.out.persistence.jpa.job.repository.JobQueueRepository;
 import com.fitmate.adapter.out.persistence.jpa.job.scheduler.ImageResizingJobScheduler;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
@@ -23,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +47,16 @@ class FileFlowIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private ImageResizingJobScheduler imageResizingJobScheduler;
 
-    private final String fileDir = System.getProperty("user.home") + "/files";
+    @TempDir
+    Path tempDir;
+
+    private String fileDir;
+
+    @BeforeEach
+    void setUpFileDir() {
+        fileDir = tempDir.toString();
+        ReflectionTestUtils.setField(filePersistenceAdapter, "fileDefaultDir", fileDir);
+    }
 
     @AfterEach
     void cleanUpFiles() {

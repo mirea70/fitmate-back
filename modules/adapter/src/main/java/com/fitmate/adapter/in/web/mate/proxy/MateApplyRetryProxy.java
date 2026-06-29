@@ -19,7 +19,7 @@ public class MateApplyRetryProxy {
             value = ObjectOptimisticLockingFailureException.class,
             maxAttempts = 3,
             backoff = @Backoff(delay = 100),
-            listeners = "mateRetryListener"
+            listeners = "customRetryListener"
     )
     public void applyMate(MateApplyCommand command) {
         mateApplyUseCasePort.applyMate(command);
@@ -28,7 +28,8 @@ public class MateApplyRetryProxy {
     @Retryable(
             value = ObjectOptimisticLockingFailureException.class,
             maxAttempts = 3,
-            backoff = @Backoff(delay = 100)
+            backoff = @Backoff(delay = 100),
+            listeners = "customRetryListener"
     )
     public void approveMate(MateApproveCommand command) {
         mateApplyUseCasePort.approveMate(command);
