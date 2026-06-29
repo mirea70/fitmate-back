@@ -9,8 +9,8 @@ import java.util.List;
 @Component
 public class FollowPersistenceMapper {
     public FollowDetailResponse jpaResponseToResponse(FollowDetailJpaResponse jpaResponse) {
-        return new FollowDetailResponse(jpaResponse.getAccountId(),
-                jpaResponse.getProfileImageId(), jpaResponse.getNickName());
+        return new FollowDetailResponse(jpaResponse.accountId(),
+                jpaResponse.profileImageId(), jpaResponse.nickName());
     }
 
     public List<FollowDetailResponse> jpaResponsesToResponses(List<FollowDetailJpaResponse> jpaResponses) {

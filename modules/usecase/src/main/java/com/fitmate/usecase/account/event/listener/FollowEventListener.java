@@ -25,8 +25,8 @@ public class FollowEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(FollowEvent event) {
         FollowEventDto dto = event.getEventDto();
-        String content = dto.getFromNickName() + FOLLOW_MSG;
-        Notice notice = Notice.of(dto.getTargetAccountId(), null, dto.getFromAccountId(), content, NoticeType.FOLLOWED);
+        String content = dto.fromNickName() + FOLLOW_MSG;
+        Notice notice = Notice.of(dto.targetAccountId(), null, dto.fromAccountId(), content, NoticeType.FOLLOWED);
         loadNoticePort.saveNoticeEntity(notice);
     }
 }

@@ -49,10 +49,10 @@ public class CustomRetryListener implements RetryListener {
 
     private RetryTarget extractRetryTarget(Object arg) {
         if (arg instanceof MateApplyCommand) {
-            return new RetryTarget(RetryDomain.MATE, ((MateApplyCommand) arg).getMateId(), RetryType.APPLY);
+            return new RetryTarget(RetryDomain.MATE, ((MateApplyCommand) arg).mateId(), RetryType.APPLY);
         }
         if (arg instanceof MateApproveCommand) {
-            return new RetryTarget(RetryDomain.MATE, ((MateApproveCommand) arg).getMateId(), RetryType.APPROVE);
+            return new RetryTarget(RetryDomain.MATE, ((MateApproveCommand) arg).mateId(), RetryType.APPROVE);
         }
         return null;
     }

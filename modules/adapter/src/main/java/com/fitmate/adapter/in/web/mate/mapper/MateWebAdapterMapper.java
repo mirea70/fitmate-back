@@ -11,20 +11,20 @@ import java.util.Set;
 public class MateWebAdapterMapper {
     public MateCreateCommand requestToCommand(MateCreateRequest request, Long writerId, Set<Long> introImageIds) {
         return new MateCreateCommand(
-                request.getFitCategory(),
-                request.getTitle(),
-                request.getIntroduction(),
+                request.fitCategory(),
+                request.title(),
+                request.introduction(),
                 introImageIds,
-                request.getMateAt(),
-                request.getFitPlaceName(),
-                request.getFitPlaceAddress(),
-                request.getGatherType(),
-                request.getPermitGender(),
-                request.getPermitMaxAge(),
-                request.getPermitMinAge(),
-                request.getPermitPeopleCnt(),
-                request.getMateFees(),
-                request.getApplyQuestion(),
+                request.mateAt(),
+                request.fitPlaceName(),
+                request.fitPlaceAddress(),
+                request.gatherType(),
+                request.permitGender(),
+                request.permitMaxAge(),
+                request.permitMinAge(),
+                request.permitPeopleCnt(),
+                request.mateFees(),
+                request.applyQuestion(),
                 writerId
         );
     }
@@ -32,20 +32,20 @@ public class MateWebAdapterMapper {
     public MateModifyCommand requestToCommand(Long mateId, MateModifyRequest request, Long writerId) {
         return new MateModifyCommand(
                 mateId,
-                request.getFitCategory(),
-                request.getTitle(),
-                request.getIntroduction(),
-                request.getIntroImageIds(),
-                request.getMateAt(),
-                request.getFitPlaceName(),
-                request.getFitPlaceAddress(),
-                request.getGatherType(),
-                request.getPermitGender(),
-                request.getPermitMaxAge(),
-                request.getPermitMinAge(),
-                request.getPermitPeopleCnt(),
-                request.getMateFees(),
-                request.getApplyQuestion(),
+                request.fitCategory(),
+                request.title(),
+                request.introduction(),
+                request.introImageIds(),
+                request.mateAt(),
+                request.fitPlaceName(),
+                request.fitPlaceAddress(),
+                request.gatherType(),
+                request.permitGender(),
+                request.permitMaxAge(),
+                request.permitMinAge(),
+                request.permitPeopleCnt(),
+                request.mateFees(),
+                request.applyQuestion(),
                 writerId
         );
     }
@@ -54,14 +54,14 @@ public class MateWebAdapterMapper {
         return new MateApplyCommand(
                 mateId,
                 accountId,
-                request.getComeAnswer()
+                request.comeAnswer()
         );
     }
 
     public MateApproveCommand requestToCommand(MateApproveRequest request, Long mateId, Long accountId) {
         return new MateApproveCommand(
                 mateId,
-                request.getApplierId(),
+                request.applierId(),
                 accountId
         );
     }

@@ -53,7 +53,7 @@ public class MateRequestController {
     public ResponseEntity<?> cancelMateApply(@PathVariable Long mateId,
                                              @RequestBody MateCancelRequest cancelRequest,
                                              @AuthenticationPrincipal AuthDetails authDetails) {
-        mateApplyUseCasePort.cancelMateApply(mateId, authDetails.getAccount().getId(), cancelRequest.getCancelReason());
+        mateApplyUseCasePort.cancelMateApply(mateId, authDetails.getAccount().getId(), cancelRequest.cancelReason());
         return ResponseEntity.noContent().build();
     }
 

@@ -10,27 +10,27 @@ import org.springframework.stereotype.Component;
 public class AccountWebAdapterMapper {
     public AccountJoinCommand requestToCommand(AccountJoinRequest request) {
         return new AccountJoinCommand(
-                request.getLoginName(),
-                request.getPassword(),
-                request.getNickName(),
-                request.getIntroduction(),
-                request.getName(),
-                request.getPhone(),
-                request.getEmail(),
-                request.getBirthDate(),
-                request.getRole(),
-                request.getGender()
+                request.loginName(),
+                request.password(),
+                request.nickName(),
+                request.introduction(),
+                request.name(),
+                request.phone(),
+                request.email(),
+                request.birthDate(),
+                request.role(),
+                request.gender()
         );
     }
 
     public AccountModifyCommand requestToCommand(Long accountId, AccountModifyRequest request) {
         return new AccountModifyCommand(
                 accountId,
-                request.getNickName(),
-                request.getIntroduction(),
-                request.getName(),
-                request.getPhone(),
-                request.getEmail(),
-                request.getProfileImageId());
+                request.nickName(),
+                request.introduction(),
+                request.name(),
+                request.phone(),
+                request.email(),
+                request.profileImageId());
     }
 }

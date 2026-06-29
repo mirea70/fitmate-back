@@ -24,7 +24,7 @@ public class AccountDeleteEventListener {
     @Transactional
     public void onApplicationEvent(AccountDeleteEvent event) {
         AccountDeleteEventDto eventDto = event.getEventDto();
-        AccountId id = new AccountId(eventDto.getAccountId());
+        AccountId id = new AccountId(eventDto.accountId());
 
         loadMateRequestPort.deleteAllMateRequestByApplier(id);
         loadMatePort.deleteAllMateByWriter(id);

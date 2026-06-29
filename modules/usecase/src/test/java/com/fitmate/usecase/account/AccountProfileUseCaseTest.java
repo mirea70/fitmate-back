@@ -121,7 +121,7 @@ class AccountProfileUseCaseTest {
 
             AccountProfileResponse result = accountProfileUseCase.findAccount(1L);
 
-            assertThat(result.getAccountId()).isEqualTo(1L);
+            assertThat(result.accountId()).isEqualTo(1L);
         }
     }
 

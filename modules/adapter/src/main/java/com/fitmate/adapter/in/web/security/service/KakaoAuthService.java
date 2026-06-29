@@ -53,7 +53,7 @@ public class KakaoAuthService {
     }
 
     public KakaoTokenResponse kakaoRegister(KakaoRegisterRequest request) {
-        KakaoUserInfo kakaoUserInfo = fetchKakaoUserInfo(request.getAccessToken());
+        KakaoUserInfo kakaoUserInfo = fetchKakaoUserInfo(request.accessToken());
         String loginName = KAKAO_LOGIN_NAME_PREFIX + kakaoUserInfo.kakaoId;
 
         if (accountRepository.findByLoginName(loginName).isPresent()) {
@@ -78,21 +78,21 @@ public class KakaoAuthService {
 
     private AccountJpaEntity createAccount(String loginName, KakaoRegisterRequest request) {
         String rawPassword = "Kakao@" + UUID.randomUUID().toString().substring(0, 8) + "1!";
-        String email = request.getEmail() != null && !request.getEmail().isBlank()
-                ? request.getEmail()
+        String email = request.email() != null && !request.email().isBlank()
+                ? request.email()
                 : loginName + KAKAO_DEFAULT_EMAIL_SUFFIX;
-        LocalDate birthDate = request.getBirthDate() != null ? LocalDate.parse(request.getBirthDate()) : null;
+        LocalDate birthDate = request.birthDate() != null ? LocalDate.parse(request.birthDate()) : null;
 
         AccountJpaEntity newAccount = AccountJpaEntity.builder()
                 .loginName(loginName)
                 .password(passwordEncoder.encode(rawPassword))
-                .nickName(request.getNickName())
+                .nickName(request.nickName())
                 .introduction("")
-                .name(request.getName())
-                .phone(request.getPhone())
+                .name(request.name())
+                .phone(request.phone())
                 .email(email)
                 .birthDate(birthDate)
-                .gender(request.getGender())
+                .gender(request.gender())
                 .role("USER")
                 .build();
 

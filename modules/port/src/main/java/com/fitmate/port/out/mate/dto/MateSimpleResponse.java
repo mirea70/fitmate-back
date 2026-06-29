@@ -3,25 +3,22 @@ package com.fitmate.port.out.mate.dto;
 import com.fitmate.domain.mate.enums.FitCategory;
 import com.fitmate.domain.mate.enums.GatherType;
 import com.fitmate.domain.mate.enums.PermitGender;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
-@AllArgsConstructor
-public class MateSimpleResponse {
-    private Long id;
-    private Long thumbnailImageId;
-    private Long writerImageId;
-    private String writerNickName;
-    private FitCategory fitCategory;
-    private String title;
-    private String fitPlaceAddress;
-    private LocalDateTime mateAt;
-    private GatherType gatherType;
-    private PermitGender permitGender;
-    private Integer permitPeopleCnt;
-    private int approvedAccountCnt;
-    private boolean closed;
+public record MateSimpleResponse(
+        Long id,
+        Long thumbnailImageId,
+        Long writerImageId,
+        String writerNickName,
+        FitCategory fitCategory,
+        String title,
+        String fitPlaceAddress,
+        LocalDateTime mateAt,
+        GatherType gatherType,
+        PermitGender permitGender,
+        Integer permitPeopleCnt,
+        int approvedAccountCnt,
+        boolean closed
+) {
 }

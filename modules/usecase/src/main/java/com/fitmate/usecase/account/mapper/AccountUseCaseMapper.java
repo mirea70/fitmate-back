@@ -42,14 +42,14 @@ public class AccountUseCaseMapper {
 
     public Account commandToDomain(AccountJoinCommand joinCommand) {
 
-        Password password = new Password(passwordEncoder.encode(joinCommand.getPassword()));
-        ProfileInfo profileInfo = new ProfileInfo(joinCommand.getNickName(), joinCommand.getIntroduction(), null);
-        PrivateInfo privateInfo = new PrivateInfo(joinCommand.getName(), joinCommand.getPhone(), joinCommand.getEmail(), joinCommand.getBirthDate());
-        Gender gender = Gender.valueOf(joinCommand.getGender().name());
-        AccountRole role = AccountRole.valueOf(joinCommand.getRole().name());
+        Password password = new Password(passwordEncoder.encode(joinCommand.password()));
+        ProfileInfo profileInfo = new ProfileInfo(joinCommand.nickName(), joinCommand.introduction(), null);
+        PrivateInfo privateInfo = new PrivateInfo(joinCommand.name(), joinCommand.phone(), joinCommand.email(), joinCommand.birthDate());
+        Gender gender = Gender.valueOf(joinCommand.gender().name());
+        AccountRole role = AccountRole.valueOf(joinCommand.role().name());
 
         return Account.withoutId(
-                joinCommand.getLoginName(),
+                joinCommand.loginName(),
                 password,
                 profileInfo,
                 privateInfo,

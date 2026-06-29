@@ -61,7 +61,7 @@ public class MateUseCase implements MateUseCasePort {
 
     @Override
     public void registerMate(MateCreateCommand mateCreateCommand) {
-        Set<Long> introImageIds = mateCreateCommand.getIntroImageIds();
+        Set<Long> introImageIds = mateCreateCommand.introImageIds();
         if(introImageIds != null && !introImageIds.isEmpty())
             loadAttachFilePort.checkExistFiles(introImageIds);
 
@@ -71,7 +71,7 @@ public class MateUseCase implements MateUseCasePort {
         loadMatePort.saveMateFeeEntities(mate.getMateFees(), new MateId(mateEntityId));
 
         eventPublisher.publishEvent(new MateRegisteredEvent(
-                new MateRegisteredEventDto(mate.getTitle(), mateEntityId, mateCreateCommand.getWriterId())
+                new MateRegisteredEventDto(mate.getTitle(), mateEntityId, mateCreateCommand.writerId())
         ));
     }
 
@@ -94,29 +94,29 @@ public class MateUseCase implements MateUseCasePort {
 
     @Override
     public void modifyMate(MateModifyCommand command) {
-        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(command.getMateId()));
+        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(command.mateId()));
         validateModifyCommand(command, loadedMate.get());
         cancelIneligibleWaitingApplicants(command, loadedMate);
 
         loadedMate.update(mate -> mate.update(
-                command.getFitCategory(),
-                command.getTitle(),
-                command.getIntroduction(),
-                command.getIntroImageIds(),
-                command.getMateAt(),
-                command.getFitPlaceName(),
-                command.getFitPlaceAddress(),
-                command.getGatherType(),
-                command.getPermitGender(),
-                command.getPermitMaxAge(),
-                command.getPermitMinAge(),
-                command.getPermitPeopleCnt(),
-                command.getMateFees(),
-                command.getApplyQuestion()
+                command.fitCategory(),
+                command.title(),
+                command.introduction(),
+                command.introImageIds(),
+                command.mateAt(),
+                command.fitPlaceName(),
+                command.fitPlaceAddress(),
+                command.gatherType(),
+                command.permitGender(),
+                command.permitMaxAge(),
+                command.permitMinAge(),
+                command.permitPeopleCnt(),
+                command.mateFees(),
+                command.applyQuestion()
         ));
         loadMatePort.deleteAllMateFeeByMateId(loadedMate.get().getId());
         loadMatePort.saveMateFeeEntities(loadedMate.get().getMateFees(), loadedMate.get().getId());
-        loadJobQueuePort.enqueueImageResizingJobs(command.getIntroImageIds());
+        loadJobQueuePort.enqueueImageResizingJobs(command.introImageIds());
 
         eventPublisher.publishEvent(new MateModifiedEvent(
                 new MateModifiedEventDto(loadedMate.get().getTitle(), loadedMate.get().getId().getValue())
@@ -167,9 +167,9 @@ public class MateUseCase implements MateUseCasePort {
     }
 
     private void validateModifyCommand(MateModifyCommand command, Mate mate) {
-        if(!mate.getWriterId().equals(command.getWriterId()))
+        if(!mate.getWriterId().equals(command.writerId()))
             throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);
-        Set<Long> introImageIds = command.getIntroImageIds();
+        Set<Long> introImageIds = command.introImageIds();
         if(introImageIds != null && !introImageIds.isEmpty())
             loadAttachFilePort.checkExistFiles(introImageIds);
         validateRecruitRuleNotChanged(command, mate);
@@ -181,11 +181,11 @@ public class MateUseCase implements MateUseCasePort {
         if (!hasApprovedMembers) return;
 
         boolean ruleChanged =
-                (command.getPermitGender() != null && command.getPermitGender() != mate.getPermitGender())
-                || (command.getPermitPeopleCnt() != null && !command.getPermitPeopleCnt().equals(mate.getPermitPeopleCnt()))
-                || (command.getGatherType() != null && command.getGatherType() != mate.getGatherType())
-                || (command.getPermitMaxAge() != null && !command.getPermitMaxAge().equals(mate.getPermitAges().getMax()))
-                || (command.getPermitMinAge() != null && !command.getPermitMinAge().equals(mate.getPermitAges().getMin()));
+                (command.permitGender() != null && command.permitGender() != mate.getPermitGender())
+                || (command.permitPeopleCnt() != null && !command.permitPeopleCnt().equals(mate.getPermitPeopleCnt()))
+                || (command.gatherType() != null && command.gatherType() != mate.getGatherType())
+                || (command.permitMaxAge() != null && !command.permitMaxAge().equals(mate.getPermitAges().getMax()))
+                || (command.permitMinAge() != null && !command.permitMinAge().equals(mate.getPermitAges().getMin()));
 
         if (ruleChanged)
             throw new LimitException(LimitErrorResult.CANNOT_MODIFY_RECRUIT_RULE);
@@ -194,17 +194,17 @@ public class MateUseCase implements MateUseCasePort {
     private void cancelIneligibleWaitingApplicants(MateModifyCommand command, Loaded<Mate> loadedMate) {
         Mate mate = loadedMate.get();
 
-        PermitGender newGender = command.getPermitGender();
+        PermitGender newGender = command.permitGender();
         boolean genderChanged = newGender != null && newGender != PermitGender.ALL && newGender != mate.getPermitGender();
 
-        Integer newMinAge = command.getPermitMinAge();
-        Integer newMaxAge = command.getPermitMaxAge();
+        Integer newMinAge = command.permitMinAge();
+        Integer newMaxAge = command.permitMaxAge();
         boolean ageChanged = (newMinAge != null && !newMinAge.equals(mate.getPermitAges().getMin()))
                 || (newMaxAge != null && !newMaxAge.equals(mate.getPermitAges().getMax()));
 
         if (!genderChanged && !ageChanged) return;
 
-        Set<Long> waitingIds = loadMateRequestPort.getWaitingAccountIds(command.getMateId());
+        Set<Long> waitingIds = loadMateRequestPort.getWaitingAccountIds(command.mateId());
         if (waitingIds == null || waitingIds.isEmpty()) return;
 
         int effectiveMinAge = newMinAge != null ? newMinAge : mate.getPermitAges().getMin();
@@ -236,11 +236,11 @@ public class MateUseCase implements MateUseCasePort {
             String cancelReason = reason + "으로 인해 신청이 자동 취소";
 
             Loaded<com.fitmate.domain.mate.apply.MateApply> loadedApply =
-                    loadMateRequestPort.loadMateApply(command.getMateId(), cancelId);
+                    loadMateRequestPort.loadMateApply(command.mateId(), cancelId);
             loadedApply.update(apply -> apply.cancel(cancelReason, LocalDateTime.now()));
 
             eventPublisher.publishEvent(new MateAutoCancelledEvent(
-                    new MateAutoCancelledEventDto(mate.getTitle(), command.getMateId(), mate.getWriterId(), cancelId, cancelReason)
+                    new MateAutoCancelledEventDto(mate.getTitle(), command.mateId(), mate.getWriterId(), cancelId, cancelReason)
             ));
         }
     }

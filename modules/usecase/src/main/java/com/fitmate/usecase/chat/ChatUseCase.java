@@ -40,8 +40,8 @@ public class ChatUseCase implements ChatUseCasePort {
 
     @Override
     public void enterChatRoom(ChatMessageCommand chatMessageCommand) {
-        String roomId = chatMessageCommand.getRoomId();
-        Long senderId = chatMessageCommand.getSenderId();
+        String roomId = chatMessageCommand.roomId();
+        Long senderId = chatMessageCommand.senderId();
 
         ChatRoom chatRoom = loadChatPort.loadChatRoom(roomId);
         chatRoom.addJoinAccountId(senderId);
@@ -57,10 +57,10 @@ public class ChatUseCase implements ChatUseCasePort {
 
     @Override
     public ChatRoomSimpleResponse createGroupChatRoom(ChatRoomCreateGroupCommand command) {
-        Mate mate = loadMatePort.loadMateEntity(new MateId(command.getMateId()));
+        Mate mate = loadMatePort.loadMateEntity(new MateId(command.mateId()));
         checkDuplicateChatRoom(mate.getId());
         ChatRoom chatRoom = chatUseCaseMapper.commandToDomain(mate.getTitle(), mate.getId().getValue());
-        chatRoom.addJoinAccountId(command.getAccountId());
+        chatRoom.addJoinAccountId(command.accountId());
         String roomId = loadChatPort.saveChatRoom(chatRoom);
 
         return new ChatRoomSimpleResponse(roomId);
@@ -73,8 +73,8 @@ public class ChatUseCase implements ChatUseCasePort {
 
     @Override
     public ChatRoomSimpleResponse createDmChatRoom(ChatRoomCreateDmCommand command) {
-        Long fromId = command.getFromAccountId();
-        Long toId = command.getToAccountId();
+        Long fromId = command.fromAccountId();
+        Long toId = command.toAccountId();
 
         Optional<String> existingRoomId = loadChatPort.findChatRoomId(Set.of(fromId, toId));
         if (existingRoomId.isPresent()) {

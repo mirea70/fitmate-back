@@ -1,25 +1,21 @@
 package com.fitmate.port.out.account;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.time.LocalDate;
 import java.util.Set;
 
-@Getter
-@AllArgsConstructor
-public class AccountProfileResponse {
-    private final Long accountId;
-    private final String loginName;
-    private final String nickName;
-    private final String introduction;
-    private final Long profileImageId;
-    private final String name;
-    private final String phone;
-    private final String email;
-    private final LocalDate birthDate;
-    private final String role;
-    private final String gender;
-    private Set<Long> followings;
-    private Set<Long> followers;
+public record AccountProfileResponse(
+        Long accountId,
+        String loginName,
+        String nickName,
+        String introduction,
+        Long profileImageId,
+        String name,
+        String phone,
+        String email,
+        LocalDate birthDate,
+        String role,
+        String gender,
+        Set<Long> followings,
+        Set<Long> followers
+) {
 }

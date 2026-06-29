@@ -1,39 +1,36 @@
 package com.fitmate.port.out.mate.dto;
 
+import com.fitmate.domain.mate.MateFee;
 import com.fitmate.domain.mate.enums.FitCategory;
 import com.fitmate.domain.mate.enums.GatherType;
-import com.fitmate.domain.mate.MateFee;
 import com.fitmate.domain.mate.enums.PermitGender;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Getter
-@AllArgsConstructor
-public class MateDetailResponse {
-    private Long id;
-    private Long writerAccountId;
-    private String writerNickName;
-    private Long writerImageId;
-    private FitCategory fitCategory;
-    private String title;
-    private String introduction;
-    private Set<Long> introImageIds;
-    private LocalDateTime mateAt;
-    private String fitPlaceName;
-    private String fitPlaceAddress;
-    private GatherType gatherType;
-    private PermitGender permitGender;
-    private Integer permitMaxAge;
-    private Integer permitMinAge;
-    private Integer permitPeopleCnt;
-    private Integer totalFee;
-    private List<MateFee> mateFees;
-    private String applyQuestion;
-    private Set<Long> waitingAccountIds;
-    private Set<Long> approvedAccountIds;
-    private boolean closed;
+public record MateDetailResponse(
+        Long id,
+        Long writerAccountId,
+        String writerNickName,
+        Long writerImageId,
+        FitCategory fitCategory,
+        String title,
+        String introduction,
+        Set<Long> introImageIds,
+        LocalDateTime mateAt,
+        String fitPlaceName,
+        String fitPlaceAddress,
+        GatherType gatherType,
+        PermitGender permitGender,
+        Integer permitMaxAge,
+        Integer permitMinAge,
+        Integer permitPeopleCnt,
+        Integer totalFee,
+        List<MateFee> mateFees,
+        String applyQuestion,
+        Set<Long> waitingAccountIds,
+        Set<Long> approvedAccountIds,
+        boolean closed
+) {
 }

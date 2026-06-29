@@ -90,7 +90,7 @@ class AttachFilePersistenceAdapterTest {
             FileResponse response = adapter.uploadFile(multipartFile);
 
             assertThat(response).isNotNull();
-            assertThat(response.getAttachFileId()).isEqualTo(1L);
+            assertThat(response.attachFileId()).isEqualTo(1L);
 
             // 원본 파일 존재 확인
             File profileDir = new File(testDir + "/profile/");
@@ -129,8 +129,8 @@ class AttachFilePersistenceAdapterTest {
             FileDownloadDto result = adapter.downloadThumbnailById(1L);
 
             assertThat(result).isNotNull();
-            assertThat(result.getUrlResource().exists()).isTrue();
-            assertThat(result.getUrlResource().getURI().getPath()).contains("thumbnail");
+            assertThat(result.urlResource().exists()).isTrue();
+            assertThat(result.urlResource().getURI().getPath()).contains("thumbnail");
         }
 
         @Test
@@ -152,7 +152,7 @@ class AttachFilePersistenceAdapterTest {
             FileDownloadDto result = adapter.downloadThumbnailById(1L);
 
             assertThat(result).isNotNull();
-            assertThat(result.getUrlResource().getURI().getPath()).contains("profile");
+            assertThat(result.urlResource().getURI().getPath()).contains("profile");
         }
 
         @Test

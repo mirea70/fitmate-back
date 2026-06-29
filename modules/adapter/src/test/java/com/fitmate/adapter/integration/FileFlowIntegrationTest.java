@@ -97,9 +97,9 @@ class FileFlowIntegrationTest extends BaseIntegrationTest {
             FileResponse response = filePersistenceAdapter.uploadFile(file);
 
             assertThat(response).isNotNull();
-            assertThat(response.getAttachFileId()).isNotNull();
+            assertThat(response.attachFileId()).isNotNull();
 
-            Optional<AttachFileJpaEntity> entity = attachFileRepository.findById(response.getAttachFileId());
+            Optional<AttachFileJpaEntity> entity = attachFileRepository.findById(response.attachFileId());
             assertThat(entity).isPresent();
             assertThat(entity.get().getThumbnailStoreFileName()).isNull();
             assertThat(jobQueueRepository
@@ -115,7 +115,7 @@ class FileFlowIntegrationTest extends BaseIntegrationTest {
         void schedulerCreatesThumbnailFile() throws IOException {
             MockMultipartFile file = createTestImage("testImage");
             FileResponse response = filePersistenceAdapter.uploadFile(file);
-            enqueueImageResizingJob(response.getAttachFileId());
+            enqueueImageResizingJob(response.attachFileId());
 
             imageResizingJobScheduler.processImageResizingJobs();
 
@@ -136,14 +136,14 @@ class FileFlowIntegrationTest extends BaseIntegrationTest {
         void uploadAndDownloadThumbnail() throws Exception {
             MockMultipartFile file = createTestImage("testImage");
             FileResponse response = filePersistenceAdapter.uploadFile(file);
-            enqueueImageResizingJob(response.getAttachFileId());
+            enqueueImageResizingJob(response.attachFileId());
             imageResizingJobScheduler.processImageResizingJobs();
 
-            FileDownloadDto thumbnailDto = filePersistenceAdapter.downloadThumbnailById(response.getAttachFileId());
+            FileDownloadDto thumbnailDto = filePersistenceAdapter.downloadThumbnailById(response.attachFileId());
 
             assertThat(thumbnailDto).isNotNull();
-            assertThat(thumbnailDto.getUrlResource().exists()).isTrue();
-            assertThat(thumbnailDto.getUrlResource().getURI().getPath()).contains("thumbnail");
+            assertThat(thumbnailDto.urlResource().exists()).isTrue();
+            assertThat(thumbnailDto.urlResource().getURI().getPath()).contains("thumbnail");
         }
 
         @Test
@@ -152,11 +152,11 @@ class FileFlowIntegrationTest extends BaseIntegrationTest {
             MockMultipartFile file = createTestImage("testImage");
             FileResponse response = filePersistenceAdapter.uploadFile(file);
 
-            FileDownloadDto originalDto = filePersistenceAdapter.downloadById(response.getAttachFileId());
+            FileDownloadDto originalDto = filePersistenceAdapter.downloadById(response.attachFileId());
 
             assertThat(originalDto).isNotNull();
-            assertThat(originalDto.getUrlResource().exists()).isTrue();
-            assertThat(originalDto.getUrlResource().getURI().getPath()).contains("profile");
+            assertThat(originalDto.urlResource().exists()).isTrue();
+            assertThat(originalDto.urlResource().getURI().getPath()).contains("profile");
         }
     }
 
@@ -169,7 +169,7 @@ class FileFlowIntegrationTest extends BaseIntegrationTest {
         void deleteRemovesBothFiles() throws IOException {
             MockMultipartFile file = createTestImage("testImage");
             FileResponse response = filePersistenceAdapter.uploadFile(file);
-            enqueueImageResizingJob(response.getAttachFileId());
+            enqueueImageResizingJob(response.attachFileId());
             imageResizingJobScheduler.processImageResizingJobs();
 
             File profileDir = new File(fileDir + "/profile/");
@@ -177,7 +177,7 @@ class FileFlowIntegrationTest extends BaseIntegrationTest {
             assertThat(profileDir.listFiles()).isNotEmpty();
             assertThat(thumbnailDir.listFiles()).isNotEmpty();
 
-            filePersistenceAdapter.deleteFile(response.getAttachFileId());
+            filePersistenceAdapter.deleteFile(response.attachFileId());
 
             File[] remainingOriginals = profileDir.listFiles();
             File[] remainingThumbnails = thumbnailDir.listFiles();

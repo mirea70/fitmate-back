@@ -27,7 +27,7 @@ public class SmsController {
             """)
     @PostMapping("/codes")
     public ResponseEntity<?> requestValidateCode(@Valid @RequestBody SmsCodeRequest request) {
-        smsUseCasePort.requestValidateCode(request.getPhone());
+        smsUseCasePort.requestValidateCode(request.phone());
         return ResponseEntity.ok().build();
     }
 

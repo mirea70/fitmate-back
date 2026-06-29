@@ -25,10 +25,10 @@ public class MateClosedEventListener {
     public void onApplicationEvent(MateClosedEvent event) {
         MateClosedEventDto dto = event.getEventDto();
 
-        String content = dto.getTitle() + " 모임이 마감되었습니다.";
+        String content = dto.title() + " 모임이 마감되었습니다.";
 
-        for (Long wisherAccountId : dto.getWisherAccountIds()) {
-            Notice notice = Notice.of(wisherAccountId, dto.getMateId(), dto.getWriterId(), content, NoticeType.MATE_CANCELLED);
+        for (Long wisherAccountId : dto.wisherAccountIds()) {
+            Notice notice = Notice.of(wisherAccountId, dto.mateId(), dto.writerId(), content, NoticeType.MATE_CANCELLED);
             loadNoticePort.saveNoticeEntity(notice);
         }
     }

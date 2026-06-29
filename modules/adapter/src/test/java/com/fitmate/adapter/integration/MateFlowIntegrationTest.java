@@ -76,7 +76,7 @@ class MateFlowIntegrationTest extends BaseIntegrationTest {
 
             List<MateSimpleResponse> myMates = mateUseCase.findMyMates(writerId);
             assertThat(myMates).hasSize(1);
-            assertThat(myMates.get(0).getTitle()).isEqualTo("운동 메이트 구함");
+            assertThat(myMates.get(0).title()).isEqualTo("운동 메이트 구함");
         }
 
         @Test
@@ -84,14 +84,14 @@ class MateFlowIntegrationTest extends BaseIntegrationTest {
         void findMateDetail() {
             registerMate("상세 조회 테스트", GatherType.AGREE);
 
-            Long mateId = mateUseCase.findMyMates(writerId).get(0).getId();
+            Long mateId = mateUseCase.findMyMates(writerId).get(0).id();
             MateDetailResponse detail = mateUseCase.findMate(mateId);
 
-            assertThat(detail.getTitle()).isEqualTo("상세 조회 테스트");
-            assertThat(detail.getWriterAccountId()).isEqualTo(writerId);
-            assertThat(detail.getApprovedAccountIds()).contains(writerId);
-            assertThat(detail.isClosed()).isFalse();
-            assertThat(detail.getTotalFee()).isEqualTo(10000);
+            assertThat(detail.title()).isEqualTo("상세 조회 테스트");
+            assertThat(detail.writerAccountId()).isEqualTo(writerId);
+            assertThat(detail.approvedAccountIds()).contains(writerId);
+            assertThat(detail.closed()).isFalse();
+            assertThat(detail.totalFee()).isEqualTo(10000);
         }
     }
 
@@ -103,12 +103,12 @@ class MateFlowIntegrationTest extends BaseIntegrationTest {
         @DisplayName("마감 후 상세 조회에서 closed=true")
         void closeAndVerify() {
             registerMate("마감 테스트", GatherType.AGREE);
-            Long mateId = mateUseCase.findMyMates(writerId).get(0).getId();
+            Long mateId = mateUseCase.findMyMates(writerId).get(0).id();
 
             mateUseCase.closeMate(mateId, writerId);
 
             MateDetailResponse detail = mateUseCase.findMate(mateId);
-            assertThat(detail.isClosed()).isTrue();
+            assertThat(detail.closed()).isTrue();
         }
     }
 }

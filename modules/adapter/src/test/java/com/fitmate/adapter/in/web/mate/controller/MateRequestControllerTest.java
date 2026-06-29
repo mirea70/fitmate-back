@@ -50,7 +50,7 @@ class MateRequestControllerTest extends BaseControllerTest {
 
             ResponseEntity<?> response = controller.cancelMateApply(
                     10L,
-                    new MateCancelRequest(),
+                    new MateCancelRequest(null),
                     new AuthDetails(createTestAccountEntity())
             );
 

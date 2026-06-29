@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChatUseCaseMapper {
     public ChatMessageResponse commandToResponse(ChatMessageCommand command, String messageDefault) {
-        String nickName = command.getSenderNickName();
+        String nickName = command.senderNickName();
         return new ChatMessageResponse(
                 nickName,
-                command.getSenderId(),
+                command.senderId(),
                 nickName + messageDefault,
                 MessageType.ENTER
         );
@@ -22,10 +22,10 @@ public class ChatUseCaseMapper {
 
     public ChatMessage commandToDomain(ChatMessageCommand command) {
         return ChatMessage.withoutId(
-                command.getRoomId(),
-                command.getMessage(),
-                command.getSenderId(),
-                command.getSenderNickName(),
+                command.roomId(),
+                command.message(),
+                command.senderId(),
+                command.senderNickName(),
                 MessageType.CHAT,
                 null
         );

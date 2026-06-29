@@ -166,26 +166,26 @@ public class MatePersistenceMapper {
 
     public MateSimpleResponse jpaResponseToResponse(MateSimpleJpaResponse jpaResponse) {
         return new MateSimpleResponse(
-                jpaResponse.getId(),
-                jpaResponse.getThumbnailImageId(),
-                jpaResponse.getWriterImageId(),
-                jpaResponse.getWriterNickName(),
-                FitCategory.valueOf(jpaResponse.getFitCategory()),
-                jpaResponse.getTitle(),
-                jpaResponse.getFitPlaceAddress(),
-                jpaResponse.getMateAt(),
-                GatherType.valueOf(jpaResponse.getGatherType()),
-                PermitGender.valueOf(jpaResponse.getPermitGender()),
-                jpaResponse.getPermitPeopleCnt(),
-                jpaResponse.getApprovedAccountCnt(),
-                jpaResponse.isClosed()
+                jpaResponse.id(),
+                jpaResponse.thumbnailImageId(),
+                jpaResponse.writerImageId(),
+                jpaResponse.writerNickName(),
+                FitCategory.valueOf(jpaResponse.fitCategory()),
+                jpaResponse.title(),
+                jpaResponse.fitPlaceAddress(),
+                jpaResponse.mateAt(),
+                GatherType.valueOf(jpaResponse.gatherType()),
+                PermitGender.valueOf(jpaResponse.permitGender()),
+                jpaResponse.permitPeopleCnt(),
+                jpaResponse.approvedAccountCnt(),
+                jpaResponse.closed()
         );
     }
 
     public SliceResponse<MateSimpleResponse> jpaResponsesToSliceResponse(List<MateSimpleJpaResponse> jpaResponses, MateListCommand command) {
 
         List<MateSimpleResponse> content = jpaResponsesToResponses(jpaResponses);
-        int pageSize = command.getSize();
+        int pageSize = command.size();
 
         boolean hasNext = false;
         if(content.size() > pageSize) {
@@ -193,11 +193,11 @@ public class MatePersistenceMapper {
             hasNext = true;
         }
 
-        Sort.Direction sortDir = command.getSortDir() == SliceCommand.SortDir.ASC
+        Sort.Direction sortDir = command.sortDir() == SliceCommand.SortDir.ASC
                 ? Sort.Direction.ASC
                 : Sort.Direction.DESC;
 
-        Pageable pageable = PageRequest.of(command.getPage(), pageSize, sortDir, command.getSortProperty());
+        Pageable pageable = PageRequest.of(command.page(), pageSize, sortDir, command.sortProperty());
         Slice<MateSimpleResponse> slices = new SliceImpl<>(content, pageable, hasNext);
         return new SliceResponse<>(
                 slices.getContent(),
@@ -216,32 +216,32 @@ public class MatePersistenceMapper {
 
     public MateQuestionResponse jpaResponseToResponse(MateQuestionJpaResponse jpaResponse) {
         return new MateQuestionResponse(
-                jpaResponse.getProfileImageId(),
-                jpaResponse.getWriterName(),
-                jpaResponse.getComeQuestion()
+                jpaResponse.profileImageId(),
+                jpaResponse.writerName(),
+                jpaResponse.comeQuestion()
         );
     }
 
     public MateRequestSimpleResponse jpaResponseToResponse(MateApplySimpleJpaResponse jpaResponse) {
 
         FitPlace fitPlace = new FitPlace(
-                jpaResponse.getFitPlaceName(),
-                jpaResponse.getFitPlaceAddress()
+                jpaResponse.fitPlaceName(),
+                jpaResponse.fitPlaceAddress()
         );
 
         return new MateRequestSimpleResponse(
-                jpaResponse.getMateId(),
-                jpaResponse.getThumbnailImageId(),
-                jpaResponse.getTitle(),
-                jpaResponse.getMateAt(),
+                jpaResponse.mateId(),
+                jpaResponse.thumbnailImageId(),
+                jpaResponse.title(),
+                jpaResponse.mateAt(),
                 fitPlace,
-                jpaResponse.getPermitPeopleCnt(),
-                jpaResponse.getApprovedAccountCnt(),
-                jpaResponse.getTotalFee(),
-                jpaResponse.getApplyAt(),
-                jpaResponse.isClosed(),
-                FitCategory.valueOf(jpaResponse.getFitCategory()),
-                ApproveStatus.valueOf(jpaResponse.getApproveStatus())
+                jpaResponse.permitPeopleCnt(),
+                jpaResponse.approvedAccountCnt(),
+                jpaResponse.totalFee(),
+                jpaResponse.applyAt(),
+                jpaResponse.closed(),
+                FitCategory.valueOf(jpaResponse.fitCategory()),
+                ApproveStatus.valueOf(jpaResponse.approveStatus())
         );
     }
 

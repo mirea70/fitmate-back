@@ -50,8 +50,8 @@ public class MateQueryRepository {
                 .leftJoin(mateApprovedCountJpaEntity).on(mateJpaEntity.id.eq(mateApprovedCountJpaEntity.mateId))
                 .where(filter(command))
                 .orderBy(mateJpaEntity.updatedAt.desc())
-                .offset(command.getPage())
-                .limit(command.getSize() + 1)
+                .offset(command.page())
+                .limit(command.size() + 1)
                 .fetch();
 
         return result;
@@ -63,15 +63,15 @@ public class MateQueryRepository {
     private BooleanBuilder filter(MateListCommand command) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        booleanBuilder.and(eqDayOfWeek(command.getDayOfWeek()));
-        booleanBuilder.and(inDateRange(command.getStartMateAt(), command.getEndMateAt()));
-        booleanBuilder.and(containRegions(command.getFitPlaceRegions()));
-        booleanBuilder.and(inPermitAges(command.getPermitMinAge(), command.getPermitMaxAge()));
-        booleanBuilder.and(inPermitPerson(command.getStartLimitPeopleCnt(), command.getEndLimitPeopleCnt()));
-        booleanBuilder.and(eqFitCategory(command.getFitCategory()));
-        booleanBuilder.and(filterByKeyword(command.getKeyword()));
+        booleanBuilder.and(eqDayOfWeek(command.dayOfWeek()));
+        booleanBuilder.and(inDateRange(command.startMateAt(), command.endMateAt()));
+        booleanBuilder.and(containRegions(command.fitPlaceRegions()));
+        booleanBuilder.and(inPermitAges(command.permitMinAge(), command.permitMaxAge()));
+        booleanBuilder.and(inPermitPerson(command.startLimitPeopleCnt(), command.endLimitPeopleCnt()));
+        booleanBuilder.and(eqFitCategory(command.fitCategory()));
+        booleanBuilder.and(filterByKeyword(command.keyword()));
 
-        if (command.getIncludeClosed() == null || !command.getIncludeClosed()) {
+        if (command.includeClosed() == null || !command.includeClosed()) {
             booleanBuilder.and(mateJpaEntity.closedAt.isNull());
         }
 

@@ -33,14 +33,14 @@ public class ChatController {
     @PostMapping("/group")
     public ResponseEntity<ChatRoomSimpleResponse> createGroupChatRoom(@Valid @RequestBody ChatRoomCreateGroupRequest request) {
         ChatRoomSimpleResponse response = chatUseCasePort.createGroupChatRoom(chatWebAdapterMapper.requestToCommand(request));
-        return ResponseEntity.created(URI.create("/api/chat-rooms/" + response.getRoomId())).body(response);
+        return ResponseEntity.created(URI.create("/api/chat-rooms/" + response.roomId())).body(response);
     }
 
     @Operation(summary = "DM 채팅방 생성", description = "DM 채팅방 생성 API")
     @PostMapping("/dm")
     public ResponseEntity<ChatRoomSimpleResponse> createDmChatRoom(@Valid @RequestBody ChatRoomCreateDmRequest request) {
         ChatRoomSimpleResponse response = chatUseCasePort.createDmChatRoom(chatWebAdapterMapper.requestToCommand(request));
-        return ResponseEntity.created(URI.create("/api/chat-rooms/" + response.getRoomId())).body(response);
+        return ResponseEntity.created(URI.create("/api/chat-rooms/" + response.roomId())).body(response);
     }
 
     @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 오름차순). 조회 시 읽음 처리됩니다.")

@@ -62,7 +62,7 @@ class MateWishFlowIntegrationTest extends BaseIntegrationTest {
                 "요가 경험 있나요?",
                 writerId
         ));
-        mateId = mateUseCase.findMyMates(writerId).get(0).getId();
+        mateId = mateUseCase.findMyMates(writerId).get(0).id();
     }
 
     @Test
@@ -79,7 +79,7 @@ class MateWishFlowIntegrationTest extends BaseIntegrationTest {
 
         List<MateSimpleResponse> wishes = mateWishUseCase.getMyWishMates(userId);
         assertThat(wishes).hasSize(1);
-        assertThat(wishes.get(0).getTitle()).isEqualTo("요가 메이트");
+        assertThat(wishes.get(0).title()).isEqualTo("요가 메이트");
     }
 
     @Test

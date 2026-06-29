@@ -33,7 +33,7 @@ public class FileController {
            List<FileResponse> responses = attachFilePersistenceAdapter.uploadFiles(multipartFiles);
            URI location = responses == null || responses.isEmpty()
                    ? URI.create("/api/files")
-                   : URI.create("/api/files/" + responses.get(0).getAttachFileId());
+                   : URI.create("/api/files/" + responses.get(0).attachFileId());
            return ResponseEntity.created(location).body(responses);
     }
 
@@ -43,8 +43,8 @@ public class FileController {
         FileDownloadDto downloadDto = attachFilePersistenceAdapter.downloadById(fileId);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, downloadDto.getContentDisposition())
-                .body(downloadDto.getUrlResource());
+                .header(HttpHeaders.CONTENT_DISPOSITION, downloadDto.contentDisposition())
+                .body(downloadDto.urlResource());
     }
 
     @Operation(summary = "썸네일 다운로드", description = "썸네일 이미지 다운로드 API (목록 조회용)")
@@ -53,7 +53,7 @@ public class FileController {
         FileDownloadDto downloadDto = attachFilePersistenceAdapter.downloadThumbnailById(fileId);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, downloadDto.getContentDisposition())
-                .body(downloadDto.getUrlResource());
+                .header(HttpHeaders.CONTENT_DISPOSITION, downloadDto.contentDisposition())
+                .body(downloadDto.urlResource());
     }
 }

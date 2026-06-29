@@ -78,7 +78,7 @@ class MateControllerTest extends BaseControllerTest {
                     "운동 메이트 구함",
                     "같이 운동해요",
                     null,
-                    request.getMateAt(),
+                    request.mateAt(),
                     "험블짐",
                     "서울시 용산구",
                     GatherType.AGREE,

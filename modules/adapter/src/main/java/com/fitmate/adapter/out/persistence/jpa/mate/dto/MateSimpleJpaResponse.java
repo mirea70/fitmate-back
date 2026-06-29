@@ -1,46 +1,36 @@
 package com.fitmate.adapter.out.persistence.jpa.mate.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Getter
-public class MateSimpleJpaResponse {
-    private final Long id;
-    private final Long thumbnailImageId;
-    private final Long writerImageId;
-    private final String writerNickName;
-    private final String fitCategory;
-    private final String title;
-    private final String fitPlaceAddress;
-    private final LocalDateTime mateAt;
-    private final String gatherType;
-    private final String permitGender;
-    private final Integer permitPeopleCnt;
-    private final int approvedAccountCnt;
-    private final boolean closed;
-
+public record MateSimpleJpaResponse(
+        Long id,
+        Long thumbnailImageId,
+        Long writerImageId,
+        String writerNickName,
+        String fitCategory,
+        String title,
+        String fitPlaceAddress,
+        LocalDateTime mateAt,
+        String gatherType,
+        String permitGender,
+        Integer permitPeopleCnt,
+        int approvedAccountCnt,
+        boolean closed
+) {
     @QueryProjection
-    public MateSimpleJpaResponse(Long id, Set<Long> introImageIds, Long writerImageId, String writerNickName, String fitCategory, String title, String fitPlaceAddress, LocalDateTime mateAt, String gatherType, String permitGender, Integer permitPeopleCnt, int approvedCount, LocalDateTime closedAt) {
-        this.id = id;
-        this.thumbnailImageId = getThumbnailFileId(introImageIds);
-        this.writerImageId = writerImageId;
-        this.writerNickName = writerNickName;
-        this.fitCategory = fitCategory;
-        this.title = title;
-        this.fitPlaceAddress = fitPlaceAddress;
-        this.mateAt = mateAt;
-        this.gatherType = gatherType;
-        this.permitGender = permitGender;
-        this.permitPeopleCnt = permitPeopleCnt;
-        this.approvedAccountCnt = approvedCount;
-        this.closed = closedAt != null;
+    public MateSimpleJpaResponse(Long id, Set<Long> introImageIds, Long writerImageId, String writerNickName,
+                                 String fitCategory, String title, String fitPlaceAddress, LocalDateTime mateAt,
+                                 String gatherType, String permitGender, Integer permitPeopleCnt, int approvedCount,
+                                 LocalDateTime closedAt) {
+        this(id, getThumbnailFileId(introImageIds), writerImageId, writerNickName, fitCategory, title,
+                fitPlaceAddress, mateAt, gatherType, permitGender, permitPeopleCnt, approvedCount, closedAt != null);
     }
 
-    private Long getThumbnailFileId(Set<Long> introImageIds) {
-        if(introImageIds == null) return null;
+    private static Long getThumbnailFileId(Set<Long> introImageIds) {
+        if (introImageIds == null) return null;
         long min = Long.MAX_VALUE;
         for (Long introImageId : introImageIds) {
             min = Math.min(min, introImageId);

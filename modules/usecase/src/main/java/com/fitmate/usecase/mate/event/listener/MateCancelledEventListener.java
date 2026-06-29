@@ -29,14 +29,14 @@ public class MateCancelledEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(MateCancelledEvent event) {
         MateCancelledEventDto dto = event.getEventDto();
-        Account applier = loadAccountPort.loadAccountEntity(new AccountId(dto.getApplierId()));
+        Account applier = loadAccountPort.loadAccountEntity(new AccountId(dto.applierId()));
         String nickName = applier.getProfileInfo().getNickName();
 
-        String content = nickName + "님이 " + dto.getTitle() + MATE_CANCELLED_MSG;
-        if (dto.getCancelReason() != null && !dto.getCancelReason().isBlank()) {
-            content += " (사유 : " + dto.getCancelReason() + ")";
+        String content = nickName + "님이 " + dto.title() + MATE_CANCELLED_MSG;
+        if (dto.cancelReason() != null && !dto.cancelReason().isBlank()) {
+            content += " (사유 : " + dto.cancelReason() + ")";
         }
-        Notice notice = Notice.of(dto.getWriterId(), dto.getMateId(), dto.getApplierId(), content, NoticeType.MATE_CANCELLED);
+        Notice notice = Notice.of(dto.writerId(), dto.mateId(), dto.applierId(), content, NoticeType.MATE_CANCELLED);
         loadNoticePort.saveNoticeEntity(notice);
     }
 }

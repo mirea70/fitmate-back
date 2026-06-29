@@ -25,8 +25,8 @@ public class MateApproveEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onApplicationEvent(MateApproveEvent event) {
         MateApproveEventDto dto = event.getEventDto();
-        String content = dto.getTitle() + MATE_APPROVE_MSG;
-        Notice notice = Notice.of(dto.getApplierId(), dto.getMateId(), null, content, NoticeType.MATE_APPROVED);
+        String content = dto.title() + MATE_APPROVE_MSG;
+        Notice notice = Notice.of(dto.applierId(), dto.mateId(), null, content, NoticeType.MATE_APPROVED);
         loadNoticePort.saveNoticeEntity(notice);
     }
 }

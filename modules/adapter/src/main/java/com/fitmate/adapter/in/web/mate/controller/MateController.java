@@ -54,7 +54,7 @@ public class MateController {
         List<FileResponse> fileResponses = filePersistenceAdapter.uploadFiles(introImages);
         Set<Long> introImageIds = null;
         if(fileResponses != null)
-            introImageIds = fileResponses.stream().map(FileResponse::getAttachFileId).collect(Collectors.toSet());
+            introImageIds = fileResponses.stream().map(FileResponse::attachFileId).collect(Collectors.toSet());
         mateUseCasePort.registerMate(mateWebAdapterMapper.requestToCommand(createRequest, authDetails.getAccount().getId(), introImageIds));
         return ResponseEntity.created(URI.create("/api/mates")).build();
     }

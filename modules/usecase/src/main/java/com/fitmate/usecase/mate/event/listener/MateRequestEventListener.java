@@ -28,13 +28,13 @@ public class MateRequestEventListener {
     public void onApplicationEvent(MateRequestEvent event) {
         MateRequestEventDto dto = event.getEventDto();
 
-        String requestContent = dto.getTitle() + MATE_REQUEST_MSG;
-        Notice requestNotice = Notice.of(dto.getWriterId(), dto.getMateId(), dto.getApplierId(), requestContent, NoticeType.MATE_REQUESTED);
+        String requestContent = dto.title() + MATE_REQUEST_MSG;
+        Notice requestNotice = Notice.of(dto.writerId(), dto.mateId(), dto.applierId(), requestContent, NoticeType.MATE_REQUESTED);
         loadNoticePort.saveNoticeEntity(requestNotice);
 
-        if (dto.getApproveStatus() == ApproveStatus.APPROVE) {
-            String approveContent = dto.getTitle() + MATE_APPROVE_MSG;
-            Notice approveNotice = Notice.of(dto.getApplierId(), dto.getMateId(), null, approveContent, NoticeType.MATE_APPROVED);
+        if (dto.approveStatus() == ApproveStatus.APPROVE) {
+            String approveContent = dto.title() + MATE_APPROVE_MSG;
+            Notice approveNotice = Notice.of(dto.applierId(), dto.mateId(), null, approveContent, NoticeType.MATE_APPROVED);
             loadNoticePort.saveNoticeEntity(approveNotice);
         }
     }

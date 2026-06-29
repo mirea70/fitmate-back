@@ -39,11 +39,11 @@ public class MateNoticeEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleMateModified(MateModifiedEvent event) {
         MateModifiedEventDto dto = event.getEventDto();
-        String content = dto.getTitle() + MATE_MODIFIED_MSG;
+        String content = dto.title() + MATE_MODIFIED_MSG;
 
-        List<Long> wisherIds = loadMateWishPort.getWisherAccountIds(dto.getMateId());
+        List<Long> wisherIds = loadMateWishPort.getWisherAccountIds(dto.mateId());
         for (Long wisherId : wisherIds) {
-            Notice notice = Notice.of(wisherId, dto.getMateId(), null, content, NoticeType.MATE_MODIFIED);
+            Notice notice = Notice.of(wisherId, dto.mateId(), null, content, NoticeType.MATE_MODIFIED);
             loadNoticePort.saveNoticeEntity(notice);
         }
     }
@@ -54,13 +54,13 @@ public class MateNoticeEventListener {
     public void handleMateRegisteredForFollowers(MateRegisteredEvent event) {
         MateRegisteredEventDto dto = event.getEventDto();
 
-        Account writer = loadAccountPort.loadAccountEntity(new AccountId(dto.getWriterId()));
+        Account writer = loadAccountPort.loadAccountEntity(new AccountId(dto.writerId()));
         String writerNickName = writer.getProfileInfo().getNickName();
 
-        Set<Long> followerIds = loadFollowPort.getFollowerIds(dto.getWriterId());
+        Set<Long> followerIds = loadFollowPort.getFollowerIds(dto.writerId());
         for (Long followerId : followerIds) {
-            String content = writerNickName + "님이 " + dto.getTitle() + FOLLOWER_MATE_REGISTERED_MSG;
-            Notice notice = Notice.of(followerId, dto.getMateId(), dto.getWriterId(), content, NoticeType.MATE_REGISTERED);
+            String content = writerNickName + "님이 " + dto.title() + FOLLOWER_MATE_REGISTERED_MSG;
+            Notice notice = Notice.of(followerId, dto.mateId(), dto.writerId(), content, NoticeType.MATE_REGISTERED);
             loadNoticePort.saveNoticeEntity(notice);
         }
     }

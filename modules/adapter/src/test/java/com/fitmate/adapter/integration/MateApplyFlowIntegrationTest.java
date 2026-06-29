@@ -71,7 +71,7 @@ class MateApplyFlowIntegrationTest extends BaseIntegrationTest {
                 "어떤 운동?",
                 writerId
         ));
-        mateId = mateUseCase.findMyMates(writerId).get(0).getId();
+        mateId = mateUseCase.findMyMates(writerId).get(0).id();
     }
 
     @Nested
@@ -84,8 +84,8 @@ class MateApplyFlowIntegrationTest extends BaseIntegrationTest {
             mateApplyUseCase.applyMate(new MateApplyCommand(mateId, applierId, "스쿼트 위주로 합니다"));
 
             MateDetailResponse detail = mateUseCase.findMate(mateId);
-            assertThat(detail.getWaitingAccountIds()).contains(applierId);
-            assertThat(detail.getApprovedAccountIds()).doesNotContain(applierId);
+            assertThat(detail.waitingAccountIds()).contains(applierId);
+            assertThat(detail.approvedAccountIds()).doesNotContain(applierId);
         }
 
         @Test
@@ -112,8 +112,8 @@ class MateApplyFlowIntegrationTest extends BaseIntegrationTest {
 
             // 확인
             MateDetailResponse detail = mateUseCase.findMate(mateId);
-            assertThat(detail.getApprovedAccountIds()).contains(applierId, writerId);
-            assertThat(detail.getWaitingAccountIds()).doesNotContain(applierId);
+            assertThat(detail.approvedAccountIds()).contains(applierId, writerId);
+            assertThat(detail.waitingAccountIds()).doesNotContain(applierId);
         }
 
         @Test
@@ -141,7 +141,7 @@ class MateApplyFlowIntegrationTest extends BaseIntegrationTest {
             mateApplyUseCase.cancelMateApply(mateId, applierId, "개인 사정");
 
             MateDetailResponse detail = mateUseCase.findMate(mateId);
-            assertThat(detail.getApprovedAccountIds()).doesNotContain(applierId);
+            assertThat(detail.approvedAccountIds()).doesNotContain(applierId);
         }
     }
 

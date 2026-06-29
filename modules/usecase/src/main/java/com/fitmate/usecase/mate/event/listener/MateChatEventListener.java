@@ -36,35 +36,35 @@ public class MateChatEventListener {
     public void handleMateRegistered(MateRegisteredEvent event) {
         MateRegisteredEventDto dto = event.getEventDto();
 
-        ChatRoom chatRoom = ChatRoom.withoutId(dto.getTitle(), dto.getMateId(), null, null, RoomType.GROUP);
-        chatRoom.addJoinAccountId(dto.getWriterId());
+        ChatRoom chatRoom = ChatRoom.withoutId(dto.title(), dto.mateId(), null, null, RoomType.GROUP);
+        chatRoom.addJoinAccountId(dto.writerId());
         String roomId = loadChatPort.saveChatRoom(chatRoom);
 
-        saveEnterMessage(roomId, dto.getWriterId());
+        saveEnterMessage(roomId, dto.writerId());
     }
 
     @EventListener
     @Order(1)
     public void handleMateRequest(MateRequestEvent event) {
         MateRequestEventDto dto = event.getEventDto();
-        if (dto.getApproveStatus() != ApproveStatus.APPROVE) return;
+        if (dto.approveStatus() != ApproveStatus.APPROVE) return;
 
-        addToChatRoom(dto.getMateId(), dto.getApplierId());
+        addToChatRoom(dto.mateId(), dto.applierId());
     }
 
     @EventListener
     @Order(1)
     public void handleMateApprove(MateApproveEvent event) {
         MateApproveEventDto dto = event.getEventDto();
-        addToChatRoom(dto.getMateId(), dto.getApplierId());
+        addToChatRoom(dto.mateId(), dto.applierId());
     }
 
     @EventListener
     public void handleMateCancelled(MateCancelledEvent event) {
         MateCancelledEventDto dto = event.getEventDto();
-        if (!dto.isWasApproved()) return;
+        if (!dto.wasApproved()) return;
 
-        removeFromChatRoom(dto.getMateId(), dto.getApplierId());
+        removeFromChatRoom(dto.mateId(), dto.applierId());
     }
 
     private void addToChatRoom(Long mateId, Long accountId) {

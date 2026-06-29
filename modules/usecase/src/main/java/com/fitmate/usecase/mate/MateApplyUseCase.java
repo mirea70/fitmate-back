@@ -54,8 +54,8 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
     @Override
     public void applyMate(MateApplyCommand mateApplyCommand) {
-        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(mateApplyCommand.getMateId()));
-        Long applierId = mateApplyCommand.getApplierId();
+        Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(mateApplyCommand.mateId()));
+        Long applierId = mateApplyCommand.applierId();
         if(applierId.equals(loadedMate.get().getWriterId()))
             throw new NotMatchException(NotMatchErrorResult.CANNOT_APPLY_WRITER);
         validatePermitRules(loadedMate.get(), applierId);
@@ -66,7 +66,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
         ApproveStatus approveStatus = saveNewMateRequest(mateApplyCommand, loadedMate.get().getGatherType());
         if (approveStatus == ApproveStatus.APPROVE) {
             loadedMate.get().checkCapacity();
-            loadMatePort.incrementApprovedCount(new MateId(mateApplyCommand.getMateId()));
+            loadMatePort.incrementApprovedCount(new MateId(mateApplyCommand.mateId()));
         }
 
         eventPublisher.publishEvent(new MateRequestEvent(
@@ -75,7 +75,7 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
     }
 
     private ApproveStatus saveNewMateRequest(MateApplyCommand mateApplyCommand, GatherType gatherType) {
-        loadMateRequestPort.isDuplicateMateRequest(mateApplyCommand.getMateId(), mateApplyCommand.getApplierId());
+        loadMateRequestPort.isDuplicateMateRequest(mateApplyCommand.mateId(), mateApplyCommand.applierId());
         ApproveStatus approveStatus;
         if(gatherType == GatherType.FAST)
             approveStatus = ApproveStatus.APPROVE;
@@ -89,11 +89,11 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
 
     @Override
     public void approveMate(MateApproveCommand mateApproveCommand) {
-        Long mateId = mateApproveCommand.getMateId();
-        Long applierId = mateApproveCommand.getApplierId();
+        Long mateId = mateApproveCommand.mateId();
+        Long applierId = mateApproveCommand.applierId();
 
         Loaded<Mate> loadedMate = loadMatePort.loadMate(new MateId(mateId));
-        if(!mateApproveCommand.getAccountId().equals(loadedMate.get().getWriterId()))
+        if(!mateApproveCommand.accountId().equals(loadedMate.get().getWriterId()))
             throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);
 
         Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);

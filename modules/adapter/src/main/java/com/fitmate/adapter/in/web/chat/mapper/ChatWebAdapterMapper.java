@@ -17,7 +17,7 @@ public class ChatWebAdapterMapper {
         return new ChatMessageCommand(
                 authDetails.getAccount().getNickName(),
                 authDetails.getAccount().getId(),
-                request.getMessage(),
+                request.message(),
                 roomId
         );
     }
@@ -26,22 +26,22 @@ public class ChatWebAdapterMapper {
         return new ChatMessageResponse(
                 authDetails.getAccount().getNickName(),
                 authDetails.getAccount().getId(),
-                request.getMessage(),
+                request.message(),
                 MessageType.CHAT
         );
     }
 
     public ChatRoomCreateGroupCommand requestToCommand(ChatRoomCreateGroupRequest request) {
         return new ChatRoomCreateGroupCommand(
-                request.getMateId(),
-                request.getAccountId()
+                request.mateId(),
+                request.accountId()
         );
     }
 
     public ChatRoomCreateDmCommand requestToCommand(ChatRoomCreateDmRequest request) {
         return new ChatRoomCreateDmCommand(
-                request.getFromAccountId(),
-                request.getToAccountId()
+                request.fromAccountId(),
+                request.toAccountId()
         );
     }
 }

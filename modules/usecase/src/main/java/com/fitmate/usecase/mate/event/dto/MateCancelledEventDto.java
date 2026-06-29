@@ -1,15 +1,11 @@
 package com.fitmate.usecase.mate.event.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class MateCancelledEventDto {
-    private final String title;
-    private final Long mateId;
-    private final Long writerId;
-    private final Long applierId;
-    private final String cancelReason;
-    private final boolean wasApproved;
+public record MateCancelledEventDto(
+        String title,
+        Long mateId,
+        Long writerId,
+        Long applierId,
+        String cancelReason,
+        boolean wasApproved
+) {
 }

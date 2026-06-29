@@ -19,29 +19,29 @@ public class MateUseCaseMapper {
     public Mate commandToDomain(MateCreateCommand createCommand) {
 
         FitPlace fitPlace = new FitPlace(
-                createCommand.getFitPlaceName(),
-                createCommand.getFitPlaceAddress()
+                createCommand.fitPlaceName(),
+                createCommand.fitPlaceAddress()
         );
 
         PermitAges permitAges = new PermitAges(
-                createCommand.getPermitMaxAge(),
-                createCommand.getPermitMinAge()
+                createCommand.permitMaxAge(),
+                createCommand.permitMinAge()
         );
 
         return Mate.withoutId(
-                createCommand.getFitCategory(),
-                createCommand.getTitle(),
-                createCommand.getIntroduction(),
-                createCommand.getIntroImageIds(),
-                createCommand.getMateAt(),
+                createCommand.fitCategory(),
+                createCommand.title(),
+                createCommand.introduction(),
+                createCommand.introImageIds(),
+                createCommand.mateAt(),
                 fitPlace,
-                createCommand.getGatherType(),
-                createCommand.getPermitGender(),
+                createCommand.gatherType(),
+                createCommand.permitGender(),
                 permitAges,
-                createCommand.getPermitPeopleCnt(),
-                createCommand.getWriterId(),
-                createCommand.getMateFees(),
-                createCommand.getApplyQuestion()
+                createCommand.permitPeopleCnt(),
+                createCommand.writerId(),
+                createCommand.mateFees(),
+                createCommand.applyQuestion()
         );
     }
 
@@ -79,9 +79,9 @@ public class MateUseCaseMapper {
 
     public MateApply commandToDomain(MateApplyCommand command, ApproveStatus approveStatus) {
         return MateApply.withoutId(
-                command.getComeAnswer(),
-                command.getMateId(),
-                command.getApplierId(),
+                command.comeAnswer(),
+                command.mateId(),
+                command.applierId(),
                 approveStatus,
                 null
         );

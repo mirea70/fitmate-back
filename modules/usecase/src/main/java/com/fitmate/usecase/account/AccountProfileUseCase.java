@@ -62,14 +62,14 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
 
     @Override
     public void modify(AccountModifyCommand modifyCommand) {
-        Loaded<Account> loadedAccount = loadAccountPort.loadAccount(new AccountId(modifyCommand.getAccountId()));
+        Loaded<Account> loadedAccount = loadAccountPort.loadAccount(new AccountId(modifyCommand.accountId()));
         checkDuplicated(loadedAccount.get().getId().getValue(), modifyCommand);
-        Long profileImageId = modifyCommand.getProfileImageId();
-        if(profileImageId != null) loadAttachFilePort.checkExistFile(modifyCommand.getProfileImageId());
+        Long profileImageId = modifyCommand.profileImageId();
+        if(profileImageId != null) loadAttachFilePort.checkExistFile(modifyCommand.profileImageId());
 
         loadedAccount.update(account -> {
-            account.updateProfileInfo(modifyCommand.getNickName(), modifyCommand.getIntroduction(), modifyCommand.getProfileImageId());
-            account.updatePrivateInfo(modifyCommand.getName(), modifyCommand.getPhone(), modifyCommand.getEmail());
+            account.updateProfileInfo(modifyCommand.nickName(), modifyCommand.introduction(), modifyCommand.profileImageId());
+            account.updatePrivateInfo(modifyCommand.name(), modifyCommand.phone(), modifyCommand.email());
         });
     }
 
@@ -155,8 +155,8 @@ public class AccountProfileUseCase implements AccountProfileUseCasePort {
     }
 
     private void checkDuplicated(Long accountId, AccountCheckCommand command) {
-        boolean isDuplicated = loadAccountPort.checkDuplicated(accountId, command.getNickName(), command.getName(),
-                                                                command.getEmail(), command.getPhone());
+        boolean isDuplicated = loadAccountPort.checkDuplicated(accountId, command.nickName(), command.name(),
+                                                                command.email(), command.phone());
         if(isDuplicated)
             throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_ACCOUNT_JOIN);
     }
