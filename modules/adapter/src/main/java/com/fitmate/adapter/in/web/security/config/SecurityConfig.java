@@ -91,15 +91,15 @@ public class SecurityConfig {
 
     private String[] excludeApi() {
         return new String[]{
-                "/api/account/registrations",
-                "/api/account/phones/availability",
-                "/api/account/login-names/availability",
+                "/api/accounts/registrations",
+                "/api/accounts/phones/availability",
+                "/api/accounts/login-names/availability",
                 "/api/sms/codes",
                 "/api/sms/codes/verification",
                 "/api/auth/tokens",
                 "/api/auth/kakao",
                 "/api/auth/kakao/account",
-                "/api/account/recovery/**",
+                "/api/accounts/recovery/**",
         };
     }
 }

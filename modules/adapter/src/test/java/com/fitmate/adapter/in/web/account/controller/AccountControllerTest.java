@@ -39,7 +39,7 @@ class AccountControllerTest extends BaseControllerTest {
     private AccountWebAdapterMapper accountWebAdapterMapper;
 
     @Nested
-    @DisplayName("POST /api/account/registrations — 회원가입 (토큰 불필요)")
+    @DisplayName("POST /api/accounts/registrations — 회원가입 (토큰 불필요)")
     class JoinTest {
 
         @Test
@@ -53,7 +53,7 @@ class AccountControllerTest extends BaseControllerTest {
 
             willDoNothing().given(accountProfileUseCasePort).join(any());
 
-            mockMvc.perform(post("/api/account/registrations")
+            mockMvc.perform(post("/api/accounts/registrations")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isCreated());
@@ -62,13 +62,13 @@ class AccountControllerTest extends BaseControllerTest {
         @Test
         @DisplayName("Content-Type 없이 요청 시 — 415 Unsupported Media Type")
         void joinWithoutContentType() throws Exception {
-            mockMvc.perform(post("/api/account/registrations"))
+            mockMvc.perform(post("/api/accounts/registrations"))
                     .andExpect(status().isUnsupportedMediaType());
         }
     }
 
     @Nested
-    @DisplayName("GET /api/account/login-names/availability — 중복 체크 (토큰 불필요)")
+    @DisplayName("GET /api/accounts/login-names/availability — 중복 체크 (토큰 불필요)")
     class CheckLoginName {
 
         @Test
@@ -76,7 +76,7 @@ class AccountControllerTest extends BaseControllerTest {
         void notDuplicated() throws Exception {
             willDoNothing().given(accountProfileUseCasePort).checkDuplicatedLoginName("abc2");
 
-            mockMvc.perform(get("/api/account/login-names/availability")
+            mockMvc.perform(get("/api/accounts/login-names/availability")
                             .param("loginName", "abc2"))
                     .andExpect(status().isOk());
         }
@@ -87,14 +87,14 @@ class AccountControllerTest extends BaseControllerTest {
             willThrow(new DuplicatedException(DuplicatedErrorResult.DUPLICATED_ACCOUNT_JOIN))
                     .given(accountProfileUseCasePort).checkDuplicatedLoginName("abc2");
 
-            mockMvc.perform(get("/api/account/login-names/availability")
+            mockMvc.perform(get("/api/accounts/login-names/availability")
                             .param("loginName", "abc2"))
                     .andExpect(status().isBadRequest());
         }
     }
 
     @Nested
-    @DisplayName("GET /api/account/phones/availability — 중복 체크 (토큰 불필요)")
+    @DisplayName("GET /api/accounts/phones/availability — 중복 체크 (토큰 불필요)")
     class CheckPhone {
 
         @Test
@@ -102,14 +102,14 @@ class AccountControllerTest extends BaseControllerTest {
         void notDuplicated() throws Exception {
             willDoNothing().given(accountProfileUseCasePort).checkDuplicatedPhone("01012345678");
 
-            mockMvc.perform(get("/api/account/phones/availability")
+            mockMvc.perform(get("/api/accounts/phones/availability")
                             .param("phone", "01012345678"))
                     .andExpect(status().isOk());
         }
     }
 
     @Nested
-    @DisplayName("GET /api/account/{accountId} — 프로필 조회")
+    @DisplayName("GET /api/accounts/{accountId} — 프로필 조회")
     class FindById {
 
         @Test
@@ -123,7 +123,7 @@ class AccountControllerTest extends BaseControllerTest {
             );
             given(accountProfileUseCasePort.findAccount(2L)).willReturn(response);
 
-            mockMvc.perform(get("/api/account/2"))
+            mockMvc.perform(get("/api/accounts/2"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.accountId").value(2))
                     .andExpect(jsonPath("$.loginName").value("otherUser"))
@@ -133,7 +133,7 @@ class AccountControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    @DisplayName("DELETE /api/account/{accountId} — 회원 탈퇴")
+    @DisplayName("DELETE /api/accounts/{accountId} — 회원 탈퇴")
     class DeleteAccount {
 
         @Test
@@ -141,7 +141,7 @@ class AccountControllerTest extends BaseControllerTest {
         void deleteSuccess() throws Exception {
             willDoNothing().given(accountProfileUseCasePort).delete(1L);
 
-            mockMvc.perform(delete("/api/account/1"))
+            mockMvc.perform(delete("/api/accounts/1"))
                     .andExpect(status().isNoContent())
                     .andExpect(content().string(""));
         }

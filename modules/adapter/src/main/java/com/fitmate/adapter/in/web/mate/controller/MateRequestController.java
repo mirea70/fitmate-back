@@ -21,7 +21,7 @@ import javax.validation.Valid;
 
 @WebAdapter
 @RestController
-@RequestMapping("/api/mate/request/{mateId}")
+@RequestMapping("/api/mates/{mateId}/requests")
 @RequiredArgsConstructor
 @Tag(name = "02-02. Mate Request", description = "메이트 신청 관리 API")
 public class MateRequestController {

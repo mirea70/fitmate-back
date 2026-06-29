@@ -25,7 +25,7 @@ import java.util.List;
 
 @WebAdapter
 @RestController
-@RequestMapping("/api/account/profile")
+@RequestMapping("/api/accounts/profile")
 @RequiredArgsConstructor
 @Tag(name = "01-02. Account Profile", description = "회원 프로필 관련 API")
 public class AccountProfileController {
@@ -85,7 +85,7 @@ public class AccountProfileController {
     }
 
     @Operation(summary = "내 메이트 신청 목록 조회 API", description = "파라미터인 승인상태에 따라 메이트 신청 목록을 조회해온다.")
-    @GetMapping("/my/mate/request")
+    @GetMapping("/my/mates/requests")
     public ResponseEntity<List<MateRequestSimpleResponse>> getMyMateRequestList(@AuthenticationPrincipal AuthDetails authDetails,
                                                                                 @Parameter(description = "메이트 신청 목록 조회 시, 승인 상태 조건")
                                                                         @RequestParam ApproveStatus approveStatus) {
@@ -94,7 +94,7 @@ public class AccountProfileController {
     }
 
     @Operation(summary = "내가 작성한 메이트 목록 조회", description = "로그인한 사용자가 작성한 메이트 글 목록 조회 API")
-    @GetMapping("/my/mate/list")
+    @GetMapping("/my/mates/list")
     public ResponseEntity<List<MateSimpleResponse>> findMyMates(@AuthenticationPrincipal AuthDetails authDetails) {
         List<MateSimpleResponse> responses = mateUseCasePort.findMyMates(authDetails.getAccount().getId());
         return ResponseEntity.ok(responses);

@@ -37,7 +37,7 @@ class ChatControllerTest extends BaseControllerTest {
     private ChatWebAdapterMapper chatWebAdapterMapper;
 
     @Nested
-    @DisplayName("DELETE /api/chat/{roomId}/membership")
+    @DisplayName("DELETE /api/chat-rooms/{roomId}/membership")
     class LeaveChatRoom {
 
         @Test
@@ -56,7 +56,7 @@ class ChatControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /api/chat/room/group")
+    @DisplayName("POST /api/chat-rooms/group")
     class CreateGroupChatRoom {
 
         @Test
@@ -65,17 +65,17 @@ class ChatControllerTest extends BaseControllerTest {
             ChatRoomCreateGroupRequest request = new ChatRoomCreateGroupRequest(1L, 1L);
             given(chatUseCasePort.createGroupChatRoom(any())).willReturn(new ChatRoomSimpleResponse("room-1"));
 
-            mockMvc.perform(post("/api/chat/room/group")
+            mockMvc.perform(post("/api/chat-rooms/group")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(request)))
                     .andExpect(status().isCreated())
-                    .andExpect(header().string("Location", "/api/chat/rooms/room-1"))
+                    .andExpect(header().string("Location", "/api/chat-rooms/room-1"))
                     .andExpect(jsonPath("$.roomId").value("room-1"));
         }
     }
 
     @Nested
-    @DisplayName("POST /api/chat/room/dm")
+    @DisplayName("POST /api/chat-rooms/dm")
     class CreateDmChatRoom {
 
         @Test
@@ -89,11 +89,11 @@ class ChatControllerTest extends BaseControllerTest {
                     """;
             given(chatUseCasePort.createDmChatRoom(any())).willReturn(new ChatRoomSimpleResponse("dm-1"));
 
-            mockMvc.perform(post("/api/chat/room/dm")
+            mockMvc.perform(post("/api/chat-rooms/dm")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(requestBody))
                     .andExpect(status().isCreated())
-                    .andExpect(header().string("Location", "/api/chat/rooms/dm-1"))
+                    .andExpect(header().string("Location", "/api/chat-rooms/dm-1"))
                     .andExpect(jsonPath("$.roomId").value("dm-1"));
         }
     }

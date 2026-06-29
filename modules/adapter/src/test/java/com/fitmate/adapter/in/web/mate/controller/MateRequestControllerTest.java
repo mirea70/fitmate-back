@@ -36,7 +36,7 @@ class MateRequestControllerTest extends BaseControllerTest {
     private MateWebAdapterMapper mateWebAdapterMapper;
 
     @Nested
-    @DisplayName("DELETE /api/mate/request/{mateId}/application")
+    @DisplayName("DELETE /api/mates/{mateId}/requests/application")
     class CancelMateApply {
 
         @Test
@@ -60,7 +60,7 @@ class MateRequestControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    @DisplayName("GET /api/mate/request/{mateId}/question")
+    @DisplayName("GET /api/mates/{mateId}/requests/question")
     class GetQuestion {
 
         @Test
@@ -69,7 +69,7 @@ class MateRequestControllerTest extends BaseControllerTest {
             MateQuestionResponse response = new MateQuestionResponse(1L, "작성자", "어떤 운동 좋아하세요?");
             given(mateApplyUseCasePort.readQuestion(10L)).willReturn(response);
 
-            mockMvc.perform(get("/api/mate/request/10/question"))
+            mockMvc.perform(get("/api/mates/10/requests/question"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.comeQuestion").value("어떤 운동 좋아하세요?"))
                     .andExpect(jsonPath("$.writerName").value("작성자"))

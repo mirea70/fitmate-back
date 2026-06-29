@@ -22,7 +22,7 @@ import java.util.List;
 
 @WebAdapter
 @RestController
-@RequestMapping("/api/chat")
+@RequestMapping("/api/chat-rooms")
 @RequiredArgsConstructor
 @Tag(name = "03. Chat", description = "채팅 관리 API")
 public class ChatController {
@@ -30,17 +30,17 @@ public class ChatController {
     private final ChatWebAdapterMapper chatWebAdapterMapper;
 
     @Operation(summary = "그룹 채팅방 생성", description = "그룹 채팅방 생성 API")
-    @PostMapping("/room/group")
+    @PostMapping("/group")
     public ResponseEntity<ChatRoomSimpleResponse> createGroupChatRoom(@Valid @RequestBody ChatRoomCreateGroupRequest request) {
         ChatRoomSimpleResponse response = chatUseCasePort.createGroupChatRoom(chatWebAdapterMapper.requestToCommand(request));
-        return ResponseEntity.created(URI.create("/api/chat/rooms/" + response.getRoomId())).body(response);
+        return ResponseEntity.created(URI.create("/api/chat-rooms/" + response.getRoomId())).body(response);
     }
 
     @Operation(summary = "DM 채팅방 생성", description = "DM 채팅방 생성 API")
-    @PostMapping("/room/dm")
+    @PostMapping("/dm")
     public ResponseEntity<ChatRoomSimpleResponse> createDmChatRoom(@Valid @RequestBody ChatRoomCreateDmRequest request) {
         ChatRoomSimpleResponse response = chatUseCasePort.createDmChatRoom(chatWebAdapterMapper.requestToCommand(request));
-        return ResponseEntity.created(URI.create("/api/chat/rooms/" + response.getRoomId())).body(response);
+        return ResponseEntity.created(URI.create("/api/chat-rooms/" + response.getRoomId())).body(response);
     }
 
     @Operation(summary = "채팅방 내 메시지 조회", description = "채팅방 내 메시지들 조회 API (정렬 기준 : 생성일 오름차순). 조회 시 읽음 처리됩니다.")
@@ -71,7 +71,7 @@ public class ChatController {
             
             **[참고]** 채팅이 1회이상 이루어진 채팅방만 조회됩니다. 채팅 기능 사용방법은 GitHub 저장소를 확인해주세요.
             """)
-    @GetMapping("/my/rooms")
+    @GetMapping("/my")
     public ResponseEntity<List<ChatRoomListItemResponse>> getMyChatRooms(@AuthenticationPrincipal AuthDetails authDetails) {
         return ResponseEntity.ok(chatUseCasePort.getMyChatRooms(authDetails.getAccount().getId()));
     }

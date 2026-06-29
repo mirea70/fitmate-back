@@ -46,7 +46,7 @@ class FileControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /api/file — 파일 업로드")
+    @DisplayName("POST /api/files — 파일 업로드")
     class Upload {
 
         @Test
@@ -61,16 +61,16 @@ class FileControllerTest extends BaseControllerTest {
             given(attachFilePersistenceAdapter.uploadFiles(List.of(multipartFile)))
                     .willReturn(List.of(new FileResponse(1L, "test.jpg")));
 
-            mockMvc.perform(multipart("/api/file")
+            mockMvc.perform(multipart("/api/files")
                             .file(multipartFile))
                     .andExpect(status().isCreated())
-                    .andExpect(header().string("Location", "/api/file/1"))
+                    .andExpect(header().string("Location", "/api/files/1"))
                     .andExpect(jsonPath("$[0].attachFileId").value(1));
         }
     }
 
     @Nested
-    @DisplayName("GET /api/file/{fileId} — 원본 다운로드")
+    @DisplayName("GET /api/files/{fileId} — 원본 다운로드")
     class Download {
 
         @Test
@@ -80,7 +80,7 @@ class FileControllerTest extends BaseControllerTest {
             FileDownloadDto dto = new FileDownloadDto(resource, "attachment; filename=\"test.jpg\"");
             given(attachFilePersistenceAdapter.downloadById(1L)).willReturn(dto);
 
-            mockMvc.perform(get("/api/file/1"))
+            mockMvc.perform(get("/api/files/1"))
                     .andExpect(status().isOk())
                     .andExpect(header().string("Content-Disposition", "attachment; filename=\"test.jpg\""));
         }
@@ -91,13 +91,13 @@ class FileControllerTest extends BaseControllerTest {
             given(attachFilePersistenceAdapter.downloadById(999L))
                     .willThrow(new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
 
-            mockMvc.perform(get("/api/file/999"))
+            mockMvc.perform(get("/api/files/999"))
                     .andExpect(status().isNotFound());
         }
     }
 
     @Nested
-    @DisplayName("GET /api/file/{fileId}/thumbnail — 썸네일 다운로드")
+    @DisplayName("GET /api/files/{fileId}/thumbnail — 썸네일 다운로드")
     class DownloadThumbnail {
 
         @Test
@@ -107,7 +107,7 @@ class FileControllerTest extends BaseControllerTest {
             FileDownloadDto dto = new FileDownloadDto(resource, "attachment; filename=\"test.jpg\"");
             given(attachFilePersistenceAdapter.downloadThumbnailById(1L)).willReturn(dto);
 
-            mockMvc.perform(get("/api/file/1/thumbnail"))
+            mockMvc.perform(get("/api/files/1/thumbnail"))
                     .andExpect(status().isOk())
                     .andExpect(header().string("Content-Disposition", "attachment; filename=\"test.jpg\""));
         }
@@ -118,7 +118,7 @@ class FileControllerTest extends BaseControllerTest {
             given(attachFilePersistenceAdapter.downloadThumbnailById(999L))
                     .willThrow(new NotFoundException(NotFoundErrorResult.NOT_FOUND_FILE_DATA));
 
-            mockMvc.perform(get("/api/file/999/thumbnail"))
+            mockMvc.perform(get("/api/files/999/thumbnail"))
                     .andExpect(status().isNotFound());
         }
     }

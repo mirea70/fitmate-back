@@ -16,7 +16,7 @@ import java.util.Map;
 
 @WebAdapter
 @RestController
-@RequestMapping("/api/mate/wish")
+@RequestMapping("/api/mates")
 @RequiredArgsConstructor
 @Tag(name = "02-03. Mate Wish", description = "메이트 찜 관리 API")
 public class MateWishController {
@@ -24,7 +24,7 @@ public class MateWishController {
     private final MateWishUseCasePort mateWishUseCasePort;
 
     @Operation(summary = "메이트 찜 토글", description = "찜 상태가 아니면 찜 추가, 이미 찜 상태면 찜 해제")
-    @PutMapping("/{mateId}")
+    @PutMapping("/{mateId}/wishes")
     public ResponseEntity<Map<String, Boolean>> toggleWish(@PathVariable Long mateId,
                                                            @AuthenticationPrincipal AuthDetails authDetails) {
         boolean wished = mateWishUseCasePort.toggleWish(authDetails.getAccount().getId(), mateId);
@@ -32,7 +32,7 @@ public class MateWishController {
     }
 
     @Operation(summary = "나의 찜 목록 조회", description = "로그인한 사용자의 메이트 찜 목록 조회 API")
-    @GetMapping("/my")
+    @GetMapping("/wishes/my")
     public ResponseEntity<List<MateSimpleResponse>> getMyWishMates(@AuthenticationPrincipal AuthDetails authDetails) {
         List<MateSimpleResponse> responses = mateWishUseCasePort.getMyWishMates(authDetails.getAccount().getId());
         return ResponseEntity.ok(responses);

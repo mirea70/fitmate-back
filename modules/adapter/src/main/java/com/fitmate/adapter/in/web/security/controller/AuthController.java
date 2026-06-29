@@ -61,6 +61,6 @@ public class AuthController {
     @Operation(summary = "카카오 회원가입", description = "카카오 토큰 + 프로필 정보로 계정 생성 후 JWT 토큰 발급")
     @PostMapping("/kakao/account")
     public ResponseEntity<KakaoTokenResponse> kakaoRegister(@Valid @RequestBody KakaoRegisterRequest request) {
-        return ResponseEntity.created(URI.create("/api/account")).body(kakaoAuthService.kakaoRegister(request));
+        return ResponseEntity.created(URI.create("/api/accounts")).body(kakaoAuthService.kakaoRegister(request));
     }
 }

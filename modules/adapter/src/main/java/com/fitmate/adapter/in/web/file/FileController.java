@@ -20,7 +20,7 @@ import java.util.List;
 
 @Tag(name = "99. File", description = "파일 관리 API")
 @RestController
-@RequestMapping("/api/file")
+@RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class FileController {
 
@@ -32,8 +32,8 @@ public class FileController {
                                                     @RequestPart(required = false) List<MultipartFile> multipartFiles) throws Exception {
            List<FileResponse> responses = attachFilePersistenceAdapter.uploadFiles(multipartFiles);
            URI location = responses == null || responses.isEmpty()
-                   ? URI.create("/api/file")
-                   : URI.create("/api/file/" + responses.get(0).getAttachFileId());
+                   ? URI.create("/api/files")
+                   : URI.create("/api/files/" + responses.get(0).getAttachFileId());
            return ResponseEntity.created(location).body(responses);
     }
 

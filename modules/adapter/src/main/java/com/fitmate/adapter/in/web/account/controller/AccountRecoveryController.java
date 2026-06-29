@@ -12,7 +12,7 @@ import java.util.Map;
 
 @WebAdapter
 @RestController
-@RequestMapping("/api/account/recovery")
+@RequestMapping("/api/accounts/recovery")
 @RequiredArgsConstructor
 @Tag(name = "01-03. Account Recovery", description = "계정 찾기/비밀번호 재설정 API")
 public class AccountRecoveryController {

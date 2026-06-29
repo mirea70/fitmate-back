@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 @WebAdapter
 @RestController
-@RequestMapping("/api/mate")
+@RequestMapping("/api/mates")
 @RequiredArgsConstructor
 @Tag(name = "02-01. Mate", description = "메이트 관리 API")
 public class MateController {
@@ -56,7 +56,7 @@ public class MateController {
         if(fileResponses != null)
             introImageIds = fileResponses.stream().map(FileResponse::getAttachFileId).collect(Collectors.toSet());
         mateUseCasePort.registerMate(mateWebAdapterMapper.requestToCommand(createRequest, authDetails.getAccount().getId(), introImageIds));
-        return ResponseEntity.created(URI.create("/api/mate")).build();
+        return ResponseEntity.created(URI.create("/api/mates")).build();
     }
 
     @Operation(summary = "메이트 글 단일조회", description = "메이트 글 단일조회 API")

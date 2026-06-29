@@ -48,7 +48,7 @@ class MateControllerTest extends BaseControllerTest {
     private AttachFilePersistenceAdapter filePersistenceAdapter;
 
     @Nested
-    @DisplayName("POST /api/mate")
+    @DisplayName("POST /api/mates")
     class Register {
 
         @Test
@@ -98,7 +98,7 @@ class MateControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    @DisplayName("GET /api/mate/{mateId}")
+    @DisplayName("GET /api/mates/{mateId}")
     class FindOne {
 
         @Test
@@ -115,7 +115,7 @@ class MateControllerTest extends BaseControllerTest {
             );
             given(mateUseCasePort.findMate(10L)).willReturn(response);
 
-            mockMvc.perform(get("/api/mate/10"))
+            mockMvc.perform(get("/api/mates/10"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(10))
                     .andExpect(jsonPath("$.title").value("운동 메이트 구함"))
@@ -126,7 +126,7 @@ class MateControllerTest extends BaseControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /api/mate/list")
+    @DisplayName("POST /api/mates/list")
     class FindList {
 
         @Test
@@ -144,7 +144,7 @@ class MateControllerTest extends BaseControllerTest {
                     }
                     """;
 
-            mockMvc.perform(post("/api/mate/list")
+            mockMvc.perform(post("/api/mates/list")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(requestBody))
                     .andExpect(status().isOk())
