@@ -23,6 +23,7 @@ import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.LoadMateWishPort;
 import com.fitmate.port.out.mate.dto.MateDetailResponse;
+import com.fitmate.port.out.outbox.OutboxEventPublisherPort;
 import com.fitmate.usecase.mate.mapper.MateUseCaseMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -61,6 +62,7 @@ class MateUseCaseTest {
     @Mock private LoadMateWishPort loadMateWishPort;
     @Mock private MateUseCaseMapper mateUseCaseMapper;
     @Mock private ApplicationEventPublisher eventPublisher;
+    @Mock private OutboxEventPublisherPort outboxEventPublisherPort;
 
     private static final Long WRITER_ID = 1L;
     private static final Long MATE_ID = 10L;

@@ -1,14 +1,15 @@
 package com.fitmate.usecase.mate.scheduler;
 
 import com.fitmate.domain.mate.Mate;
-import com.fitmate.domain.notice.Notice;
-import com.fitmate.domain.notice.NoticeType;
 import com.fitmate.port.out.mate.LoadMatePort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
-import com.fitmate.port.out.notice.LoadNoticePort;
+import com.fitmate.usecase.mate.event.MateReminderEvent;
+import com.fitmate.usecase.mate.event.dto.MateReminderEventDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,10 +23,10 @@ public class MateReminderScheduler {
 
     private final LoadMatePort loadMatePort;
     private final LoadMateRequestPort loadMateRequestPort;
-    private final LoadNoticePort loadNoticePort;
-    private static final String REMINDER_MSG = " 모임이 내일 예정되어 있습니다.";
+    private final ApplicationEventPublisher eventPublisher;
 
     @Scheduled(cron = "0 0 9 * * *")
+    @Transactional
     public void sendMateReminder() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
         LocalDateTime from = tomorrow.atStartOfDay();
@@ -34,14 +35,14 @@ public class MateReminderScheduler {
         List<Mate> mates = loadMatePort.loadMatesByMateAtBetween(from, to);
 
         for (Mate mate : mates) {
-            String content = mate.getTitle() + REMINDER_MSG;
             Set<Long> approvedAccountIds = loadMateRequestPort.getApprovedAccountIds(mate.getId().getValue());
-            approvedAccountIds.add(mate.getWriterId()); // 작성자 포함
+            approvedAccountIds.add(mate.getWriterId());
             if (approvedAccountIds.isEmpty()) continue;
 
             for (Long accountId : approvedAccountIds) {
-                Notice notice = Notice.of(accountId, mate.getId().getValue(), null, content, NoticeType.MATE_REMINDER);
-                loadNoticePort.saveNoticeEntity(notice);
+                eventPublisher.publishEvent(new MateReminderEvent(
+                        new MateReminderEventDto(mate.getId().getValue(), accountId, mate.getTitle())
+                ));
             }
         }
     }

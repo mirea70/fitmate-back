@@ -16,6 +16,7 @@ import com.fitmate.port.out.file.LoadAttachFilePort;
 import com.fitmate.port.out.follow.LoadFollowPort;
 import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.notice.LoadNoticePort;
+import com.fitmate.port.out.outbox.OutboxEventPublisherPort;
 import com.fitmate.usecase.account.mapper.AccountUseCaseMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -53,6 +54,7 @@ class AccountProfileUseCaseTest {
     @Mock private LoadMateRequestPort loadMateRequestPort;
     @Mock private AccountUseCaseMapper accountUseCaseMapper;
     @Mock private ApplicationEventPublisher eventPublisher;
+    @Mock private OutboxEventPublisherPort outboxEventPublisherPort;
 
     private Account createAccount(Long id) {
         return Account.withId(
