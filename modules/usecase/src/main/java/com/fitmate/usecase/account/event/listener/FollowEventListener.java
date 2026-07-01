@@ -24,11 +24,11 @@ public class FollowEventListener {
         FollowEventDto dto = event.getEventDto();
         outboxEventPublisherPort.publish(
                 EventType.FOLLOWED,
-                dto.getTargetAccountId(),
+                dto.targetAccountId(),
                 FollowedEventPayload.builder()
-                        .fromAccountId(dto.getFromAccountId())
-                        .targetAccountId(dto.getTargetAccountId())
-                        .fromNickName(dto.getFromNickName())
+                        .fromAccountId(dto.fromAccountId())
+                        .targetAccountId(dto.targetAccountId())
+                        .fromNickName(dto.fromNickName())
                         .build()
         );
     }

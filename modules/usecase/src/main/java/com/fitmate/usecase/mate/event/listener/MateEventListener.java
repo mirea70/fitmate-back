@@ -24,11 +24,11 @@ public class MateEventListener {
         MateRegisteredEventDto dto = event.getEventDto();
         outboxEventPublisherPort.publish(
                 EventType.MATE_REGISTERED,
-                dto.getMateId(),
+                dto.mateId(),
                 MateRegisteredEventPayload.builder()
-                        .mateId(dto.getMateId())
-                        .writerId(dto.getWriterId())
-                        .title(dto.getTitle())
+                        .mateId(dto.mateId())
+                        .writerId(dto.writerId())
+                        .title(dto.title())
                         .build()
         );
     }
@@ -39,10 +39,10 @@ public class MateEventListener {
         MateModifiedEventDto dto = event.getEventDto();
         outboxEventPublisherPort.publish(
                 EventType.MATE_MODIFIED,
-                dto.getMateId(),
+                dto.mateId(),
                 MateModifiedEventPayload.builder()
-                        .mateId(dto.getMateId())
-                        .title(dto.getTitle())
+                        .mateId(dto.mateId())
+                        .title(dto.title())
                         .build()
         );
     }
@@ -53,13 +53,13 @@ public class MateEventListener {
         MateRequestEventDto dto = event.getEventDto();
         outboxEventPublisherPort.publish(
                 EventType.MATE_REQUESTED,
-                dto.getMateId(),
+                dto.mateId(),
                 MateRequestedEventPayload.builder()
-                        .mateId(dto.getMateId())
-                        .writerId(dto.getWriterId())
-                        .applierId(dto.getApplierId())
-                        .title(dto.getTitle())
-                        .approveStatus(dto.getApproveStatus())
+                        .mateId(dto.mateId())
+                        .writerId(dto.writerId())
+                        .applierId(dto.applierId())
+                        .title(dto.title())
+                        .approveStatus(dto.approveStatus())
                         .build()
         );
     }
@@ -70,11 +70,11 @@ public class MateEventListener {
         MateApproveEventDto dto = event.getEventDto();
         outboxEventPublisherPort.publish(
                 EventType.MATE_APPROVED,
-                dto.getMateId(),
+                dto.mateId(),
                 MateApprovedEventPayload.builder()
-                        .mateId(dto.getMateId())
-                        .applierId(dto.getApplierId())
-                        .title(dto.getTitle())
+                        .mateId(dto.mateId())
+                        .applierId(dto.applierId())
+                        .title(dto.title())
                         .build()
         );
     }
@@ -85,14 +85,14 @@ public class MateEventListener {
         MateCancelledEventDto dto = event.getEventDto();
         outboxEventPublisherPort.publish(
                 EventType.MATE_CANCELLED,
-                dto.getMateId(),
+                dto.mateId(),
                 MateCancelledEventPayload.builder()
-                        .mateId(dto.getMateId())
-                        .writerId(dto.getWriterId())
-                        .applierId(dto.getApplierId())
-                        .title(dto.getTitle())
-                        .cancelReason(dto.getCancelReason())
-                        .wasApproved(dto.isWasApproved())
+                        .mateId(dto.mateId())
+                        .writerId(dto.writerId())
+                        .applierId(dto.applierId())
+                        .title(dto.title())
+                        .cancelReason(dto.cancelReason())
+                        .wasApproved(dto.wasApproved())
                         .build()
         );
     }
@@ -103,13 +103,13 @@ public class MateEventListener {
         MateAutoCancelledEventDto dto = event.getEventDto();
         outboxEventPublisherPort.publish(
                 EventType.MATE_AUTO_CANCELLED,
-                dto.getMateId(),
+                dto.mateId(),
                 MateAutoCancelledEventPayload.builder()
-                        .mateId(dto.getMateId())
-                        .writerId(dto.getWriterId())
-                        .applierId(dto.getApplierId())
-                        .title(dto.getTitle())
-                        .cancelReason(dto.getCancelReason())
+                        .mateId(dto.mateId())
+                        .writerId(dto.writerId())
+                        .applierId(dto.applierId())
+                        .title(dto.title())
+                        .cancelReason(dto.cancelReason())
                         .build()
         );
     }
@@ -120,12 +120,12 @@ public class MateEventListener {
         MateClosedEventDto dto = event.getEventDto();
         outboxEventPublisherPort.publish(
                 EventType.MATE_CLOSED,
-                dto.getMateId(),
+                dto.mateId(),
                 MateClosedEventPayload.builder()
-                        .mateId(dto.getMateId())
-                        .writerId(dto.getWriterId())
-                        .title(dto.getTitle())
-                        .wisherAccountIds(dto.getWisherAccountIds())
+                        .mateId(dto.mateId())
+                        .writerId(dto.writerId())
+                        .title(dto.title())
+                        .wisherAccountIds(dto.wisherAccountIds())
                         .build()
         );
     }
