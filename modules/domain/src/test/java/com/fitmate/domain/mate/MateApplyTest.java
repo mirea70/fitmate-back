@@ -10,42 +10,56 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("MateApply 도메인 테스트")
+@DisplayName("MateApply domain test")
 class MateApplyTest {
 
     @Test
-    @DisplayName("withoutId로 생성하면 id, createdAt, updatedAt이 null")
+    @DisplayName("withoutId creates a new waiting apply")
     void withoutId() {
-        MateApply apply = MateApply.withoutId("답변", 1L, 2L, ApproveStatus.WAIT, null);
+        MateApply apply = MateApply.withoutId("answer", 1L, 2L, ApproveStatus.WAIT, null);
 
         assertThat(apply.getId()).isNull();
-        assertThat(apply.getComeAnswer()).isEqualTo("답변");
+        assertThat(apply.getComeAnswer()).isEqualTo("answer");
         assertThat(apply.getMateId()).isEqualTo(1L);
         assertThat(apply.getApplierId()).isEqualTo(2L);
         assertThat(apply.getApproveStatus()).isEqualTo(ApproveStatus.WAIT);
     }
 
     @Test
-    @DisplayName("changeToApprove — 대기 상태를 승인으로 변경")
-    void changeToApprove() {
-        MateApply apply = MateApply.withoutId("답변", 1L, 2L, ApproveStatus.WAIT, null);
-        apply.changeToApprove();
+    @DisplayName("approve changes WAIT to APPROVE and returns true")
+    void approve() {
+        MateApply apply = MateApply.withoutId("answer", 1L, 2L, ApproveStatus.WAIT, null);
+
+        boolean approved = apply.approve();
+
+        assertThat(approved).isTrue();
         assertThat(apply.getApproveStatus()).isEqualTo(ApproveStatus.APPROVE);
     }
 
     @Test
-    @DisplayName("cancel — 취소 사유와 삭제 시간이 설정됨")
+    @DisplayName("approve returns false when already approved")
+    void approveAlreadyApproved() {
+        MateApply apply = MateApply.withoutId("answer", 1L, 2L, ApproveStatus.APPROVE, null);
+
+        boolean approved = apply.approve();
+
+        assertThat(approved).isFalse();
+        assertThat(apply.getApproveStatus()).isEqualTo(ApproveStatus.APPROVE);
+    }
+
+    @Test
+    @DisplayName("cancel sets reason and deletedAt")
     void cancel() {
         MateApply apply = MateApply.withId(
-                new MateApplyId(1L), "답변", 1L, 2L,
+                new MateApplyId(1L), "answer", 1L, 2L,
                 ApproveStatus.APPROVE, null,
                 LocalDateTime.now(), LocalDateTime.now()
         );
 
         LocalDateTime now = LocalDateTime.now();
-        apply.cancel("개인 사정", now);
+        apply.cancel("reason", now);
 
-        assertThat(apply.getCancelReason()).isEqualTo("개인 사정");
+        assertThat(apply.getCancelReason()).isEqualTo("reason");
         assertThat(apply.getDeletedAt()).isEqualTo(now);
     }
 }

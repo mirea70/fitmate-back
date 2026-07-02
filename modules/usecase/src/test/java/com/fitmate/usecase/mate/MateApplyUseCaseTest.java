@@ -228,6 +228,27 @@ class MateApplyUseCaseTest {
             org.assertj.core.api.Assertions.assertThat(apply.getApproveStatus()).isEqualTo(ApproveStatus.APPROVE);
             then(loadMatePort).should().incrementApprovedCount(any(MateId.class));
         }
+
+        @Test
+        @DisplayName("이미 승인된 신청을 다시 승인하면 카운트와 이벤트를 발생시키지 않는다")
+        void approveAlreadyApprovedDoesNothing() {
+            Mate mate = createMate(GatherType.AGREE, 1, 5, PermitGender.ALL);
+            Loaded<Mate> loadedMate = new Loaded<>(mate, m -> {});
+            given(loadMatePort.loadMate(any(MateId.class))).willReturn(loadedMate);
+
+            MateApply apply = MateApply.withId(
+                    new MateApplyId(1L), "답변", MATE_ID, APPLIER_ID,
+                    ApproveStatus.APPROVE, null, LocalDateTime.now(), LocalDateTime.now()
+            );
+            Loaded<MateApply> loadedApply = new Loaded<>(apply, a -> {});
+            given(loadMateRequestPort.loadMateApply(MATE_ID, APPLIER_ID)).willReturn(loadedApply);
+
+            MateApproveCommand command = new MateApproveCommand(MATE_ID, APPLIER_ID, WRITER_ID);
+            mateApplyUseCase.approveMate(command);
+
+            then(loadMatePort).should(never()).incrementApprovedCount(any(MateId.class));
+            then(eventPublisher).should(never()).publishEvent(any());
+        }
     }
 
     @Nested

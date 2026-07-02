@@ -97,9 +97,12 @@ public class MateApplyUseCase implements MateApplyUseCasePort {
             throw new NotMatchException(NotMatchErrorResult.NOT_MATCH_WRITER_ID);
 
         Loaded<MateApply> loadedMateApply = loadMateRequestPort.loadMateApply(mateId, applierId);
-        loadedMateApply.update(MateApply::changeToApprove);
+        if (loadedMateApply.get().getApproveStatus() == ApproveStatus.APPROVE) {
+            return;
+        }
 
         loadedMate.get().checkCapacity();
+        loadedMateApply.update(MateApply::approve);
         loadMatePort.incrementApprovedCount(new MateId(mateId));
 
         eventPublisher.publishEvent(new MateApproveEvent(

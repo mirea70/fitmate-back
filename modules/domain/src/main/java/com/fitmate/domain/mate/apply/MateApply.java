@@ -55,8 +55,12 @@ public class MateApply {
                 null);
     }
 
-    public void changeToApprove() {
+    public boolean approve() {
+        if (this.approveStatus == ApproveStatus.APPROVE) {
+            return false;
+        }
         this.approveStatus = ApproveStatus.APPROVE;
+        return true;
     }
 
     public void cancel(String cancelReason, LocalDateTime deletedAt) {
