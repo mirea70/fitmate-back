@@ -23,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("CustomRetryListener 단위 테스트")
+@DisplayName("CustomRetryListener unit test")
 class CustomRetryListenerTest {
 
     @InjectMocks
@@ -36,11 +36,11 @@ class CustomRetryListenerTest {
     private RetryCountQueryRepository retryCountQueryRepository;
 
     @Test
-    @DisplayName("MateApplyCommand 재시도 시 MATE/APPLY retryCount 증가")
+    @DisplayName("apply retry records MATE/APPLY retryCount")
     void onError_applyCommand_recordsRetry() {
         RetryContext context = mock(RetryContext.class);
         RetryCallback<?, ?> callback = mock(RetryCallback.class);
-        MateApplyCommand command = new MateApplyCommand(10L, 2L, "답변");
+        MateApplyCommand command = new MateApplyCommand(10L, 2L, "answer");
 
         given(context.getAttribute("context.args")).willReturn(new Object[]{command});
         given(context.getRetryCount()).willReturn(1);
@@ -53,7 +53,7 @@ class CustomRetryListenerTest {
     }
 
     @Test
-    @DisplayName("MateApproveCommand 재시도 시 MATE/APPROVE retryCount 증가")
+    @DisplayName("approve retry records MATE/APPROVE retryCount")
     void onError_approveCommand_recordsRetry() {
         RetryContext context = mock(RetryContext.class);
         RetryCallback<?, ?> callback = mock(RetryCallback.class);
@@ -70,7 +70,23 @@ class CustomRetryListenerTest {
     }
 
     @Test
-    @DisplayName("context.args가 null이면 기록하지 않음")
+    @DisplayName("cancel retry records MATE/CANCEL retryCount")
+    void onError_cancelArgs_recordsRetry() {
+        RetryContext context = mock(RetryContext.class);
+        RetryCallback<?, ?> callback = mock(RetryCallback.class);
+
+        given(context.getAttribute("context.args")).willReturn(new Object[]{10L, 2L, "cancel"});
+        given(context.getRetryCount()).willReturn(1);
+        given(retryCountRepository.existsByDomainAndTargetIdAndType(RetryDomain.MATE, 10L, RetryType.CANCEL)).willReturn(false);
+
+        customRetryListener.onError(context, callback, new RuntimeException());
+
+        then(retryCountRepository).should().save(any(RetryCountJpaEntity.class));
+        then(retryCountQueryRepository).should().incrementRetryCount(RetryDomain.MATE, 10L, RetryType.CANCEL);
+    }
+
+    @Test
+    @DisplayName("null args do not record retry")
     void onError_nullArgs_noRecord() {
         RetryContext context = mock(RetryContext.class);
         RetryCallback<?, ?> callback = mock(RetryCallback.class);
@@ -83,11 +99,11 @@ class CustomRetryListenerTest {
     }
 
     @Test
-    @DisplayName("이미 존재하는 retry target이면 새로 생성하지 않고 카운트만 증가")
+    @DisplayName("existing retry target increments only")
     void onError_existingTarget_incrementOnly() {
         RetryContext context = mock(RetryContext.class);
         RetryCallback<?, ?> callback = mock(RetryCallback.class);
-        MateApplyCommand command = new MateApplyCommand(10L, 2L, "답변");
+        MateApplyCommand command = new MateApplyCommand(10L, 2L, "answer");
 
         given(context.getAttribute("context.args")).willReturn(new Object[]{command});
         given(context.getRetryCount()).willReturn(2);

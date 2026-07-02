@@ -39,7 +39,7 @@ public class CustomRetryListener implements RetryListener {
         Object[] args = (Object[]) context.getAttribute("context.args");
         if (args == null || args.length == 0) return;
 
-        RetryTarget retryTarget = extractRetryTarget(args[0]);
+        RetryTarget retryTarget = extractRetryTarget(args);
         if (retryTarget == null) return;
 
         log.info("낙관적 락 재시도 발생 — domain: {}, targetId: {}, type: {}, 재시도 횟수: {}",
@@ -47,12 +47,17 @@ public class CustomRetryListener implements RetryListener {
         recordRetry(retryTarget.domain, retryTarget.targetId, retryTarget.type);
     }
 
-    private RetryTarget extractRetryTarget(Object arg) {
+    private RetryTarget extractRetryTarget(Object[] args) {
+        Object arg = args[0];
         if (arg instanceof MateApplyCommand) {
             return new RetryTarget(RetryDomain.MATE, ((MateApplyCommand) arg).mateId(), RetryType.APPLY);
         }
         if (arg instanceof MateApproveCommand) {
             return new RetryTarget(RetryDomain.MATE, ((MateApproveCommand) arg).mateId(), RetryType.APPROVE);
+        }
+        if (args.length == 3 && args[0] instanceof Long && args[1] instanceof Long
+                && (args[2] == null || args[2] instanceof String)) {
+            return new RetryTarget(RetryDomain.MATE, (Long) args[0], RetryType.CANCEL);
         }
         return null;
     }

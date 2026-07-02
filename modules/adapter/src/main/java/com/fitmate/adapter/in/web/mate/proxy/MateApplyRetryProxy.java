@@ -34,4 +34,15 @@ public class MateApplyRetryProxy {
     public void approveMate(MateApproveCommand command) {
         mateApplyUseCasePort.approveMate(command);
     }
+
+    @Retryable(
+            value = ObjectOptimisticLockingFailureException.class,
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 100),
+            listeners = "customRetryListener"
+    )
+    public void cancelMateApply(Long mateId, Long applierId, String cancelReason) {
+        mateApplyUseCasePort.cancelMateApply(mateId, applierId, cancelReason);
+    }
+
 }
