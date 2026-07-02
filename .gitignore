@@ -3,6 +3,7 @@ AGENTS.md
 .gradle
 .agents/
 .codex/
+docs/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/

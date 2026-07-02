@@ -8,6 +8,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * 유니크 인덱스
+ * uk_mate_apply_active
+ * ON mate_apply (
+ * CASE WHEN deleted_at IS NULL THEN mate_id END,
+ * CASE WHEN deleted_at IS NULL THEN applier_id END
+ * );
+ */
+
 @Entity
 @Table(name = "mate_apply")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,10 +30,10 @@ public class MateApplyJpaEntity extends BaseJpaEntity {
     @Column(nullable = false)
     private String comeAnswer;
 
-    @Column(nullable = false)
+    @Column(name = "mate_id", nullable = false)
     private Long mateId;
 
-    @Column(nullable = false)
+    @Column(name = "applier_id", nullable = false)
     private Long applierId;
 
     @Column(nullable = false)

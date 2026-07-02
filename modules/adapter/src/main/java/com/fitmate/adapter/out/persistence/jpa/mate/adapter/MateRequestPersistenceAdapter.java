@@ -18,6 +18,7 @@ import com.fitmate.port.out.mate.LoadMateRequestPort;
 import com.fitmate.port.out.mate.dto.MateQuestionResponse;
 import com.fitmate.port.out.mate.dto.MateRequestSimpleResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -48,7 +49,11 @@ public class MateRequestPersistenceAdapter implements LoadMateRequestPort {
     @Override
     public void saveMateRequestEntity(MateApply mateApply) {
         MateApplyJpaEntity mateRequestEntity = matePersistenceMapper.domainToEntity(mateApply);
-        mateApplyRepository.save(mateRequestEntity);
+        try {
+            mateApplyRepository.saveAndFlush(mateRequestEntity);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicatedException(DuplicatedErrorResult.DUPLICATED_MATE_REQUEST);
+        }
     }
 
     @Override
